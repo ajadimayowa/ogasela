@@ -19,7 +19,7 @@ const LoginPage = () => {
     return (
         <div className={`${style.container}`}>
             <div className={`${style.main}`}>
-                <div style={{ width: '60%' }}>
+                <div style={{ width: '100%', display:'flex', justifyContent:'center' }}>
                     <form
                         onSubmit={(e) => handleUserLogin(e)}
                         className={`${style.loginForm}`}
