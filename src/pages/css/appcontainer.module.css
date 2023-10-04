@@ -12,6 +12,7 @@
     display: flex;
     position: fixed;
     border: solid rgb(213, 213, 213) 0.5px;
+    background-color: #fff;
     justify-content: center;
     align-items: center;
     bottom: 0px;

@@ -35,7 +35,9 @@ const DashContainer = () => {
             <div className={`${style.bottomNav}`}>
                 {
                     guides.map((item)=>
-                    (<Link to={item.url}><div style={{display:'flex',flexDirection:'row',marginInline:10}}>{<div>{item.title}</div>}</div></Link>))
+                    (<Link to={item.url}
+                        style={{textDecoration:'none'}}
+                    ><div style={{display:'flex',flexDirection:'row',marginInline:10}}>{<div>{item.title}</div>}</div></Link>))
                 }
             </div>
         </div>
