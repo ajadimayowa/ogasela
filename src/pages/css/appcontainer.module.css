@@ -1,18 +1,24 @@
 .container {
-  height: 90vh;
+    min-height: 100vh;
     text-align: center;
     gap: 0px;
     margin: 0px;
     box-sizing: border-box;
-    overflow: scroll;
+    /* background-color: green; */
     
   }
 
-  .topbar{
-    background-color: pink;
-    min-height: 5em;
+  .bottomNav{
     display: flex;
-    padding-inline: 5%;
+    position: fixed;
+    border: solid rgb(213, 213, 213) 0.5px;
+    justify-content: center;
+    align-items: center;
+    bottom: 0px;
+    /* background-color: pink; */
+    min-height: 4em;
+    width: 100%;
+    display: flex;
     align-items: center;
   }
 
