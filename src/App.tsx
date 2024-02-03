@@ -29,6 +29,7 @@ function App() {
           <Route path='support' element={<SupportPage/>}/>
           <Route path='privacy-policy' element={<PrivacyPolicyPage/>}/>
           <Route path='terms-and-conditions' element={<TermsandConPage/>}/>
+          <Route path='*' element={<Homepage/>}/>
         </Route>
 
         <Route path='/dashboard' element={<DashContainer/>}>
