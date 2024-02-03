@@ -73,7 +73,7 @@ const SideBar: React.FC<any> = ({ type,offSideBar,on }) => {
     } else {
        return (
             <div className={on?`bg-primary py-5 ${style.sidebar}`:`bg-primary py-5 ${style.offSidebar}`}>
-                <div className="w-100 text-end text-light px-5">
+                <div className="w-100 text-end text-light px-3">
                 <i className="bi bi-x-circle"
                             style={{ cursor: 'pointer' }}
                             onClick={() => offSideBar()} ></i>

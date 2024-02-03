@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 const TopBar: React.FC<any> = ({ type,offSideBar }) => {
     const currentPath = useLocation().pathname;
     const token = localStorage.getItem('userToken');
-    
+
     const menus = [
         {
             title: 'Home',
@@ -37,7 +37,7 @@ const TopBar: React.FC<any> = ({ type,offSideBar }) => {
 
     if (type == 'authenticated') {
         return (
-            <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-light py-4 px-3">
+            <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-light p-2">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">Navbar</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

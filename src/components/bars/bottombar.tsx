@@ -49,7 +49,7 @@ const BottomBar: React.FC<any> = ({ type }) => {
 
     if (type == 'authenticated') {
         return (
-            <nav className="navbar sticky-bottom px-3 navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar sticky-bottom px-1 navbar-expand-lg navbar-light bg-light">
                 <div className="container-fluid ">
                 {
                 menus.map((menu, index) => (
@@ -66,7 +66,7 @@ const BottomBar: React.FC<any> = ({ type }) => {
                 </div>
             </nav>
         )
-    } else if (type == 'authenticated') {
+    } else {
         return (
             <nav className="navbar navbar-expand-lg  navbar-light bg-light">
                 <div className="container-fluid ">
@@ -85,10 +85,6 @@ const BottomBar: React.FC<any> = ({ type }) => {
                 </div>
             </nav>
         )
-    }
-
-    else {
-        return (<p>{''}</p>)
     }
 
 }
