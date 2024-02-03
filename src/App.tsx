@@ -15,6 +15,7 @@ import SupportPage from './pages/onboarding/support';
 import PrivacyPolicyPage from './pages/onboarding/privacypolicy';
 import TermsandConPage from './pages/onboarding/termsandcon';
 import DashboardPage from './pages/dashboads/dashboard';
+import AboutUsPage from './pages/onboarding/aboutus';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='reset-pass' element={<ResetPassPage/>}/>
           <Route path='otp' element={<OtpPage/>}/>
           <Route path='support' element={<SupportPage/>}/>
+          <Route path='about-us' element={<AboutUsPage/>}/>
           <Route path='privacy-policy' element={<PrivacyPolicyPage/>}/>
           <Route path='terms-and-conditions' element={<TermsandConPage/>}/>
           <Route path='*' element={<Homepage/>}/>

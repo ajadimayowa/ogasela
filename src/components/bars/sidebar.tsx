@@ -50,7 +50,7 @@ const SideBar: React.FC<any> = ({ type,offSideBar,on }) => {
         {
             title: 'About Us',
             icon: 'bi-bag-check',
-            path: '/signup'
+            path: '/about-us'
         }
     ]
 
@@ -88,7 +88,10 @@ const SideBar: React.FC<any> = ({ type,offSideBar,on }) => {
                             className={`text-center py-3 ${currentPath == menu.path ? 'bg-info' : "bg-primary"} p-0 m-0`}>{menu.title}
                         </li>))
                     }
-                    <li className="d-flex justify-content-center py-3">
+                    {
+                        currentPath == '/login' || currentPath == '/signup'? '' :
+                        <>
+                        <li className="d-flex justify-content-center py-3">
                         <Button 
                         onClick={()=>handleNavigation('/signup')}
                         className="bg-secondary" style={{minWidth:'8em'}}>Get Started</Button>
@@ -98,6 +101,8 @@ const SideBar: React.FC<any> = ({ type,offSideBar,on }) => {
                         onClick={()=>handleNavigation('/login')} 
                         className="bg-secondary" style={{minWidth:'8em'}}>Login</Button>
                         </li>
+                        </>
+                        }
                 </ul>
                 
                 

@@ -1,12 +1,15 @@
 import React from "react";
 import style from "../css/inputfield.module.css";
-import "../css/inputfield.module.css";
 
-export default function InputField({ icon, title, placeholder,type, passInput,toggleShow }) {
+const  InputField : React.FC<any>  = ({ icon,error, title,label, placeholder,type, passInput,toggleShow,name})  =>  {
 
   return (
-    <div className={`${style.container}`}>
+    <>
+    <label className="p-0  w-75 text-start" style={{marginBottom:'-7px', marginLeft:'-18px'}}>{label}</label>
+    <div className={`p-0 m-0 ${style.container}`}>
       <input
+      name={name}
+      id={name}
       onChange={passInput}
       className={`${style.field}`}
       type={type}
@@ -34,5 +37,8 @@ export default function InputField({ icon, title, placeholder,type, passInput,to
         {icon}
       </p>
     </div>
+    <p className="text-start text-danger w-75 p-0" style={{fontSize:'0.7em', marginTop:'-5px'}}>{error}</p>
+    </>
   );
 }
+export default InputField;

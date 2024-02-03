@@ -97,12 +97,17 @@ const TopBar: React.FC<any> = ({ type,offSideBar }) => {
                             <li className="nav-item">
                                 <a className="nav-link" href="support">Support</a>
                             </li>
-                            <li className="nav-item">
+                           { 
+                           currentPath == '/login'?'':
+                           <>
+                           <li className="nav-item">
                                 <a className="nav-link" href="login">Login</a>
                             </li>
                             <li className="nav-item">
                                 <Link className="text-light" to={'signup'}><Button>Get Started</Button></Link>
                             </li>
+                            </>
+                            }
                         </ul>
                         {/* <form className="d-flex">
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
