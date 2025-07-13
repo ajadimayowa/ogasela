@@ -1,0 +1,20 @@
+// src/styles/Topbar.scss
+.topbar {
+    height: 60px;
+    z-index: 999;
+    
+    .toggle-btn {
+      cursor: pointer;
+      color: #343a40;
+    }
+  
+    .user-info {
+      font-weight: 500;
+      color: #343a40;
+  
+      img {
+        object-fit: cover;
+      }
+    }
+  }
+  

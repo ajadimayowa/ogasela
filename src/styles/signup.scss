@@ -1,0 +1,14 @@
+// src/styles/Signup.scss
+.signup-page {
+    background: linear-gradient(135deg, #cfd9df, #e2ebf0);
+  
+    a {
+      color: #198754; // Bootstrap success color
+      text-decoration: none;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
