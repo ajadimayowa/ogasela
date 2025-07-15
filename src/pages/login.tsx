@@ -11,6 +11,7 @@ import CustomButton from '../components/custom-button/custom-button';
 import { ErrorMessage, Formik } from 'formik';
 import * as Yup from 'yup';
 import api from '../app/api';
+import { toast } from 'react-toastify';
 
 export interface ILogin {
   email: string;
@@ -46,6 +47,7 @@ const LoginPage = () => {
       setLoading(false);
     } catch (error) {
        setLoading(false);
+       toast.error('Invalid credentials!')
     }
   };
 
