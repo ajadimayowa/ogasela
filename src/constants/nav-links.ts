@@ -1,7 +1,7 @@
 export const NAV_LINKS = [
     {
         id:1,
-        name: 'Loan Manager',
+        name: 'Dashboard',
         superAdminScreens:[],
         branchManagerScreens:[],
         authorizerScreens:[],
@@ -10,7 +10,7 @@ export const NAV_LINKS = [
     },
     {
         id:2,
-        name: 'Duplicate Detector',
+        name: 'Loan Manager',
         superAdminScreens:[],
         branchManagerScreens:[],
         authorizerScreens:[],
@@ -19,7 +19,7 @@ export const NAV_LINKS = [
     },
     {
         id:3,
-        name: 'HR Manager',
+        name: 'Duplicate Detector',
         superAdminScreens:[],
         branchManagerScreens:[],
         authorizerScreens:[],
@@ -28,7 +28,25 @@ export const NAV_LINKS = [
     },
     {
         id:4,
+        name: 'HR Manager',
+        superAdminScreens:[],
+        branchManagerScreens:[],
+        authorizerScreens:[],
+        marketerScreens:[],
+        generalScreens:[],
+    },
+    {
+        id:5,
         name: 'Accounting',
+        superAdminScreens:[],
+        branchManagerScreens:[],
+        authorizerScreens:[],
+        marketerScreens:[],
+        generalScreens:[],
+    },
+    {
+        id:6,
+        name: 'Settings',
         superAdminScreens:[],
         branchManagerScreens:[],
         authorizerScreens:[],

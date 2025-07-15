@@ -4,15 +4,19 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface AuthState {
   token: string | null;
   staffProfile:{
-    staffLevel:string
+    staffLevel:string,
+    organization:{subscriptionType:string}
   } | null
 }
 
 const initialState: AuthState = {
   token: localStorage.getItem('token') || null,
   staffProfile: {
-    staffLevel:''
-  } 
+    staffLevel:'',
+    organization:{
+      subscriptionType:'basic'
+    }
+  },
 };
 
 const authSlice = createSlice({

@@ -1,11 +1,11 @@
 // src/components/Sidebar.tsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-// import { List } from 'react-bootstrap-icons';
-import '../styles/sidebar.scss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/auth/authSlice';
-import { persistor } from '../store/store'; // where you setup Redux Persist
+import { persistor, RootState } from '../store/store';
+import '../styles/sidebar.scss';
+import { getSidebarLinks } from '../utils/navUtils';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,41 +13,55 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
-  const dispatch = useDispatch()
+    const dispatch = useDispatch();
+  const role = useSelector((state: RootState) => state.auth.staffProfile?.staffLevel || '');
+  // const subscriptionType = useSelector(
+  //   (state: RootState) => state.auth.staffProfile?.organization?.subscriptionType || 'basic'
+  // );
+  const sidebarLinks : any[] = getSidebarLinks(role, 'pro');
+
   const handleLogout = async () => {
     dispatch(logout());
-    await persistor.purge(); // Clears localStorage or storage engine
-  // Optional: Redirect
-  window.location.href = '/login';
-    
-  }
+    await persistor.purge();
+    window.location.href = '/login';
+  };
+
   return (
-    <div className={`bg-primary sidebar`}>
-      <div onClick={toggleSidebar} className="sidebar-header d-flex align-items-center justify-content-between p-3">
-        <h4 className="m-0">Admin</h4>
-        <i className="bi bi-gear-fill me-2"></i>
+    <div className={`sidebar bg-primary ${isOpen ? 'open' : 'collapsed'}`}>
+      <div className="sidebar-header d-flex justify-content-between align-items-center p-3">
+        <h4 className="text-white m-0">Admin</h4>
+        <i className="bi bi-x text-white d-md-none" onClick={toggleSidebar}></i>
       </div>
 
-      <nav className="sidebar-nav flex-column">
-        <NavLink to="/" className="nav-link">
-          <i className="bi bi-house-door-fill me-2"></i> Dashboard
-        </NavLink>
+      <nav className="sidebar-nav px-2">
+        {sidebarLinks.map(({ name, links }) => (
+          <div key={name} className="mb-2">
+            {name === 'Dashboard' || name === 'Settings' ? (
+              <NavLink to={name === 'Dashboard' ? '/' : '/settings'} className="nav-link">
+                <i className={`bi ${name === 'Dashboard' ? 'bi-house-door-fill' : 'bi-gear-fill'} me-2`}></i>
+                {name}
+              </NavLink>
+            ) : (
+              <>
+                <div className="nav-link dropdown-toggle" data-bs-toggle="collapse" data-bs-target={`#${name.replace(/\s+/g, '')}`}>
+                  {name}
+                </div>
+                <div id={name.replace(/\s+/g, '')} className="collapse ps-3">
+                  {links.map((link:any)=>(
+                    <NavLink to={link.path} key={link.path} className="nav-link small">
+                      <i className={`${link.icon || 'bi bi-dot'} me-2`}></i>
+                      {link.title}
+                    </NavLink>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        ))}
 
-        <NavLink to="/users" className="nav-link">
-          <i className="bi bi-people-fill me-2"></i> Users
-        </NavLink>
-
-        <NavLink to="/settings" className="nav-link">
-          <i className="bi bi-gear-fill me-2"></i> Settings
-        </NavLink>
-
-        <NavLink to="/reports" className="nav-link">
-          <i className="bi bi-graph-up-arrow me-2"></i> Reports
-        </NavLink>
-
-        <NavLink onClick={handleLogout} to="/login" className="nav-link">
-          <i className="bi bi-graph-up-arrow me-2"></i> Logout
-        </NavLink>
+        <button onClick={handleLogout} className="nav-link text-start">
+          <i className="bi bi-box-arrow-right me-2"></i> Logout
+        </button>
       </nav>
     </div>
   );

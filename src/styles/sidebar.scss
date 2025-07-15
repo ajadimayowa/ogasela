@@ -1,46 +1,35 @@
-// src/styles/Sidebar.scss
 .sidebar {
-    width: 300px;
-    // background-color: #343a40;
+  width: 250px;
+  transition: all 0.3s ease-in-out;
+  background-color: #212529;
+  color: #fff;
+
+  &.collapsed {
+    width: 0;
+    overflow: hidden;
+  }
+
+  .nav-link {
     color: #fff;
-    transition: all 0.3s ease-in-out;
-    z-index: 1500;
-  
-    &.open {
-      left: 0;
+    padding: 10px 15px;
+
+    &:hover {
+      background-color: #343a40;
     }
-  
-    .sidebar-header {
-      background-color: #212529;
-      border-bottom: 1px solid #495057;
-  
-      .toggle-icon {
-        cursor: pointer;
-        color: #fff;
-      }
-    }
-  
-    .sidebar-nav {
-      margin-top: 1rem;
-  
-      .nav-link {
-        color: #adb5bd;
-        padding: 10px 20px;
-        display: flex;
-        align-items: center;
-        transition: 0.3s;
-        font-weight: 500;
-  
-        &:hover,
-        &.active {
-          background-color: #495057;
-          color: #fff;
-        }
-  
-        i {
-          font-size: 1.2rem;
-        }
-      }
+
+    &.active {
+      background-color: #495057;
+      font-weight: bold;
     }
   }
-  
+
+  .dropdown-toggle {
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    position: absolute;
+    z-index: 1000;
+    height: 100vh;
+  }
+}
