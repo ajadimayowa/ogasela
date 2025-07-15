@@ -33,7 +33,7 @@ const DashboardPage = () => {
 //   };
 
   return (
-    <div className="">
+    <div className="" style={{overflowY:'auto', scrollbarWidth:'none'}}>
       <h1>Hi monkey</h1>
       <h1>Dashboard</h1>
       <h1>Dashboard</h1>

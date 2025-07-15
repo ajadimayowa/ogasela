@@ -8,9 +8,15 @@ import DashboardLayout from '../layouts/dashboard-layout';
 import ProtectedRoute from '../components/ProtectedRoute';
 import ProfilePage from '../pages/test-page';
 import TestPage from '../pages/protected/sample-page';
-import VerifyOtpPage from '../pages/VerifyOtpPage';
+import VerifyOtpPage from '../pages/VerifyLoginOtpPage';
 import SuperAdminProtectedRoutes from '../components/SuperAdminProtectedRoute';
 import SuperAdminDashboard from '../pages/super-admin-pages/SuperAdminDashboard';
+import GeneralDashboard from '../pages/protected/general-pages/GeneralDashboard';
+import ResetPasswordPage from '../pages/request-reset-password';
+import RequestResetPasswordPage from '../pages/request-reset-password';
+import VerifyLoginOtpPage from '../pages/VerifyLoginOtpPage';
+import VerifyResetPasswordOtpPage from '../pages/VerifyResetOtpPage';
+
 
 const AppRouter = () => {
   return (
@@ -18,39 +24,24 @@ const AppRouter = () => {
       <Routes>
         {/* Public Routes: Accessible without authentication */}
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/verify-otp" element={<VerifyOtpPage />} />
+        <Route path="/verify-login-otp" element={<VerifyLoginOtpPage/>} />
+        <Route path="/request-password-reset-otp" element={<RequestResetPasswordPage/>} />
+        <Route path="/verify-password-reset-otp" element={<VerifyResetPasswordOtpPage/>} />
         <Route path="/signup" element={<SignupPage />} />
         {/* Uncomment the following line if ResetPassword page is implemented */}
         {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
 
         {/* Private Route: Protects access to the Dashboard, requires authentication */}
         <Route
-          path="/*"
+          path="/"
           element={
-            <ProtectedRoute />
+             <SuperAdminProtectedRoutes />
           }
         >
-          {/* Nested routes inside DashboardLayout */}
-          <Route index element={<DashboardPage />} />
-          <Route path="profile" element={<ProfilePage />} />
+          <Route index element={<GeneralDashboard/>} />
+          <Route path="/loan" element={<ProfilePage />} />
           <Route path="users" element={<TestPage />} />
-          {/* Add additional nested routes here as needed */}
         </Route>
-
-        <Route
-          path="/super-admin"
-          element={
-            <SuperAdminProtectedRoutes />
-          }
-        >
-          {/* Nested routes inside DashboardLayout */}
-          <Route index element={<SuperAdminDashboard />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="users" element={<TestPage />} />
-          {/* Add additional nested routes here as needed */}
-        </Route>
-
-        {/* Catch-all Route: Redirect unknown paths to login page */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>

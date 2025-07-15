@@ -2,32 +2,19 @@
 import React from 'react';
 // import { BsList } from 'react-icons/bs';
 import '../styles/topbar.scss';
+import { Image } from 'react-bootstrap';
 
 interface TopbarProps {
   toggleSidebar: () => void;
 }
 
-const Topbar = ({ toggleSidebar }: TopbarProps) => {
+const Topbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   return (
-    <nav className="topbar d-flex align-items-center justify-content-between px-3 py-2 shadow-sm">
-      <div className="d-flex align-items-center">
-        <i className="bi bi-gear-fill me-2" onClick={toggleSidebar}></i>
-        <h5 className="m-0">Admin Portal</h5>
-      </div>
-
-      <div className="d-flex align-items-center">
-        <div className="user-info d-flex align-items-center">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile"
-            className="rounded-circle me-2"
-            width="40"
-            height="40"
-          />
-          <span>Admin</span>
-        </div>
-      </div>
-    </nav>
+    <div className="d-flex justify-content-between shadow-sm align-items-center px-4 py-3 bg-light">
+      <i className="bi bi-list d-md-none fs-3" onClick={toggleSidebar}></i>
+      {/* <h5 className="m-0">App Name</h5> */}
+      <Image src='https://wok9jamedia.s3.eu-north-1.amazonaws.com/bcklogo.jpg' height={24}/>
+    </div>
   );
 };
 

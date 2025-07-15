@@ -9,7 +9,7 @@ import compnayLogo from '../assets/images/bc-kash-logo.png';
 import { toast } from 'react-toastify';
 import '../styles/login-otp.scss'; // Ensure you have this CSS file for styling
 
-const VerifyOtpPage = () => {
+const VerifyLoginOtpPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -76,24 +76,24 @@ const VerifyOtpPage = () => {
                 dispatch(setToken(token));
                 dispatch(setStaffProfile(staffProfile));
                 toast.success('Login successful!');
+                navigate('/');
 
-
-                switch (payload?.staffInfo?.staffLevel) {
-                    case 'super-admin':
-                        navigate('/super-admin/');
-                        break;
-                    case 'approver':
-                        navigate('/approver/');
-                        break;
-                    case 'branch-manager':
-                        navigate('/manager/');
-                        break;
-                    case 'marketer':
-                        navigate('/marketer/');
-                        break;
-                    default:
-                        navigate('/login');
-                }
+                // switch (payload?.staffInfo?.staffLevel) {
+                //     case 'super-admin':
+                //         navigate('/super-admin/');
+                //         break;
+                //     case 'approver':
+                //         navigate('/approver/');
+                //         break;
+                //     case 'branch-manager':
+                //         navigate('/manager/');
+                //         break;
+                //     case 'marketer':
+                //         navigate('/marketer/');
+                //         break;
+                //     default:
+                //         navigate('/login');
+                // }
             }
 
         } catch (err: any) {
@@ -170,4 +170,4 @@ const VerifyOtpPage = () => {
     );
 };
 
-export default VerifyOtpPage;
+export default VerifyLoginOtpPage;
