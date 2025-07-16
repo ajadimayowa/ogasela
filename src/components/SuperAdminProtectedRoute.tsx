@@ -26,7 +26,7 @@ const SuperAdminProtectedRoutes: React.FC<any> = () => {
   }
 
   return (
-  <div className="d-flex p-0 m-0" style={{ height: '100vh', overflow: 'hidden' }}>
+  <div className="d-flex p-0 m-0" style={{ height: '100vh'}}>
     {/* Sidebar */}
     <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 

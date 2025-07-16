@@ -27,7 +27,7 @@ const GeneralDashboard = () => {
           <div
             key={module.name}
             className="module-card"
-            onClick={() => navigate(module.path)}
+            // onClick={() => navigate(module.path)}
           >
             <i className={`${module.icon} module-icon`}></i>
             <h6 className="mt-2">{module.name}</h6>

@@ -40,10 +40,10 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
   };
 
   return (
-    <div className={`sidebar bg-primary ${isOpen ? 'open' : 'collapsed'}`}>
+    <div className={`sidebar bg-primary ${isOpen ? 'open' : 'collapsed'} h-100`}>
       <div className="sidebar-header d-flex justify-content-between align-items-center p-3">
         <h4 className="text-white m-0">Admin</h4>
-        <i className="bi bi-x text-white d-md-none" onClick={toggleSidebar}></i>
+        <i className="bi bi-x-circle" onClick={toggleSidebar}></i>
       </div>
 
       <nav className="sidebar-nav px-2">
