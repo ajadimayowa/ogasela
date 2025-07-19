@@ -29,7 +29,7 @@ const SuperAdminLoanDashboard = () => {
   return (
     <div className="dashboard-container">
       <DecoratedCard>
-       <div className='d-flex justify-content-between w-100'>
+       <div className='d-flex flex-wrap justify-content-between w-100'>
         <div>
            <h4 className="">Welcome, {
           staffProfile?.firstName
