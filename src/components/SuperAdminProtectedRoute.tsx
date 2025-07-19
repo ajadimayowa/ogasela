@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { logout } from '../features/auth/authSlice';
 import { persistor } from '../store/store'; // where you setup Redux Persist
+import SuperAdminSidebar from './sidebars/super-admin-sidebar';
+import { toast } from 'react-toastify';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -15,20 +17,24 @@ interface ProtectedRouteProps {
 const SuperAdminProtectedRoutes: React.FC<any> = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
-  const staffLevel = useSelector((state: RootState) => state.auth.staffProfile?.staffLevel);
-  const dispatch = useDispatch()
+   const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
+  const dispatch = useDispatch();
+  const token = useSelector((state:RootState) => state.auth.token);
 
 
-  if (!isTokenValid()) {
+  if (!token&&staffProfile?.staffLevel !=='super-admin') {
     dispatch(logout());
-    persistor.purge(); // Clears localStorage or storage engine
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    persistor.purge();
+    return <Navigate to="/login"  replace />;
   }
 
   return (
   <div className="d-flex p-0 m-0" style={{ height: '100vh'}}>
     {/* Sidebar */}
-    <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+    <SuperAdminSidebar 
+    isOpen={isSidebarOpen} 
+    toggleSidbar={()=>setIsSidebarOpen(!isSidebarOpen)} 
+    />
 
     {/* Right side: Topbar + main */}
     <div className="d-flex flex-column flex-grow-1 w-100">

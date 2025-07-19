@@ -5,10 +5,11 @@ import { RootState } from '../../../store/store';
 import { getAccessibleModules } from '../../../utils/navUtils';
 import { useNavigate } from 'react-router-dom';
 import './general-dashboard.scss';
+import DecoratedCard from '../../../components/cards/decoratedCard';
 
 const GeneralDashboard = () => {
   const navigate = useNavigate();
-  const staff = useSelector((state: RootState) => state.auth.staffProfile);
+  const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
     'marketer',
@@ -18,16 +19,25 @@ const GeneralDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h4 className="mb-4">Welcome, {
-    //   staff?.fullName
-    'How are you today?'
-      }</h4>
-      <div className="module-grid">
+      <DecoratedCard>
+       <div>
+        <div>
+           <h4 className="">Welcome, {
+          staffProfile?.firstName
+          // 'How are you today?'
+        }</h4>
+        <p>How are you doing today?</p>
+        </div>
+        <div></div>
+       </div>
+      </DecoratedCard>
+
+      <div className="module-grid mt-3">
         {modules.map(module => (
           <div
             key={module.name}
             className="module-card"
-            // onClick={() => navigate(module.path)}
+          // onClick={() => navigate(module.path)}
           >
             <i className={`${module.icon} module-icon`}></i>
             <h6 className="mt-2">{module.name}</h6>

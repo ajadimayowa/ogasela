@@ -45,9 +45,15 @@ const LoginPage = () => {
       const res = await api.post('/staff/login',payload);
       navigate('/verify-login-otp', { state: { email: payload.email } });
       setLoading(false);
-    } catch (error) {
-       setLoading(false);
-       toast.error('Invalid credentials!')
+    } catch (error:any) {
+      console.log({errorHere:error})
+      setLoading(false);
+       if(error?.data?.message){
+        toast.error(error?.data?.message)
+       } else{
+       console.log({seeError:error})
+       toast.error(error?.message)
+       }
     }
   };
 

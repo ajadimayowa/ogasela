@@ -71,29 +71,29 @@ const VerifyLoginOtpPage = () => {
         try {
             const res = await api.post('/staff/verify-otp', { email, otp: finalOtp });
             if (res.status == 200) {
-                const { token, payload } = res.data;
-                const staffProfile = res?.data?.payload?.staffInfo;
-                dispatch(setToken(token));
+                console.log({dataSent:res?.data?.payload})
+                const { payload } = res.data;
+                console.log({seePayloadFromOtp:payload})
+                const staffProfile = payload?.staffData;
+                dispatch(setToken(payload?.token));
                 dispatch(setStaffProfile(staffProfile));
                 toast.success('Login successful!');
-                navigate('/');
-
-                // switch (payload?.staffInfo?.staffLevel) {
-                //     case 'super-admin':
-                //         navigate('/super-admin/');
-                //         break;
-                //     case 'approver':
-                //         navigate('/approver/');
-                //         break;
-                //     case 'branch-manager':
-                //         navigate('/manager/');
-                //         break;
-                //     case 'marketer':
-                //         navigate('/marketer/');
-                //         break;
-                //     default:
-                //         navigate('/login');
-                // }
+                switch (payload?.staffData?.staffLevel) {
+                    case 'super-admin':
+                        navigate('/super-admin/');
+                        break;
+                    case 'approver':
+                        navigate('/approver/');
+                        break;
+                    case 'branch-manager':
+                        navigate('/manager/');
+                        break;
+                    case 'marketer':
+                        navigate('/marketer/');
+                        break;
+                    default:
+                        navigate('/login');
+                }
             }
 
         } catch (err: any) {
@@ -134,6 +134,8 @@ const VerifyLoginOtpPage = () => {
                             <input
                                 key={index}
                                 type="text"
+                                inputMode="numeric"
+                                pattern="\d*"
                                 maxLength={1}
                                 value={digit}
                                 onChange={(e) => handleChange(index, e.target.value)}

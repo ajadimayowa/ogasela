@@ -10,12 +10,12 @@ import ProfilePage from '../pages/test-page';
 import TestPage from '../pages/protected/sample-page';
 import VerifyOtpPage from '../pages/VerifyLoginOtpPage';
 import SuperAdminProtectedRoutes from '../components/SuperAdminProtectedRoute';
-import SuperAdminDashboard from '../pages/super-admin-pages/SuperAdminDashboard';
 import GeneralDashboard from '../pages/protected/general-pages/GeneralDashboard';
 import ResetPasswordPage from '../pages/request-reset-password';
 import RequestResetPasswordPage from '../pages/request-reset-password';
 import VerifyLoginOtpPage from '../pages/VerifyLoginOtpPage';
 import VerifyResetPasswordOtpPage from '../pages/VerifyResetOtpPage';
+import SuperAdminLoanDashboard from '../pages/protected/super-admin-pages/loan-pages/SuperAdminLoanDashboard';
 
 
 const AppRouter = () => {
@@ -33,13 +33,16 @@ const AppRouter = () => {
 
         {/* Private Route: Protects access to the Dashboard, requires authentication */}
         <Route
-          path="/"
+          path="/super-admin"
           element={
              <SuperAdminProtectedRoutes />
           }
         >
           <Route index element={<GeneralDashboard/>} />
-          <Route path="/loan" element={<ProfilePage />} />
+          <Route path="loan" element={<SuperAdminLoanDashboard/>}>
+          {/* <Route path=''/> */}
+            
+          </Route>
           <Route path="users" element={<TestPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />

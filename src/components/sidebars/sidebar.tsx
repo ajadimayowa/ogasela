@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../features/auth/authSlice';
-import { persistor, RootState } from '../store/store';
-import { getSidebarLinks } from '../utils/navUtils';
+import { logout } from '../../features/auth/authSlice';
+import { persistor,RootState } from '../../store/store';
+import { getSidebarLinks } from '../../utils/navUtils';
 import '../styles/sidebar.scss';
 
 // Define SidebarSubLink type if not imported
@@ -40,7 +40,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
   };
 
   return (
-    <div className={`sidebar bg-primary ${isOpen ? 'open' : 'collapsed'} h-100`}>
+    <div className={`sidebar bg-primary ${isOpen ? 'open' : 'collapsed'} col-12  d-absolute bg-light top-0 left-0 h-100  d-lg-block d-md-block col-md-4 col-lg-4`}>
       <div className="sidebar-header d-flex justify-content-between align-items-center p-3">
         <h4 className="text-white m-0">Admin</h4>
         <i className="bi bi-x-circle" onClick={toggleSidebar}></i>
