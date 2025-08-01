@@ -6,12 +6,14 @@ import { Image } from 'react-bootstrap';
 import CustomButton from './custom-button/custom-button';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import { useNavigate } from 'react-router-dom';
 
 interface TopbarProps {
   toggleSidebar: () => void;
 }
 
 const Topbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
+  const navigate= useNavigate()
    const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
   return (
     <div className="topbar d-flex justify-content-between shadow-sm align-items-center px-4 py-3 bg-light">
@@ -21,6 +23,7 @@ const Topbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
         <CustomButton
         title='Go Back'
         type='button'
+        onClick={()=>navigate(-1)}
         className='border outline bg-light text-dark'
 
         />

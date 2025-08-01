@@ -16,6 +16,8 @@ import RequestResetPasswordPage from '../pages/request-reset-password';
 import VerifyLoginOtpPage from '../pages/VerifyLoginOtpPage';
 import VerifyResetPasswordOtpPage from '../pages/VerifyResetOtpPage';
 import SuperAdminLoanDashboard from '../pages/protected/super-admin-pages/loan-pages/SuperAdminLoanDashboard';
+import SuperAdminCreateBranch from '../pages/protected/super-admin-pages/SuperAdminCreateBranch';
+import CreateStaffPage from '../pages/protected/super-admin-pages/CreateStaffPage';
 
 
 const AppRouter = () => {
@@ -38,6 +40,8 @@ const AppRouter = () => {
              <SuperAdminProtectedRoutes />
           }
         >
+          <Route path="create-branch" element={<SuperAdminCreateBranch/>} />
+          <Route path="create-staff" element={<CreateStaffPage/>} />
           <Route index element={<GeneralDashboard/>} />
           <Route path="loan" element={<SuperAdminLoanDashboard/>}>
           {/* <Route path=''/> */}

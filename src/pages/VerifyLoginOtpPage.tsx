@@ -26,7 +26,7 @@ const VerifyLoginOtpPage = () => {
     useEffect(() => {
         if (!email) {
             toast.warning('Email not found. Please login again.');
-            navigate('/login');
+            navigate('/login', {replace:true});
         }
     }, [email, navigate]);
 
@@ -80,7 +80,7 @@ const VerifyLoginOtpPage = () => {
                 toast.success('Login successful!');
                 switch (payload?.staffData?.staffLevel) {
                     case 'super-admin':
-                        navigate('/super-admin/');
+                        navigate('/super-admin/',{replace:true});
                         break;
                     case 'approver':
                         navigate('/approver/');

@@ -6,6 +6,7 @@ import { getAccessibleModules } from '../../../utils/navUtils';
 import { useNavigate } from 'react-router-dom';
 import './general-dashboard.scss';
 import DecoratedCard from '../../../components/cards/decoratedCard';
+import CustomButton from '../../../components/custom-button/custom-button';
 
 const GeneralDashboard = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const GeneralDashboard = () => {
   return (
     <div className="dashboard-container">
       <DecoratedCard>
-       <div>
+       <div className='d-flex flex-wrap justify-content-between w-100'>
         <div>
            <h4 className="">Welcome, {
           staffProfile?.firstName
@@ -28,7 +29,13 @@ const GeneralDashboard = () => {
         }</h4>
         <p>How are you doing today?</p>
         </div>
-        <div></div>
+        <div>
+          <div className='d-flex gap-2'>
+            <CustomButton onClick={()=>navigate('create-staff')} title='New Staff'/>
+            <CustomButton onClick={()=>navigate('create-branch')} className='border bg-light text-dark' title='Create Branch'/>
+          </div>
+          <a href='#'>Go to Branch Management</a>
+        </div>
        </div>
       </DecoratedCard>
 

@@ -17,9 +17,32 @@ $font-secondary: 'Lato', sans-serif;
   font-family: $font-primary;
 }
 
-.form-control{
-  box-shadow: none;
-  outline: none;
+/* For Chrome, Safari, Edge, Opera */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input.form-control:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+input{
+  // min-width: 260px !important;
+  border-radius: 5px !important;
+}
+
+input:focus,
+select:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 // Body Styling
