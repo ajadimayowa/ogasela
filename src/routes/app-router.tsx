@@ -18,6 +18,9 @@ import VerifyResetPasswordOtpPage from '../pages/VerifyResetOtpPage';
 import SuperAdminLoanDashboard from '../pages/protected/super-admin-pages/loan-pages/SuperAdminLoanDashboard';
 import SuperAdminCreateBranch from '../pages/protected/super-admin-pages/SuperAdminCreateBranch';
 import CreateStaffPage from '../pages/protected/super-admin-pages/CreateStaffPage';
+import SuperAdminSettingsPage from '../pages/protected/super-admin-pages/SuperAdminSettingsPage';
+import SuperAdminManageBranchPage from '../pages/protected/super-admin-pages/SuperAdminManageBranchPage';
+import SuperAdminManageStaffsPage from '../pages/protected/super-admin-pages/SuperAdminManageStaffsPage';
 
 
 const AppRouter = () => {
@@ -40,9 +43,13 @@ const AppRouter = () => {
              <SuperAdminProtectedRoutes />
           }
         >
-          <Route path="create-branch" element={<SuperAdminCreateBranch/>} />
-          <Route path="create-staff" element={<CreateStaffPage/>} />
           <Route index element={<GeneralDashboard/>} />
+          <Route path="create-branch" element={<SuperAdminCreateBranch/>} />
+          <Route path="branch-management" element={<SuperAdminManageBranchPage/>} />
+          <Route path="create-staff" element={<CreateStaffPage/>} />
+          <Route path="hr" element={<SuperAdminManageStaffsPage/>} />
+          <Route path="settings" element={<SuperAdminSettingsPage/>} />
+          
           <Route path="loan" element={<SuperAdminLoanDashboard/>}>
           {/* <Route path=''/> */}
             

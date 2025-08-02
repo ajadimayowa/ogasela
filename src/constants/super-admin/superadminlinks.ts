@@ -62,7 +62,7 @@ export const SuperAdminNavs = [
         id: 'super-admin-hrmanager',
         title: 'HR Manager',
         icon: 'bi bi-person-lines-fill',
-        path: '#',
+        path: '/super-admin/hr',
         subPages: []
     },
     {
@@ -76,7 +76,7 @@ export const SuperAdminNavs = [
         id: 'super-admin-hrmanager',
         title: 'Settings',
         icon: 'bi bi-gear',
-        path: '#',
+        path: '/super-admin/settings',
         subPages: []
     },
 ]

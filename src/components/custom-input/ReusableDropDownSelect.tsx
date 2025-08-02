@@ -19,7 +19,8 @@ interface CustomInputProps {
     style?: React.CSSProperties;
     icon?: string;
     icon2?: string;
-    options: any[]
+    options: any[];
+    passSelectedValue?:(v:any)=>void;
 }
 
 const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
@@ -31,7 +32,8 @@ const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
     type,
     icon,
     icon2,
-    options
+    options,
+    passSelectedValue
 }) => {
     const [field, meta, helpers] = useField(name);
     const [secured, setSecured] = useState(true);
@@ -42,6 +44,7 @@ const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
             ...provided,
             boxShadow: 'none',
             minWidth: '300px',
+            maxWidth: '300px',
             borderColor: state.isFocused ? '#1A5745' : '#ccc',
             '&:hover': {
                 borderColor: '#1A5745',
@@ -68,6 +71,9 @@ const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
 
     const handleSelectChange = (selectedOption: any) => {
         setValue(selectedOption);
+        if (passSelectedValue) {
+            passSelectedValue(selectedOption);
+        }
     };
 
     const renderIcon = (iconClass?: string, onClick?: () => void) =>

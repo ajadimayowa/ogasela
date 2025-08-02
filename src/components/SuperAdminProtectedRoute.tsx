@@ -51,7 +51,7 @@ const SuperAdminProtectedRoutes: React.FC<any> = () => {
           scrollbarWidth:'none',
           overflowY: 'auto',
           marginTop: '20px',
-          marginBottom:'20px'
+          marginBottom:'20px',
         }}
       >
         <Outlet />

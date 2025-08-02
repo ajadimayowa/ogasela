@@ -1,5 +1,6 @@
 import { useField, Field } from "formik";
 import React, { useState } from "react";
+import Select from 'react-select';
 
 interface CustomInputProps {
     inputType: "number-input" | "password" | "text-input" | string;
@@ -18,9 +19,11 @@ interface CustomInputProps {
     style?: React.CSSProperties;
     icon?: string;
     icon2?: string;
+    options: any[];
+    passSelectedValue?:(v:any)=>void;
 }
 
-const ReusableInputs: React.FC<CustomInputProps> = ({
+const ReusableDropDownStates: React.FC<CustomInputProps> = ({
     inputType,
     id,
     name,
@@ -28,10 +31,49 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
     placeholder,
     type,
     icon,
-    icon2
+    icon2,
+    options,
+    passSelectedValue
 }) => {
-    const [field, meta] = useField(name);
+    const [field, meta, helpers] = useField(name);
     const [secured, setSecured] = useState(true);
+    const { setValue } = helpers;
+
+    const customStyles = {
+        control: (provided: any, state: any) => ({
+            ...provided,
+            boxShadow: 'none',
+            minWidth: '300px',
+            borderColor: state.isFocused ? '#1A5745' : '#ccc',
+            '&:hover': {
+                borderColor: '#1A5745',
+            },
+        }),
+        option: (provided: any, state: any) => ({
+            ...provided,
+            backgroundColor: state.isFocused
+                ? '#1A5745'
+                : 'white',
+            color: state.isFocused ? 'white' : 'black',
+            '&:active': {
+                backgroundColor: '#1A5745',
+            },
+        }),
+        dropdownIndicator: (provided: any, state: any) => ({
+            ...provided,
+            color: state.isFocused ? '#1A5745' : '#666',
+        }),
+        indicatorSeparator: () => ({
+            display: 'none',
+        }),
+    };
+
+    const handleSelectChange = (selectedOption: any) => {
+        setValue(selectedOption);
+        if (passSelectedValue) {
+            passSelectedValue(selectedOption);
+        }
+    };
 
     const renderIcon = (iconClass?: string, onClick?: () => void) =>
         iconClass && (
@@ -49,51 +91,11 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
 
     const renderInputField = () => {
         switch (inputType) {
-            case "number-input":
-                return (
-                    <Field
-                        {...field}
-                        type="number"
-                        name={name}
-                        className="form-control p-2"
-                        id={id}
-                        placeholder={placeholder}
-                        style={{
-                            outline: 'none',
-                            boxShadow: 'none'
-                        }}
-                    />
-                );
-
-            case "password":
-                return (
-                    <Field
-                        {...field}
-                        type={secured ? "password" : "text"}
-                        name={name}
-                        className="form-control rounded-end-0 p-2"
-                        id={id}
-                        placeholder={placeholder}
-                    />
-                );
-
             case "text-input":
                 return (
                     <Field
                         {...field}
-                        type={type}
-                        name={name}
-                        className="form-control p-2"
-                        id={id}
-                        placeholder={placeholder}
-                    />
-                );
-
-                case "text-area":
-                return (
-                    <Field
-                        {...field}
-                        as="textarea"
+                        type="text"
                         name={name}
                         className="form-control p-2"
                         id={id}
@@ -103,13 +105,18 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
 
             default:
                 return (
-                    <Field
+                    <Select
                         {...field}
                         name={name}
-                        className="form-control p-2 rounded-0 outline-0"
+                        className="rounded-0 outline-0"
                         id={id}
+                        value={field.value}
                         placeholder={placeholder}
+                        options={options} isSearchable
+                        onChange={handleSelectChange}
+                        styles={customStyles}
                     />
+
                 );
         }
     };
@@ -130,4 +137,4 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
     );
 };
 
-export default ReusableInputs;
+export default ReusableDropDownStates;

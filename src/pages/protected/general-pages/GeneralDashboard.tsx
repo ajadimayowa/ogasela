@@ -34,7 +34,7 @@ const GeneralDashboard = () => {
             <CustomButton onClick={()=>navigate('create-staff')} title='New Staff'/>
             <CustomButton onClick={()=>navigate('create-branch')} className='border bg-light text-dark' title='Create Branch'/>
           </div>
-          <a href='#'>Go to Branch Management</a>
+          <a href='super-admin/branch-management'>Go to Branch Management</a>
         </div>
        </div>
       </DecoratedCard>
@@ -58,6 +58,8 @@ const GeneralDashboard = () => {
           <h6 className="mt-2">Settings</h6>
         </div> */}
       </div>
+
+      
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { setStaffProfile, setToken } from '../features/auth/authSlice';
+import { setOrganisationData, setStaffProfile, setToken } from '../features/auth/authSlice';
 import api from '../app/api';
 import { Card, Form, Image } from 'react-bootstrap';
 import CustomButton from '../components/custom-button/custom-button';
@@ -75,12 +75,14 @@ const VerifyLoginOtpPage = () => {
                 const { payload } = res.data;
                 console.log({seePayloadFromOtp:payload})
                 const staffProfile = payload?.staffData;
+                const orgData = payload?.organisationData;
                 dispatch(setToken(payload?.token));
                 dispatch(setStaffProfile(staffProfile));
+                dispatch(setOrganisationData(orgData));
                 toast.success('Login successful!');
                 switch (payload?.staffData?.staffLevel) {
                     case 'super-admin':
-                        navigate('/super-admin/',{replace:true});
+                        navigate('/super-admin',{replace:true});
                         break;
                     case 'approver':
                         navigate('/approver/');
