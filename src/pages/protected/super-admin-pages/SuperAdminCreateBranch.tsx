@@ -85,7 +85,7 @@ const SuperAdminCreateBranch = () => {
 
   const getAuthorizers = async () => {
     try {
-      const res = await api.get(`/staff/staffs?organisationId=${orgProfile?.id}&mode=dropdown&staffLevel=branch-manager&userClass=authorizer`);
+      const res = await api.get(`/staff/staffs?mode=dropdown&staffLevel=branch-manager&userClass=authorizer`);
       if (res.status == 200) {
         let auths = res?.data?.payload.map((auth: any) => ({
           value: auth?.id,

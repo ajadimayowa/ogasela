@@ -48,7 +48,7 @@ export const SuperAdminNavs = [
         id: 'super-admin-dd',
         title: 'Duplicate Detector',
         icon: 'bi bi-journal-check',
-        path: '#',
+        path: '/super-admin/duplicate-checker',
         subPages: [
             {
                 id: 'super-admin-dd',

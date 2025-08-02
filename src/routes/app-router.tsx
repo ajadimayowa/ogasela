@@ -21,6 +21,7 @@ import CreateStaffPage from '../pages/protected/super-admin-pages/CreateStaffPag
 import SuperAdminSettingsPage from '../pages/protected/super-admin-pages/SuperAdminSettingsPage';
 import SuperAdminManageBranchPage from '../pages/protected/super-admin-pages/SuperAdminManageBranchPage';
 import SuperAdminManageStaffsPage from '../pages/protected/super-admin-pages/SuperAdminManageStaffsPage';
+import SuperAdminDuplicateCheckerPage from '../pages/protected/super-admin-pages/SuperAdminDuplicateCheckerPage';
 
 
 const AppRouter = () => {
@@ -48,6 +49,7 @@ const AppRouter = () => {
           <Route path="branch-management" element={<SuperAdminManageBranchPage/>} />
           <Route path="create-staff" element={<CreateStaffPage/>} />
           <Route path="hr" element={<SuperAdminManageStaffsPage/>} />
+          <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage/>} />
           <Route path="settings" element={<SuperAdminSettingsPage/>} />
           
           <Route path="loan" element={<SuperAdminLoanDashboard/>}>
