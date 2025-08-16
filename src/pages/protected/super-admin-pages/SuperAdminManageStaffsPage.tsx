@@ -8,7 +8,7 @@ import './superAdminCreateBranch.scss';
 import DecoratedCard from '../../../components/cards/decoratedCard';
 import CustomButton from '../../../components/custom-button/custom-button';
 import ChartCard from '../../../components/chart/ChartCard';
-import { Badge, Card } from 'react-bootstrap';
+import { Badge, Card, Spinner } from 'react-bootstrap';
 import { Formik } from 'formik';
 import CustomInput from '../../../components/custom-input/CustormInput';
 import ReusableInputs from '../../../components/custom-input/ReusableInputs';
@@ -18,6 +18,7 @@ import CreateRoleModal from '../../../components/modals/super-admin-modals/Creat
 import api from '../../../app/api';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { IStaff } from '../../../interfaces/staff';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -30,6 +31,7 @@ const SuperAdminManageStaffsPage = () => {
   const navigate = useNavigate();
   const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
+  const [staffs, setStaffs] = useState<IStaff[]>([]);
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
     'marketer',
@@ -38,33 +40,38 @@ const SuperAdminManageStaffsPage = () => {
   );
 
   const [departmentModal, setDepartmentModal] = useState(false);
-  const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(false)
   const [roleModal, setRoleModal] = useState(false);
 
-  const getStaffs = async () => {
-    try {
-      const res = await api.get(`/staff/staffs?mode=dropdown`);
-      if (res.status == 200) {
-        console.log({seeRes:res})
-        const { payload } = res.data;
-        setBranches(payload)
-        console.log({ seePayloadFromOtp: payload })
-        const staffProfile = payload?.staffData;
-        // dispatch(setToken(payload?.token));
-        // dispatch(setStaffProfile(staffProfile));
-      }
+  const getOrganizationStaffs = async () => {
+    setLoading(true)
+        try {
+            const res = await api.get(`staff/staffs?organizationId=${orgProfile?.id}`);
+            if (res.status == 200) {
+              
+                console.log({ hereIsDepts: res?.data?.payload })
+                let options = res?.data?.payload.map((item: any) => ({
+                    value: item?.id,
+                    label: item?.fullName,
+                }))
+                setStaffs(res?.data?.payload);
+                setLoading(false)
+                // const { payload } = res.data;
+                // console.log({ seePayloadFromOtp: payload })
+                // const staffProfile = payload?.staffData;
+                // dispatch(setToken(payload?.token));
+                // dispatch(setStaffProfile(staffProfile));
+            }
 
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    } finally {
-      setLoading(false);
+        } catch (err: any) {
+            toast.error(err?.response?.data?.message || 'Invalid or expired OTP');
+        } finally {
+            setLoading(false);
+        }
     }
-  }
-
-  useEffect(() => {
-    getStaffs();
-  }, [navigate])
+    useEffect(() => {
+        getOrganizationStaffs()
+    }, [navigate])
 
   return (
     <div className="dashboard-container">
@@ -82,20 +89,39 @@ const SuperAdminManageStaffsPage = () => {
             <tr >
               <th scope="col" className='bg-primary text-light'>S/N</th>
               <th scope="col" className='bg-primary text-light'>Staff Name</th>
+              <th scope="col" className='bg-primary text-light'>Department</th>
+              <th scope="col" className='bg-primary text-light'>Type</th>
+              <th scope="col" className='bg-primary text-light'>Level</th>
+              <th scope="col" className='bg-primary text-light'>Phone Number</th>
               <th scope="col" className='bg-primary text-light'>Date Created</th>
               <th scope="col" className='bg-primary text-light'>Status</th>
             </tr>
           </thead>
           <tbody>
             {
-              branches.map((branch:any,index)=>(<tr>
+              !loading &&
+              staffs.map((staff:IStaff,index)=>(<tr>
               <th scope="row">{index + 1}</th>
-              <td>{branch?.fullName}</td>
-              <td>{moment(branch?.createdAt).format('DD-MM-YYYY')}</td>
-              <td><Badge className='bg-warning'>{branch?.isApproved?'Approved':'Pending'}</Badge></td>
+              <td>{staff?.fullName}</td>
+              <td>{staff?.department?.name}</td>
+              <td className='text-capitalize'>{staff?.userClass}</td>
+              <td className='text-capitalize'>{staff?.staffLevel}</td>
+              <td>{staff?.phoneNumber}</td>
+              <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
+              <td><Badge className='bg-warning'>{staff?.isApproved?'Approved':'Pending'}</Badge></td>
             </tr>))
             }
-            
+            <tr className='text-center'>
+              {
+                <td colSpan={5}>{loading && <Spinner size='sm' />}</td>
+              }
+            </tr>
+
+            <tr className='text-center'>
+              {
+                <td className='fw-bold' colSpan={8}>{!loading && staffs.length < 1 && 'No Data Available'}</td>
+              }
+            </tr>
           </tbody>
         </table>
         <div>
@@ -124,7 +150,7 @@ const SuperAdminManageStaffsPage = () => {
 
 
 
-      <CreateDeptModal
+      {/* <CreateDeptModal
         on={departmentModal}
         off={() => setDepartmentModal(false)}
       />
@@ -132,7 +158,7 @@ const SuperAdminManageStaffsPage = () => {
       <CreateRoleModal
         on={roleModal}
         off={() => setRoleModal(false)}
-      />
+      /> */}
     </div>
   );
 };

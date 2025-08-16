@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import './superAdminCreateBranch.scss';
 import DecoratedCard from '../../../components/cards/decoratedCard';
 import CreateStaffForm from '../../../components/page-forms/CreateStaffForm';
+import CreateDepartmentForm from '../../../components/page-forms/CreateDepartmentForm';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -15,7 +16,7 @@ const sampleData = [
   { month: 'Apr', value: 250 },
 ];
 
-const CreateStaffPage = () => {
+const CreateDeptPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -34,15 +35,15 @@ const CreateStaffPage = () => {
       <DecoratedCard>
         <div className='d-flex flex-wrap justify-content-between w-100'>
           <div>
-            <h4 className="">New Staff.</h4>
-            <p>Onboard a new staff from here.</p>
+            <h4 className="">New Department.</h4>
+            <p>Create a new department.</p>
           </div>
         </div>
       </DecoratedCard>
 
-      <CreateStaffForm/>
+      <CreateDepartmentForm/>
     </div>
   );
 };
 
-export default CreateStaffPage
+export default CreateDeptPage

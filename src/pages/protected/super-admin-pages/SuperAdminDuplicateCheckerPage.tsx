@@ -18,6 +18,8 @@ import CreateRoleModal from '../../../components/modals/super-admin-modals/Creat
 import api from '../../../app/api';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import DataCheckerForm from '../../../components/page-forms/DuplicateDataCheckerForm';
+import DuplicateDataCheckerForm from '../../../components/page-forms/DuplicateDataCheckerForm';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -30,7 +32,7 @@ const SuperAdminDuplicateCheckerPage = () => {
   const navigate = useNavigate();
   const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
-  const [startTable,setStartTable] = useState(false);
+  const [startTable, setStartTable] = useState(false);
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
     'marketer',
@@ -38,23 +40,23 @@ const SuperAdminDuplicateCheckerPage = () => {
     'pro'
   );
 
-const [step, setStep] = useState(1);
-const [numColumns, setNumColumns] = useState(0);
-const [columnHeaders, setColumnHeaders] = useState<string[]>([]);
-const [tableData, setTableData] = useState<string[][]>([]);
+  const [step, setStep] = useState(1);
+  const [numColumns, setNumColumns] = useState(0);
+  const [columnHeaders, setColumnHeaders] = useState<string[]>([]);
+  const [tableData, setTableData] = useState<string[][]>([]);
 
   const [departmentModal, setDepartmentModal] = useState(false);
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(false)
   const [roleModal, setRoleModal] = useState(false);
 
-  
+
 
   const getStaffs = async () => {
     try {
       const res = await api.get(`/staff/staffs?mode=dropdown`);
       if (res.status == 200) {
-        console.log({seeRes:res})
+        console.log({ seeRes: res })
         const { payload } = res.data;
         setBranches(payload)
         console.log({ seePayloadFromOtp: payload })
@@ -85,113 +87,16 @@ const [tableData, setTableData] = useState<string[][]>([]);
         </div>
       </DecoratedCard>
       <div>
-        <div className='w-100 d-flex justify-content-end mt-3'>
+        {/* <div className='w-100 d-flex justify-content-end mt-3'>
           <div></div>
-          {!startTable&&<div><CustomButton onClick={()=>setStartTable(true)} title='New Record'/></div>}
+          {!startTable && <div><CustomButton onClick={() => setStartTable(true)} title='New Record' /></div>}
 
-        </div>
+        </div> */}
 
-        {step === 1 && startTable && (
-  <>
-  <p>Enter Number of Columns</p>
-  <div className='d-flex gap-2'>
-<div>
-  
-  <input
-      type="number"
-      value={numColumns}
-      onChange={(e) => setNumColumns(Number(e.target.value))}
-    />
-</div>
-    <CustomButton
-    title='Next'
-    onClick={() => setStep(2)}
-    />
-  </div>
-    
-  </>
-)}
+        <DuplicateDataCheckerForm/>
 
-{step === 2 && (
-  <div className='d-flex gap-2 flex-wrap align-items-center'>
-{Array.from({ length: numColumns }).map((_, i) => (
-      <input
-        key={i}
-        placeholder={`Column ${i + 1} Title`}
-        value={columnHeaders[i] || ''}
-        onChange={(e) => {
-          const updated = [...columnHeaders];
-          updated[i] = e.target.value;
-          setColumnHeaders(updated);
-        }}
-      />
-    ))}
-    <CustomButton
-    title='Generate Table'
-    onClick={() => setStep(3)}
-    />
-  </div>
-)}
 
-{step === 3 && (
-  <>
-    <table>
-      <thead >
-        <tr className='text-uppercase'>
-          {columnHeaders.map((header, i) => (
-            <th key={i}>{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody className='m-2'>
-        {tableData.map((row, rowIndex) => (
-          <tr  key={rowIndex}>
-            {columnHeaders.map((_, colIndex) => (
-              <td key={colIndex}>
-                <input
-                  value={row[colIndex] || ''}
-                  onChange={(e) => {
-                    const updated = [...tableData];
-                    updated[rowIndex][colIndex] = e.target.value;
-                    setTableData(updated);
-                  }}
-                />
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-    <div className='d-flex w-75 justify-content-between mt-2'>
-      <CustomButton
-    title='Add New Row'
-    onClick={
-      ()=>setTableData([...tableData, Array(numColumns).fill('')])
-    }
-    />
-
-    <div className='d-flex gap-2'>
-      <CustomButton
-    title='Download'
-    // onClick={
-    //   ()=>setTableData([...tableData, Array(numColumns).fill('')])
-    // }
-    />
-
-    <CustomButton
-    title='Upload Record'
-    className='bg-light border text-dark'
-    // onClick={
-    //   ()=>setTableData([...tableData, Array(numColumns).fill('')])
-    // }
-    />
-
-    </div>
-    </div>
-
-  </>
-)}
-        <table className="table table-striped mt-3">
+        {/* <table className="table table-striped mt-3">
           <thead>
             <tr >
               <th scope="col" className='bg-primary text-light'>S/N</th>
@@ -202,43 +107,43 @@ const [tableData, setTableData] = useState<string[][]>([]);
           </thead>
           <tbody>
             {
-              branches.map((branch:any,index)=>(<tr>
-              <th scope="row">{index + 1}</th>
-              <td>{branch?.fullName}</td>
-              <td>{moment(branch?.createdAt).format('DD-MM-YYYY')}</td>
-              <td><Badge className='bg-warning'>{branch?.isApproved?'Approved':'Pending'}</Badge></td>
-            </tr>))
+              branches.map((branch: any, index) => (<tr>
+                <th scope="row">{index + 1}</th>
+                <td>{branch?.fullName}</td>
+                <td>{moment(branch?.createdAt).format('DD-MM-YYYY')}</td>
+                <td><Badge className='bg-warning'>{branch?.isApproved ? 'Approved' : 'Pending'}</Badge></td>
+              </tr>))
             }
 
-             {
-              branches.length<1 &&
+            {
+              branches.length < 1 &&
               <tr className='text-center'><td className='fw-bold' colSpan={5}>No Data Available</td></tr>
-              
+
             }
-            
+
           </tbody>
         </table>
         <div>
           <nav aria-label="Page navigation example">
-  {
-    branches.length >0 &&
-    <ul className="pagination">
-    <li className="page-item">
-      <a className="page-link" href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    <li className="page-item"><a className="page-link" href="#">1</a></li>
-    <li className="page-item"><a className="page-link" href="#">2</a></li>
-    <li className="page-item"><a className="page-link" href="#">3</a></li>
-    <li className="page-item">
-      <a className="page-link" href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>}
-</nav>
-        </div>
+            {
+              branches.length > 0 &&
+              <ul className="pagination">
+                <li className="page-item">
+                  <a className="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li className="page-item"><a className="page-link" href="#">1</a></li>
+                <li className="page-item"><a className="page-link" href="#">2</a></li>
+                <li className="page-item"><a className="page-link" href="#">3</a></li>
+                <li className="page-item">
+                  <a className="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>}
+          </nav>
+        </div> */}
       </div>
 
 
@@ -246,7 +151,7 @@ const [tableData, setTableData] = useState<string[][]>([]);
 
 
 
-      <CreateDeptModal
+      {/* <CreateDeptModal
         on={departmentModal}
         off={() => setDepartmentModal(false)}
       />
@@ -254,7 +159,7 @@ const [tableData, setTableData] = useState<string[][]>([]);
       <CreateRoleModal
         on={roleModal}
         off={() => setRoleModal(false)}
-      />
+      /> */}
     </div>
   );
 };

@@ -8,7 +8,7 @@ import './superAdminCreateBranch.scss';
 import DecoratedCard from '../../../components/cards/decoratedCard';
 import CustomButton from '../../../components/custom-button/custom-button';
 import ChartCard from '../../../components/chart/ChartCard';
-import { Badge, Card, Spinner } from 'react-bootstrap';
+import { Badge, Card } from 'react-bootstrap';
 import { Formik } from 'formik';
 import CustomInput from '../../../components/custom-input/CustormInput';
 import ReusableInputs from '../../../components/custom-input/ReusableInputs';
@@ -26,7 +26,7 @@ const sampleData = [
   { month: 'Apr', value: 250 },
 ];
 
-const SuperAdminManageBranchPage = () => {
+const SuperAdminManageStaffsPage = () => {
   const navigate = useNavigate();
   const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
@@ -42,17 +42,15 @@ const SuperAdminManageBranchPage = () => {
   const [loading, setLoading] = useState(false)
   const [roleModal, setRoleModal] = useState(false);
 
-  const getBranches = async () => {
-    setLoading(true)
+  const getStaffs = async () => {
     try {
-      const res = await api.get(`/branches?organisationId=${orgProfile?.id}`);
+      const res = await api.get(`/staff/staffs?mode=dropdown`);
       if (res.status == 200) {
-        console.log({ seeRes: res })
+        console.log({seeRes:res})
         const { payload } = res.data;
         setBranches(payload)
         console.log({ seePayloadFromOtp: payload })
         const staffProfile = payload?.staffData;
-        setLoading(false)
         // dispatch(setToken(payload?.token));
         // dispatch(setStaffProfile(staffProfile));
       }
@@ -65,7 +63,7 @@ const SuperAdminManageBranchPage = () => {
   }
 
   useEffect(() => {
-    getBranches();
+    getStaffs();
   }, [navigate])
 
   return (
@@ -73,83 +71,70 @@ const SuperAdminManageBranchPage = () => {
       <DecoratedCard>
         <div className='d-flex flex-wrap justify-content-between w-100'>
           <div>
-            <h4 className="">Branch Management.</h4>
-            <p>Manage and see all your Organisation branch from here.</p>
+            <h4 className="">Staff Directory and Management.</h4>
+            <p>Manage your Organisation staffs from here.</p>
           </div>
         </div>
       </DecoratedCard>
-      <Card className='mt-2'>
+      <div>
         <table className="table table-striped mt-3">
           <thead>
             <tr >
               <th scope="col" className='bg-primary text-light'>S/N</th>
-              <th scope="col" className='bg-primary text-light'>Branch Name</th>
-              <th scope="col" className='bg-primary text-light'>Manager</th>
+              <th scope="col" className='bg-primary text-light'>Staff Name</th>
               <th scope="col" className='bg-primary text-light'>Date Created</th>
               <th scope="col" className='bg-primary text-light'>Status</th>
             </tr>
           </thead>
           <tbody>
-            {!loading &&
-              branches.map((branch: any, index) => (<tr>
-                <th scope="row">{index + 1}</th>
-                <td>{branch?.name}</td>
-                <td>{branch?.manager?.fullName}</td>
-                <td>{moment(branch?.createdAt).format('DD-MM-YYYY')}</td>
-                <td><Badge className='bg-warning'>{branch?.isApproved ? 'Approved' : 'Pending'}</Badge></td>
-              </tr>))
+            {
+              branches.map((branch:any,index)=>(<tr>
+              <th scope="row">{index + 1}</th>
+              <td>{branch?.fullName}</td>
+              <td>{moment(branch?.createdAt).format('DD-MM-YYYY')}</td>
+              <td><Badge className='bg-warning'>{branch?.isApproved?'Approved':'Pending'}</Badge></td>
+            </tr>))
             }
-            <tr className='text-center'>
-              {
-                <td colSpan={5}>{loading && <Spinner size='sm' />}</td>
-              }
-            </tr>
-
-            <tr className='text-center'>
-              {
-                <td className='fw-bold' colSpan={5}>{!loading && branches.length < 1 && 'No Data Available'}</td>
-              }
-            </tr>
-
+            
           </tbody>
         </table>
         <div>
           <nav aria-label="Page navigation example">
-            <ul className="pagination">
-              <li className="page-item">
-                <a className="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li className="page-item"><a className="page-link" href="#">1</a></li>
-              <li className="page-item"><a className="page-link" href="#">2</a></li>
-              <li className="page-item"><a className="page-link" href="#">3</a></li>
-              <li className="page-item">
-                <a className="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+  <ul className="pagination">
+    <li className="page-item">
+      <a className="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li className="page-item"><a className="page-link" href="#">1</a></li>
+    <li className="page-item"><a className="page-link" href="#">2</a></li>
+    <li className="page-item"><a className="page-link" href="#">3</a></li>
+    <li className="page-item">
+      <a className="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
         </div>
-      </Card>
+      </div>
 
 
 
 
 
 
-      {/* <CreateDeptModal
+      <CreateDeptModal
         on={departmentModal}
         off={() => setDepartmentModal(false)}
-      /> */}
+      />
 
-      {/* <CreateRoleModal
+      <CreateRoleModal
         on={roleModal}
         off={() => setRoleModal(false)}
-      /> */}
+      />
     </div>
   );
 };
 
-export default SuperAdminManageBranchPage;
+export default SuperAdminManageStaffsPage;

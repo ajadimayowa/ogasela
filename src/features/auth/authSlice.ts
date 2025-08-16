@@ -4,9 +4,19 @@ import { persistor, RootState } from "../../store/store";
 
 export interface IStaffProfile {
   token: string | null;
+  rootAdminProfile: {
+    id: string,
+    fullName: string,
+    firstName: string,
+    email: string,
+    phoneNumber: string,
+    isRootAdmin: boolean,
+
+  }| null;
   staffProfile: {
     createdAt: string,
     department: string,
+    organization:string,
     emailIsVerified: boolean | null,
     firstName: string,
     fullName: string,
@@ -21,6 +31,7 @@ export interface IStaffProfile {
     phoneNumber: string,
     staffKycInformation: {}
     staffLevel: string,
+    userClass: string,
     staffNokInformation: {}
     state: string,
     updatedAt: string
@@ -38,17 +49,36 @@ export interface IStaffProfile {
     createdAt: string,
     updatedAt: string,
 
-  } | null
+  } | null;
 
+  departmentData: {
+    id: string,
+    name: string
+  } | null;
+
+  roleData: {
+    id: string,
+    name: string,
+    permissions:string[],
+  } | null
 
 }
 
 const initialState: IStaffProfile = {
   token: localStorage.getItem('token') || null,
+  rootAdminProfile: {
+    id: '',
+    fullName: '',
+    firstName: '',
+    email: '',
+    phoneNumber: '',
+    isRootAdmin: false
+  },
   staffProfile: {
     id: '',
     createdAt: '',
     department: '',
+    organization:'',
     emailIsVerified: null,
     firstName: '',
     fullName: '',
@@ -62,6 +92,7 @@ const initialState: IStaffProfile = {
     phoneNumber: '',
     staffKycInformation: {},
     staffLevel: '',
+    userClass:'',
     staffNokInformation: {},
     state: '',
     updatedAt: '',
@@ -78,6 +109,15 @@ const initialState: IStaffProfile = {
     orgRegNumber: '',
     createdAt: '',
     updatedAt: '',
+  },
+  departmentData: {
+    id: '',
+    name: ''
+  },
+  roleData: {
+    id: '',
+    name: '',
+    permissions:[]
   }
 };
 
@@ -89,20 +129,31 @@ const authSlice = createSlice({
       state.token = action.payload;
       localStorage.setItem('token', action.payload);
     },
+    setRootAdminProfile: (state, action: any) => {
+      state.rootAdminProfile = action.payload;
+    },
     setStaffProfile: (state, action: PayloadAction<IStaffProfile['staffProfile']>) => {
       state.staffProfile = action.payload;
     },
     setOrganisationData: (state, action: PayloadAction<IStaffProfile['organisationData']>) => {
       state.organisationData = action.payload;
     },
+    
+    setDeptData: (state, action: PayloadAction<IStaffProfile['departmentData']>) => {
+      state.departmentData = action.payload;
+    },
+    setRoleData: (state, action: PayloadAction<IStaffProfile['roleData']>) => {
+      state.roleData = action.payload;
+    },
     logout: (state) => {
       state.token = null;
       state.staffProfile = null; // or {}
+       state.rootAdminProfile = null; // or {}
       localStorage.removeItem('token');
     },
   },
 });
 
-export const { setToken, setStaffProfile,setOrganisationData, logout } = authSlice.actions;
+export const { setToken,setRootAdminProfile, setStaffProfile, setOrganisationData, logout } = authSlice.actions;
 
 export default authSlice.reducer;

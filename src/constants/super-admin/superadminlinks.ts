@@ -3,7 +3,7 @@ export const SuperAdminNavs = [
         id: 'general-dashboard',
         title: 'Dashboard',
         icon: 'bi bi-speedometer2',
-        path: '/super-admin'
+        path: '/super-admin/dashboard'
     },
     {
         id: 'super-admin-loan',

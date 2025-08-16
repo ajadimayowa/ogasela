@@ -10,15 +10,13 @@ interface CustomButtonProps {
     style?: React.CSSProperties;
     onClick?:()=>void
 }
-const CustomButton: React.FC<CustomButtonProps> = ({onClick,style, className,loading,title,type, ...props }) => {
+const CustomButtonOwner: React.FC<CustomButtonProps> = ({onClick,style, className,loading,title,type, ...props }) => {
     return (
-        <Button 
-        // style={{...style,backgroundColor: color ?? '#1A5745' }} 
-        onClick={onClick} className={className} type={type} {...props} disabled={loading} 
+        <Button style={{backgroundColor: color ?? '#1A5745' }} onClick={onClick} className={className} type={type} {...props} disabled={loading} 
         // style={{...props.style}}
          >
         {loading ? <Spinner animation="grow" size="sm" role="status" aria-hidden="true" /> :title}
         </Button>
     );
 }
-export default CustomButton;
+export default CustomButtonOwner;

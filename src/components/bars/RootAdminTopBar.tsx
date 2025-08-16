@@ -1,18 +1,18 @@
 // src/components/Topbar.tsx
 import React from 'react';
 // import { BsList } from 'react-icons/bs';
-import '../styles/topbar.scss';
+import '../../styles/topbar.scss';
 import { Image } from 'react-bootstrap';
-import CustomButton from './custom-button/custom-button';
+import CustomButton from '../custom-button/custom-button';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { RootState } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
 
 interface TopbarProps {
   toggleSidebar: () => void;
 }
 
-const Topbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
+const RootAdminTopBar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   const navigate= useNavigate()
    const rootAdminProfile = useSelector((state: RootState) => state.auth.rootAdminProfile);
   return (
@@ -42,4 +42,4 @@ const Topbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   );
 };
 
-export default Topbar;
+export default RootAdminTopBar;

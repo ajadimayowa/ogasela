@@ -82,7 +82,7 @@ const VerifyLoginOtpPage = () => {
                 toast.success('Login successful!');
                 switch (payload?.staffData?.staffLevel) {
                     case 'super-admin':
-                        navigate('/super-admin',{replace:true});
+                        navigate('/super-admin/dashboard',{replace:true});
                         break;
                     case 'approver':
                         navigate('/approver/');

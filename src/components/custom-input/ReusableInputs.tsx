@@ -89,7 +89,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
                     />
                 );
 
-                case "text-area":
+            case "text-area":
                 return (
                     <Field
                         {...field}

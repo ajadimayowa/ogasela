@@ -19,8 +19,10 @@ interface CustomInputProps {
     style?: React.CSSProperties;
     icon?: string;
     icon2?: string;
+    link?: string;
+    linkTitle?: string;
     options: any[];
-    passSelectedValue?:(v:any)=>void;
+    passSelectedValue?: (v: any) => void;
 }
 
 const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
@@ -28,6 +30,8 @@ const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
     id,
     name,
     label,
+    link,
+    linkTitle,
     placeholder,
     type,
     icon,
@@ -43,7 +47,7 @@ const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
         control: (provided: any, state: any) => ({
             ...provided,
             boxShadow: 'none',
-            minWidth: '300px',
+            minWidth: '100%',
             maxWidth: '300px',
             borderColor: state.isFocused ? '#1A5745' : '#ccc',
             '&:hover': {
@@ -109,7 +113,7 @@ const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
                     <Select
                         {...field}
                         name={name}
-                        className="rounded-0 outline-0"
+                        className="rounded-0 outline-0 w-100"
                         id={id}
                         value={field.value}
                         placeholder={placeholder}
@@ -123,12 +127,15 @@ const ReusableDropDownSelect: React.FC<CustomInputProps> = ({
     };
 
     return (
-        <div className="form-group w-100">
-            {label && (
-                <label htmlFor={id} className="fw-medium m-1 text-dark">
-                    {label}
-                </label>
-            )}
+        <div className="form-group">
+            <div className="d-flex justify-content-between align-items-center">
+                {label && (
+                    <label htmlFor={id} className="fw-medium m-1 text-dark d-flex">
+                        {label}
+                    </label>
+                )}
+                {link && (<small className="p-0 m-0"><a href={link}>{linkTitle}</a></small>)}
+            </div>
             <div className="d-flex align-items-center">
                 {renderIcon(icon)}
                 {renderInputField()}
