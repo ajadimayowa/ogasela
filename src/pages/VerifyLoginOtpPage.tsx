@@ -91,7 +91,7 @@ const VerifyLoginOtpPage = () => {
                         navigate('/manager/');
                         break;
                     case 'marketer':
-                        navigate('/marketer/');
+                        navigate('/marketer/dashboard');
                         break;
                     default:
                         navigate('/login');

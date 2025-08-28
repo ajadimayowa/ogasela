@@ -1,19 +1,27 @@
 // src/pages/Dashboard.tsx
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
-import { getAccessibleModules } from '../../../utils/navUtils';
+import { RootState } from '../../../../store/store';
+import { getAccessibleModules } from '../../../../utils/navUtils';
 import { useNavigate } from 'react-router-dom';
-import './general-dashboard.scss';
-import DecoratedCard from '../../../components/cards/decoratedCard';
-import CustomButton from '../../../components/custom-button/custom-button';
+import './superAdminLoandashboard.scss';
+import DecoratedCard from '../../../../components/cards/decoratedCard';
+import CustomButton from '../../../../components/custom-button/custom-button';
+import ChartCard from '../../../../components/chart/ChartCard';
 
-const GeneralDashboard = () => {
+const sampleData = [
+  { month: 'Jan', value: 100 },
+  { month: 'Feb', value: 200 },
+  { month: 'Mar', value: 180 },
+  { month: 'Apr', value: 250 },
+];
+
+const SuperAdminLoanDashboard = () => {
   const navigate = useNavigate();
   const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
-    'super-admin',
+    'marketer',
     // staff?.organization?.subscriptionType || 
     'pro'
   );
@@ -31,13 +39,33 @@ const GeneralDashboard = () => {
         </div>
         <div>
           <div className='d-flex gap-2'>
-            <CustomButton onClick={()=>navigate('create-staff')} title='New Staff'/>
-            <CustomButton onClick={()=>navigate('create-branch')} className='border bg-light text-dark' title='Create Branch'/>
+            <CustomButton title='+ Manager'/>
+            <CustomButton className='border bg-light text-dark' title='+ Branch'/>
           </div>
-          <a href='super-admin/branch-management'>Go to Branch Management</a>
+          <a href='#'>Go to Branch Management</a>
         </div>
        </div>
       </DecoratedCard>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <ChartCard
+        title="Monthly Loan Performance"
+        data={sampleData}
+        dataKey="value"
+        xKey="month"
+        chartType="line"
+        color="#4CAF50"
+      />
+
+      <ChartCard
+        title="Loan Completion Analysis"
+        data={sampleData}
+        dataKey="value"
+        xKey="month"
+        chartType="bar"
+        color="#2196F3"
+      />
+    </div>
 
       <div className="module-grid mt-3">
         {modules.map(module => (
@@ -58,10 +86,8 @@ const GeneralDashboard = () => {
           <h6 className="mt-2">Settings</h6>
         </div> */}
       </div>
-
-      
     </div>
   );
 };
 
-export default GeneralDashboard;
+export default SuperAdminLoanDashboard;

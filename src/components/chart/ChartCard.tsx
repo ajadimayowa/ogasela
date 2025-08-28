@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  AreaChart,
 } from 'recharts';
 
 type ChartType = 'line' | 'bar';
@@ -34,10 +35,10 @@ const ChartCard: React.FC<ChartCardProps> = ({
 }) => {
   return (
     <div className="rounded-2xl shadow-md p-4 bg-white m-2">
-      <h3 className="text-lg font-semibold mb-3">{title}</h3>
+      <h5 className="text-lg font-semibold mb-3">{title}</h5>
       <ResponsiveContainer width="100%" height={height}>
         {chartType === 'line' ? (
-          <LineChart data={data}>
+          <AreaChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={xKey} />
             <YAxis />
@@ -46,11 +47,11 @@ const ChartCard: React.FC<ChartCardProps> = ({
               type="monotone"
               dataKey={dataKey}
               stroke={color}
-              strokeWidth={2}
+              strokeWidth={1}
               dot={{ r: 3 }}
               activeDot={{ r: 5 }}
             />
-          </LineChart>
+          </AreaChart>
         ) : (
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />

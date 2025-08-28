@@ -89,7 +89,6 @@ const SuperAdminManageStaffsPage = () => {
             <tr >
               <th scope="col" className='bg-primary text-light'>S/N</th>
               <th scope="col" className='bg-primary text-light'>Staff Name</th>
-              <th scope="col" className='bg-primary text-light'>Current Branch</th>
               <th scope="col" className='bg-primary text-light'>Department</th>
               <th scope="col" className='bg-primary text-light'>Type</th>
               <th scope="col" className='bg-primary text-light'>Level</th>
@@ -101,10 +100,9 @@ const SuperAdminManageStaffsPage = () => {
           <tbody>
             {
               !loading &&
-              staffs.map((staff:IStaff,index)=>(<tr role='button' onClick={()=>navigate(`/super-admin/staff/${staff?.id}`)}>
+              staffs.map((staff:IStaff,index)=>(<tr>
               <th scope="row">{index + 1}</th>
               <td>{staff?.fullName}</td>
-              <td>{staff?.branch?.name}</td>
               <td>{staff?.department?.name}</td>
               <td className='text-capitalize'>{staff?.userClass}</td>
               <td className='text-capitalize'>{staff?.staffLevel}</td>
@@ -115,13 +113,13 @@ const SuperAdminManageStaffsPage = () => {
             }
             <tr className='text-center'>
               {
-                <td colSpan={9}>{loading && <Spinner size='sm' />}</td>
+                <td colSpan={8}>{loading && <Spinner size='sm' />}</td>
               }
             </tr>
 
             <tr className='text-center'>
               {
-                <td className='fw-bold' colSpan={9}>{!loading && staffs.length < 1 && 'No Data Available'}</td>
+                <td className='fw-bold' colSpan={8}>{!loading && staffs.length < 1 && 'No Data Available'}</td>
               }
             </tr>
           </tbody>

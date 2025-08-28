@@ -121,7 +121,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
                     {label}
                 </label>
             )}
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center" style={{maxWidth:'350px'}}>
                 {renderIcon(icon)}
                 {renderInputField()}
                 {inputType === "password" && renderEndIcon(icon2, () => setSecured(!secured))}

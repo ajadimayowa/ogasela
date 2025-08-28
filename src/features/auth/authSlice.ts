@@ -15,6 +15,10 @@ export interface IStaffProfile {
   }| null;
   staffProfile: {
     createdAt: string,
+    branch:{
+      _id:string;
+      name:string;
+    };
     department: string,
     organization:string,
     emailIsVerified: boolean | null,
@@ -81,6 +85,10 @@ const initialState: IStaffProfile = {
     organization:'',
     emailIsVerified: null,
     firstName: '',
+    branch:{
+      _id:'',
+      name:''
+    },
     fullName: '',
     homeAddress: '',
     isApproved: null,

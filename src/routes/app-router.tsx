@@ -29,6 +29,11 @@ import RootAdminOrganizationListPage from '../pages/protected/root-admin-pages/R
 import CreateDeptPage from '../pages/protected/super-admin-pages/CreateDeptPage';
 import CreateRolePage from '../pages/protected/super-admin-pages/CreateRolePage';
 import CreateBranchPage from '../pages/protected/super-admin-pages/CreateBranchPage';
+import MarketerProtectedRoute from '../components/MarketerProtectedRoute';
+import MarketerGeneralDashboard from '../pages/protected/general-pages/MarketerGeneralDashboard';
+import CreateLoanPage from '../pages/protected/marketer-pages/CreateLoanPage';
+import MarketerLoanDashboard from '../pages/protected/marketer-pages/loan-pages/MarketerLoanDashboard';
+import SuperAdminViewStaffPage from '../pages/protected/super-admin-pages/SuperAdminViewStaffPage';
 
 
 const AppRouter = () => {
@@ -62,10 +67,36 @@ const AppRouter = () => {
           <Route path="create-role" element={<CreateRolePage/>} />
 
           <Route path="hr" element={<SuperAdminManageStaffsPage/>} />
+           <Route path="staff/:id" element={<SuperAdminViewStaffPage/>} />
           <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage/>} />
           <Route path="settings" element={<SuperAdminSettingsPage/>} />
           
           <Route path="loan" element={<SuperAdminLoanDashboard/>}>
+          {/* <Route path=''/> */}
+            
+          </Route>
+          <Route path="users" element={<TestPage />} />
+        </Route>
+
+        <Route
+          path="/marketer"
+          element={
+             <MarketerProtectedRoute />
+          }
+        >
+          <Route index path='dashboard' element={<MarketerGeneralDashboard/>} />
+          <Route path="create-branch" element={<CreateBranchPage/>} />
+          <Route path="branch-management" element={<SuperAdminManageBranchPage/>} />
+
+          <Route path="create-loan" element={<CreateLoanPage/>} />
+          <Route path="create-dept" element={<CreateDeptPage/>} />
+          <Route path="create-role" element={<CreateRolePage/>} />
+
+          <Route path="hr" element={<SuperAdminManageStaffsPage/>} />
+          <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage/>} />
+          <Route path="settings" element={<SuperAdminSettingsPage/>} />
+          
+          <Route path="loan" element={<MarketerLoanDashboard/>}>
           {/* <Route path=''/> */}
             
           </Route>
@@ -84,6 +115,7 @@ const AppRouter = () => {
           <Route path="audit-trail" element={<SuperAdminManageBranchPage/>} />
           <Route path="settings" element={<CreateStaffPage/>} />
           <Route path="hr" element={<SuperAdminManageStaffsPage/>} />
+          <Route path="staff/:id" element={<SuperAdminManageStaffsPage/>} />
           <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage/>} />
           <Route path="settings" element={<SuperAdminSettingsPage/>} />
           
@@ -94,7 +126,7 @@ const AppRouter = () => {
           <Route path="users" element={<TestPage />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
       </Routes>
     </Router>
   );

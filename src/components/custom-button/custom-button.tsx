@@ -5,14 +5,15 @@ interface CustomButtonProps {
     loading?: boolean;
     title: string;
     type?: "button" | "submit" | "reset";
-    variant?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark";
+    variant?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "outline";
     className?: string;
     style?: React.CSSProperties;
     onClick?:()=>void
 }
-const CustomButton: React.FC<CustomButtonProps> = ({onClick,style, className,loading,title,type, ...props }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({onClick,style, className,variant,loading,title,type, ...props }) => {
     return (
         <Button 
+        variant={variant}
         // style={{...style,backgroundColor: color ?? '#1A5745' }} 
         onClick={onClick} className={className} type={type} {...props} disabled={loading} 
         // style={{...props.style}}
