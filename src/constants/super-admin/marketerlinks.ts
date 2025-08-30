@@ -3,10 +3,10 @@ export const MarketerNavs = [
         id: 'general-dashboard',
         title: 'Dashboard',
         icon: 'bi bi-speedometer2',
-        path: '/marketer/dashboard'
+        path: '/marketer/db'
     },
     {
-        id: 'super-admin-loan',
+        id: 'marketer-loan',
         title: 'Loan Manager',
         icon: 'bi bi-cash-stack',
         path: '#',
@@ -15,13 +15,13 @@ export const MarketerNavs = [
                 id: 'super-admin-loan',
                 title: 'Dashboard',
                 icon: '',
-                path: '/marketer/loan',
+                path: '/marketer/loan-db',
             },
             {
                 id: 'super-admin-loan',
                 title: 'Loan Managemnts',
                 icon: '',
-                path: '#',
+                path: '/marketer/loan-management',
             },
             {
                 id: 'super-admin-loan',
@@ -48,7 +48,7 @@ export const MarketerNavs = [
         id: 'super-admin-dd',
         title: 'Duplicate Detector',
         icon: 'bi bi-journal-check',
-        path: '/super-admin/duplicate-checker',
+        path: '/marketer/duplicate-checker',
         subPages: [
             {
                 id: 'super-admin-dd',

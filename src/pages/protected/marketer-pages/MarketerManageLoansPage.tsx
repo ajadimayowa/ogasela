@@ -19,6 +19,7 @@ import api from '../../../app/api';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { IStaff } from '../../../interfaces/staff';
+import { IGroup } from '../../../interfaces/group';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -27,11 +28,11 @@ const sampleData = [
   { month: 'Apr', value: 250 },
 ];
 
-const SuperAdminManageStaffsPage = () => {
+const MarketerManageLoansPage = () => {
   const navigate = useNavigate();
   const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
-  const [staffs, setStaffs] = useState<IStaff[]>([]);
+  const [loans, setLoans] = useState<IGroup[]>([]);
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
     'marketer',
@@ -43,10 +44,12 @@ const SuperAdminManageStaffsPage = () => {
   const [loading, setLoading] = useState(false)
   const [roleModal, setRoleModal] = useState(false);
 
-  const getOrganizationStaffs = async () => {
+  const getLoans= async () => {
     setLoading(true)
         try {
-            const res = await api.get(`staff/staffs?organisationId=${orgProfile?.id}`);
+            const res = await api.get(`groups?branchId=${staffProfile?.branch._id}`);
+             setLoans(res?.data?.data);
+              setLoading(false)
             if (res.status == 200) {
               
                 console.log({ hereIsDepts: res?.data?.payload })
@@ -54,8 +57,7 @@ const SuperAdminManageStaffsPage = () => {
                     value: item?.id,
                     label: item?.fullName,
                 }))
-                setStaffs(res?.data?.payload);
-                setLoading(false)
+               
                 // const { payload } = res.data;
                 // console.log({ seePayloadFromOtp: payload })
                 // const staffProfile = payload?.staffData;
@@ -64,13 +66,13 @@ const SuperAdminManageStaffsPage = () => {
             }
 
         } catch (err: any) {
-            toast.error(err?.response?.data?.message || 'Invalid or expired OTP');
+            // toast.error(err?.response?.data?.message || 'Invalid or expired OTP');
         } finally {
             setLoading(false);
         }
     }
     useEffect(() => {
-        getOrganizationStaffs()
+        getLoans()
     }, [navigate])
 
   return (
@@ -78,8 +80,8 @@ const SuperAdminManageStaffsPage = () => {
       <DecoratedCard>
         <div className='d-flex flex-wrap justify-content-between w-100'>
           <div>
-            <h4 className="">Staff Directory and Management.</h4>
-            <p>Manage your Organisation staffs from here.</p>
+            <h4 className="">Manage Loans.</h4>
+            <p>ManageManage all loans created by you.</p>
           </div>
         </div>
       </DecoratedCard>
@@ -88,11 +90,8 @@ const SuperAdminManageStaffsPage = () => {
           <thead>
             <tr >
               <th scope="col" className='bg-primary text-light'>S/N</th>
-              <th scope="col" className='bg-primary text-light'>Staff Name</th>
-              <th scope="col" className='bg-primary text-light'>Department</th>
-              <th scope="col" className='bg-primary text-light'>Type</th>
-              <th scope="col" className='bg-primary text-light'>Level</th>
-              <th scope="col" className='bg-primary text-light'>Phone Number</th>
+              <th scope="col" className='bg-primary text-light'>Group Name</th>
+              <th scope="col" className='bg-primary text-light'>Requested Amount</th>
               <th scope="col" className='bg-primary text-light'>Date Created</th>
               <th scope="col" className='bg-primary text-light'>Status</th>
             </tr>
@@ -100,15 +99,14 @@ const SuperAdminManageStaffsPage = () => {
           <tbody>
             {
               !loading &&
-              staffs.map((staff:IStaff,index)=>(<tr>
+              loans.map((staff:IGroup,index)=>(
+              <tr className='p-2' role='button' onClick={()=>navigate(`/marketer/view-group/${staff?._id}`)}>
               <th scope="row">{index + 1}</th>
-              <td>{staff?.fullName}</td>
-              <td>{staff?.department?.name}</td>
-              <td className='text-capitalize'>{staff?.userClass}</td>
-              <td className='text-capitalize'>{staff?.staffLevel}</td>
-              <td>{staff?.phoneNumber}</td>
+              <td>{staff?.groupName}</td>
+              <td>{staff?.totalAmountBorrowed}</td>
               <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
-              <td><Badge className='bg-warning'>{staff?.isApproved?'Approved':'Pending'}</Badge></td>
+              {/* <td><Badge className='bg-warning'>{staff?.isApproved?'Approved':'Pending'}</Badge></td> */}
+              <td><Badge className='bg-warning'>{'Pending'}</Badge></td>
             </tr>))
             }
             <tr className='text-center'>
@@ -119,7 +117,7 @@ const SuperAdminManageStaffsPage = () => {
 
             <tr className='text-center'>
               {
-                <td className='fw-bold' colSpan={8}>{!loading && staffs.length < 1 && 'No Data Available'}</td>
+                <td className='fw-bold' colSpan={8}>{!loading && loans.length < 1 && 'No Data Available'}</td>
               }
             </tr>
           </tbody>
@@ -163,4 +161,4 @@ const SuperAdminManageStaffsPage = () => {
   );
 };
 
-export default SuperAdminManageStaffsPage;
+export default MarketerManageLoansPage;

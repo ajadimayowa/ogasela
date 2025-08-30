@@ -34,6 +34,11 @@ import MarketerGeneralDashboard from '../pages/protected/general-pages/MarketerG
 import CreateLoanPage from '../pages/protected/marketer-pages/CreateLoanPage';
 import MarketerLoanDashboard from '../pages/protected/marketer-pages/loan-pages/MarketerLoanDashboard';
 import SuperAdminViewStaffPage from '../pages/protected/super-admin-pages/SuperAdminViewStaffPage';
+import MarketerLoanDashboardComp from '../pages/protected/marketer-pages/loan-pages/MarketerGeneralDashboard';
+import MarketerManageLoansPage from '../pages/protected/marketer-pages/MarketerManageLoansPage';
+import MarketerViewGroupPage from '../pages/protected/marketer-pages/loan-pages/MarketerViewGroupPage';
+import MarketerViewCustomerPage from '../pages/protected/marketer-pages/loan-pages/MarketerViewCustormerPage';
+import MarketerDuplicateCheckerPage from '../pages/protected/marketer-pages/duplicate-pages/MarketerDuplicateCheckerPage';
 
 
 const AppRouter = () => {
@@ -41,12 +46,13 @@ const AppRouter = () => {
     <Router>
       <Routes>
         {/* Public Routes: Accessible without authentication */}
+        <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/root-login" element={<RootLoginPage/>} />
-        <Route path="/creator" element={<OwnerPage/>} />
-        <Route path="/verify-login-otp" element={<VerifyLoginOtpPage/>} />
-        <Route path="/request-password-reset-otp" element={<RequestResetPasswordPage/>} />
-        <Route path="/verify-password-reset-otp" element={<VerifyResetPasswordOtpPage/>} />
+        <Route path="/root-login" element={<RootLoginPage />} />
+        <Route path="/creator" element={<OwnerPage />} />
+        <Route path="/verify-login-otp" element={<VerifyLoginOtpPage />} />
+        <Route path="/request-password-reset-otp" element={<RequestResetPasswordPage />} />
+        <Route path="/verify-password-reset-otp" element={<VerifyResetPasswordOtpPage />} />
         <Route path="/signup" element={<SignupPage />} />
         {/* Uncomment the following line if ResetPassword page is implemented */}
         {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
@@ -55,25 +61,25 @@ const AppRouter = () => {
         <Route
           path="/super-admin"
           element={
-             <SuperAdminProtectedRoutes />
+            <SuperAdminProtectedRoutes />
           }
         >
-          <Route index path='dashboard' element={<GeneralDashboard/>} />
-          <Route path="create-branch" element={<CreateBranchPage/>} />
-          <Route path="branch-management" element={<SuperAdminManageBranchPage/>} />
+          <Route index path='dashboard' element={<GeneralDashboard />} />
+          <Route path="create-branch" element={<CreateBranchPage />} />
+          <Route path="branch-management" element={<SuperAdminManageBranchPage />} />
 
-          <Route path="create-staff" element={<CreateStaffPage/>} />
-          <Route path="create-dept" element={<CreateDeptPage/>} />
-          <Route path="create-role" element={<CreateRolePage/>} />
+          <Route path="create-staff" element={<CreateStaffPage />} />
+          <Route path="create-dept" element={<CreateDeptPage />} />
+          <Route path="create-role" element={<CreateRolePage />} />
 
-          <Route path="hr" element={<SuperAdminManageStaffsPage/>} />
-           <Route path="staff/:id" element={<SuperAdminViewStaffPage/>} />
-          <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage/>} />
-          <Route path="settings" element={<SuperAdminSettingsPage/>} />
-          
-          <Route path="loan" element={<SuperAdminLoanDashboard/>}>
-          {/* <Route path=''/> */}
-            
+          <Route path="hr" element={<SuperAdminManageStaffsPage />} />
+          <Route path="staff/:id" element={<SuperAdminViewStaffPage />} />
+          <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage />} />
+          <Route path="settings" element={<SuperAdminSettingsPage />} />
+
+          <Route path="loan" element={<SuperAdminLoanDashboard />}>
+            {/* <Route path=''/> */}
+
           </Route>
           <Route path="users" element={<TestPage />} />
         </Route>
@@ -81,47 +87,41 @@ const AppRouter = () => {
         <Route
           path="/marketer"
           element={
-             <MarketerProtectedRoute />
+            <MarketerProtectedRoute />
           }
         >
-          <Route index path='dashboard' element={<MarketerGeneralDashboard/>} />
-          <Route path="create-branch" element={<CreateBranchPage/>} />
-          <Route path="branch-management" element={<SuperAdminManageBranchPage/>} />
+          <Route index path='db' element={<MarketerGeneralDashboard />} />
+          <Route path='loan-db' element={<MarketerLoanDashboardComp/>} />
+          <Route path='loan-management' element={<MarketerManageLoansPage/>} />
+          <Route path='view-group/:id' element={<MarketerViewGroupPage/>} />
+          <Route path='view-customer/:id' element={<MarketerViewCustomerPage/>} />
 
-          <Route path="create-loan" element={<CreateLoanPage/>} />
-          <Route path="create-dept" element={<CreateDeptPage/>} />
-          <Route path="create-role" element={<CreateRolePage/>} />
-
-          <Route path="hr" element={<SuperAdminManageStaffsPage/>} />
-          <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage/>} />
-          <Route path="settings" element={<SuperAdminSettingsPage/>} />
+          <Route path='create-loan' element={<CreateLoanPage/>} />
+          <Route path='create-loan' element={<CreateLoanPage/>} />
+          <Route path='view-loan' element={<MarketerManageLoansPage/>} />
           
-          <Route path="loan" element={<MarketerLoanDashboard/>}>
-          {/* <Route path=''/> */}
-            
-          </Route>
-          <Route path="users" element={<TestPage />} />
+          <Route path="duplicate-checker" element={< MarketerDuplicateCheckerPage />} />
         </Route>
 
         {/* Private Route: Protects access to the Dashboard, requires authentication */}
         <Route
           path="/root-admin"
           element={
-             <RootAdminProtectedRoute />
+            <RootAdminProtectedRoute />
           }
         >
-          <Route path="dashboard" index element={<RootAdminDashboard/>} />
-          <Route path="organizations" element={<RootAdminOrganizationListPage/>} />
-          <Route path="audit-trail" element={<SuperAdminManageBranchPage/>} />
-          <Route path="settings" element={<CreateStaffPage/>} />
-          <Route path="hr" element={<SuperAdminManageStaffsPage/>} />
-          <Route path="staff/:id" element={<SuperAdminManageStaffsPage/>} />
-          <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage/>} />
-          <Route path="settings" element={<SuperAdminSettingsPage/>} />
-          
-          <Route path="loan" element={<SuperAdminLoanDashboard/>}>
-          {/* <Route path=''/> */}
-            
+          <Route path="dashboard" index element={<RootAdminDashboard />} />
+          <Route path="organizations" element={<RootAdminOrganizationListPage />} />
+          <Route path="audit-trail" element={<SuperAdminManageBranchPage />} />
+          <Route path="settings" element={<CreateStaffPage />} />
+          <Route path="hr" element={<SuperAdminManageStaffsPage />} />
+          <Route path="staff/:id" element={<SuperAdminManageStaffsPage />} />
+          <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage />} />
+          <Route path="settings" element={<SuperAdminSettingsPage />} />
+
+          <Route path="loan" element={<SuperAdminLoanDashboard />}>
+            {/* <Route path=''/> */}
+
           </Route>
           <Route path="users" element={<TestPage />} />
         </Route>

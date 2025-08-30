@@ -55,6 +55,26 @@
         }
     }
 
+    .sub-menu{
+        // background-color: yellow;
+        &.active {
+             background-color: #ecf3fa;
+            font-weight: bold;
+            
+
+            a{
+               color: #1A5745;
+            }
+
+            i{
+               color: #1A5745;
+            }
+        }
+        &:hover {
+            background-color: #3a6e5e;
+        }
+    }
+
     .dropdown-toggle {
         cursor: pointer;
     }

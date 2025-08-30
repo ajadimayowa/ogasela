@@ -101,7 +101,7 @@ const SuperAdminManageStaffsPage = () => {
           <tbody>
             {
               !loading &&
-              staffs.map((staff:IStaff,index)=>(<tr role='button' onClick={()=>navigate(`/super-admin/staff/${staff?.id}`)}>
+              staffs.map((staff:IStaff,index)=>(<tr className='p-1' role='button' onClick={()=>navigate(`/super-admin/staff/${staff?.id}`)}>
               <th scope="row">{index + 1}</th>
               <td>{staff?.fullName}</td>
               <td>{staff?.branch?.name}</td>

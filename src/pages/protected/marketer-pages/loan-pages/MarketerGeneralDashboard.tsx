@@ -1,16 +1,16 @@
 // src/pages/Dashboard.tsx
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
-import { getAccessibleModules } from '../../../utils/navUtils';
+import { RootState } from '../../../../store/store';
+import { getAccessibleModules } from '../../../../utils/navUtils';
 import { useNavigate } from 'react-router-dom';
 import './general-dashboard.scss';
-import DecoratedCard from '../../../components/cards/decoratedCard';
-import CustomButton from '../../../components/custom-button/custom-button';
-import DashboardDataCard from '../../../components/cards/DashboardDataCard';
-import ChartCard from '../../../components/chart/ChartCard';
+import DecoratedCard from '../../../../components/cards/decoratedCard';
+import CustomButton from '../../../../components/custom-button/custom-button';
+import DashboardDataCard from '../../../../components/cards/DashboardDataCard';
+import ChartCard from '../../../../components/chart/ChartCard';
 
-const MarketerGeneralDashboard = () => {
+const MarketerLoanDashboardComp = () => {
   const navigate = useNavigate();
   const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
   const modules = getAccessibleModules(
@@ -51,30 +51,6 @@ const MarketerGeneralDashboard = () => {
     },
   ]
 
-  const generalData = [
-    {
-      label:'Uploaded Records',
-      value:'4',
-      icon1:'bi bi-credit-card',
-      icon2:'',
-      color:'primary'
-    },
-    {
-      label:'Created Groups',
-      value:'8',
-      icon1:'bi bi-credit-card',
-      icon2:'',
-      color:'primary'
-    },
-    {
-      label:'Total Customers',
-      value:'34',
-      icon1:'bi bi-people',
-      icon2:'',
-      color:'primary'
-    },
-  ]
-
   const sampleData = [
   { month: 'Jan', value: 100 },
   { month: 'Feb', value: 200 },
@@ -93,6 +69,13 @@ const MarketerGeneralDashboard = () => {
         }</h4>
         <p>How are you doing today?</p>
         </div>
+        <div>
+          <div className='d-flex gap-2'>
+            <CustomButton onClick={()=>navigate('/marketer/create-loan')} title='New Loan'/>
+            {/* <CustomButton onClick={()=>navigate('create-branch')} className='border bg-light text-dark' title='Create Branch'/> */}
+          </div>
+          <a href='/marketer/loan-management'>Manage Loans</a>
+        </div>
        </div>
       </DecoratedCard>
 
@@ -100,15 +83,16 @@ const MarketerGeneralDashboard = () => {
         {cardData.map(module => (
           <DashboardDataCard  data={module}/>
         ))}
+        {/* <div
+          className="module-card bg-secondary text-white"
+          onClick={() => navigate('/settings')}
+        >
+          <i className="bi bi-gear-fill module-icon"></i>
+          <h6 className="mt-2">Settings</h6>
+        </div> */}
       </div>
 
-      <div className="module-grid mt-3">
-        {generalData.map(module => (
-          <DashboardDataCard  data={module}/>
-        ))}
-      </div>
-
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <ChartCard
         title="Monthly Loan Performance"
         data={sampleData}
@@ -126,11 +110,11 @@ const MarketerGeneralDashboard = () => {
         chartType="bar"
         color="#2196F3"
       />
-    </div> */}
+    </div>
 
       
     </div>
   );
 };
 
-export default MarketerGeneralDashboard;
+export default MarketerLoanDashboardComp;

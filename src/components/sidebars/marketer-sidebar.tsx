@@ -15,6 +15,8 @@ const MarketerSidebar: React.FC<any> = ({ isOpen, toggleSidbar }) => {
     const dispatch = useDispatch();
     const getCurrentUrl= useLocation().pathname;
 
+    console.log({youAreHere:getCurrentUrl})
+
     const handleLogout = async () => {
         dispatch(logout());
         await persistor.purge();
@@ -83,7 +85,7 @@ const MarketerSidebar: React.FC<any> = ({ isOpen, toggleSidbar }) => {
                     {MarketerNavs
                         .filter((nav) => isAllowed(nav.title))
                         .map((nav) => (
-                            <li className={`p-3 nav-link nav-link ${getCurrentUrl.includes(nav.path)?'active':''}`} key={nav.id}>
+                            <li className={`p-3 nav-link ${getCurrentUrl.includes(nav.path)?'active':''}`} key={nav.id}>
                                 <div
                                     className="d-flex text-light align-items-center justify-content-between"
                                     onClick={() => nav.subPages?.length && toggleMenu(nav.id)}
@@ -102,9 +104,9 @@ const MarketerSidebar: React.FC<any> = ({ isOpen, toggleSidbar }) => {
                                 </div>
 
                                 {nav.subPages && openMenus.includes(nav.id) && (
-                                    <ul className="ms-3 ">
+                                    <ul className="ms-3 list-unstyled ">
                                         {nav.subPages.map((sub) => (
-                                            <li className="p-3" key={sub.path}>
+                                            <li className={`p-3 sub-menu ${getCurrentUrl.includes(sub.path)?'active':''}`} key={sub.path}>
                                                 <a  href={sub.path} className="text-decoration-none">
                                                     {sub.title}
                                                 </a>
