@@ -31,8 +31,8 @@ const GeneralDashboard = () => {
         </div>
         <div>
           <div className='d-flex gap-2'>
-            <CustomButton onClick={()=>navigate('create-staff')} title='New Staff'/>
-            <CustomButton onClick={()=>navigate('create-branch')} className='border bg-light text-dark' title='Create Branch'/>
+            <CustomButton onClick={()=>navigate('/super-admin/create-staff')} title='New Staff'/>
+            <CustomButton onClick={()=>navigate('/super-admin/create-branch')} className='border bg-light text-dark' title='Create Branch'/>
           </div>
           <a href='super-admin/branch-management'>Go to Branch Management</a>
         </div>

@@ -13,7 +13,8 @@ import moment from 'moment';
 import { IStaff, IStaffProfile } from '../../../../interfaces/staff';
 import AddStaffToBranchModal from '../../../../components/modals/super-admin-modals/AddStaffToBranchModal';
 import { IGroup, IMember } from '../../../../interfaces/group';
-import { Badge, Spinner } from 'react-bootstrap';
+import { Badge, Card, Spinner } from 'react-bootstrap';
+import DashboardDataCard from '../../../../components/cards/DashboardDataCard';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -21,6 +22,30 @@ const sampleData = [
   { month: 'Mar', value: 180 },
   { month: 'Apr', value: 250 },
 ];
+
+const generalData = [
+    {
+      label:'Collective Loan',
+      value:'45,5000',
+      icon1:'bi bi-credit-card',
+      icon2:'',
+      color:'primary'
+    },
+    {
+      label:'Estimated Repayment',
+      value:'25,600',
+      icon1:'bi bi-credit-card',
+      icon2:'',
+      color:'primary'
+    },
+    {
+      label:'Amount Repaid',
+      value:'340000',
+      icon1:'bi bi-people',
+      icon2:'',
+      color:'primary'
+    },
+  ]
 
 const MarketerViewGroupPage = () => {
   const navigate = useNavigate();
@@ -88,15 +113,22 @@ const MarketerViewGroupPage = () => {
             
           </div>
         </div>
-        <table className="table table-striped mt-3">
+        {/* <table className="table table-striped mt-3">
           <tbody>
             <tr>
               <td className=''>{staffProfile?.fullName}</td>
             </tr>
           </tbody>
-        </table>
+        </table> */}
 
-        <table className="table table-striped mt-3">
+<div className="module-grid mt-3">
+        {generalData.map(module => (
+          <DashboardDataCard  data={module}/>
+        ))}
+      </div>
+
+<Card className='p-1'>
+  <table className="table table-striped mt-3">
           <thead>
             <tr >
               <th scope="col" className='bg-primary text-light'>S/N</th>
@@ -115,7 +147,7 @@ const MarketerViewGroupPage = () => {
               !loading &&
               members?.map((staff:IMember,index)=>(
               <tr className='p-2' role='button' 
-              // onClick={()=>navigate(`/marketer/view-group/${staff?._id}`)}
+              onClick={()=>navigate(`/marketer/view-customer/${staff?._id}`)}
               >
               <th scope="row">{index + 1}</th>
                <td>{staff?.bvn}</td>
@@ -161,6 +193,9 @@ const MarketerViewGroupPage = () => {
   </ul>
 </nav>
         </div>
+
+</Card>
+        
       </div>
 
 

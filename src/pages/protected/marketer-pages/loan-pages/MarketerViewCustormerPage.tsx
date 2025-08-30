@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { IStaff, IStaffProfile } from '../../../../interfaces/staff';
 import AddStaffToBranchModal from '../../../../components/modals/super-admin-modals/AddStaffToBranchModal';
+import CustomIconButton from '../../../../components/custom-button/custom-icon-button';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -23,7 +24,7 @@ const sampleData = [
 const MarketerViewCustomerPage = () => {
   const navigate = useNavigate();
   const userProfile = useSelector((state: RootState) => state.auth.staffProfile);
-  const [staffProfile,setStaffProfile] = useState<IStaffProfile>()
+  const [memberProfile,setMemberProfile] = useState<IStaffProfile>()
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
   const [staffs, setStaffs] = useState<IStaff[]>([]);
   const [addStaffToBranchModal,setAddStaffToBranchModal] = useState(false)
@@ -41,13 +42,13 @@ const MarketerViewCustomerPage = () => {
 
   
 
-    const getStaffInfo = async () => {
+    const getMemberInfo = async () => {
     setLoading(true)
         try {
-            const res = await api.get(`staff/${id}`);
+            const res = await api.get(`/member/${id}`);
             console.log({see:res})
            
-                setStaffProfile(res?.data?.payload);
+                setMemberProfile(res?.data?.payload);
                 setLoading(false)
                 // const { payload } = res.data;
                 // console.log({ seePayloadFromOtp: payload })
@@ -63,7 +64,7 @@ const MarketerViewCustomerPage = () => {
         }
     }
     useEffect(() => {
-        getStaffInfo()
+        getMemberInfo()
     }, [navigate])
 
   return (
@@ -71,22 +72,22 @@ const MarketerViewCustomerPage = () => {
       <DecoratedCard>
         <div className='d-flex flex-wrap justify-content-between w-100'>
           <div>
-            <h4 className="">Custormer profile page.</h4>
-            <p>Track customer loan activi.</p>
+            <h4 className="">{`${memberProfile?.fullName} Profile page`}</h4>
+            <p>Track customer loan activities.</p>
           </div>
         </div>
       </DecoratedCard>
       <div>
         <div className='w-100 d-flex  justify-content-end mt-2'>
           <div className='d-flex gap-2'>
-            <CustomButton onClick={()=>setAddStaffToBranchModal(true)} className='border' title='Add to branch'/>
+            <CustomIconButton onClick={()=>setAddStaffToBranchModal(true)} className='border d-flex gap-2 align-items-center' title='Biometrics'/>
             <CustomButton className='border bg-light text-dark p-3' title='Update Profile'/>
           </div>
         </div>
         <table className="table table-striped mt-3">
           <tbody>
             <tr>
-              <td className=''>{staffProfile?.fullName}</td>
+              <td className=''>{memberProfile?.fullName}</td>
             </tr>
           </tbody>
         </table>
