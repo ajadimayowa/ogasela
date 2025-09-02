@@ -18,6 +18,7 @@ interface CustomInputProps {
     style?: React.CSSProperties;
     icon?: string;
     icon2?: string;
+    maxInput?:number
 }
 
 const ReusableInputs: React.FC<CustomInputProps> = ({
@@ -28,6 +29,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
     placeholder,
     type,
     icon,
+    maxInput,
     icon2
 }) => {
     const [field, meta] = useField(name);
@@ -57,6 +59,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
                         name={name}
                         className="form-control p-2"
                         id={id}
+                        max={maxInput}
                         placeholder={placeholder}
                         style={{
                             outline: 'none',

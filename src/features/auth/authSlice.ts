@@ -2,6 +2,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { persistor, RootState } from "../../store/store";
 
+interface IBusinessRule {
+  duration:number | null,
+  rate:number | null,
+}
 export interface IStaffProfile {
   token: string | null;
   rootAdminProfile: {
@@ -52,6 +56,7 @@ export interface IStaffProfile {
     orgRegNumber: string,
     createdAt: string,
     updatedAt: string,
+    businessRule:IBusinessRule[]
 
   } | null;
 
@@ -117,6 +122,7 @@ const initialState: IStaffProfile = {
     orgRegNumber: '',
     createdAt: '',
     updatedAt: '',
+    businessRule:[]
   },
   departmentData: {
     id: '',

@@ -15,6 +15,7 @@ import ReusableInputs from '../../../components/custom-input/ReusableInputs';
 import ReusableDropDownSelect from '../../../components/custom-input/ReusableDropDownSelect';
 import CreateDeptModal from '../../../components/modals/super-admin-modals/CreateDeptModal';
 import CreateRoleModal from '../../../components/modals/super-admin-modals/CreateRoleModal';
+import CreateRuleModal from '../../../components/modals/super-admin-modals/CreateRuleModal';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -26,6 +27,7 @@ const sampleData = [
 const SuperAdminSettingsPage = () => {
   const navigate = useNavigate();
   const staffProfile = useSelector((state: RootState) => state.auth.staffProfile);
+  const orgData = useSelector((state: RootState) => state.auth.organisationData);
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
     'marketer',
@@ -33,7 +35,7 @@ const SuperAdminSettingsPage = () => {
     'pro'
   );
 
-  const [departmentModal, setDepartmentModal] = useState(false);
+  const [newRuleModal, setNewRuleModal] = useState(false);
   const [roleModal, setRoleModal] = useState(false);
 
   const initialValues = {
@@ -59,21 +61,38 @@ const SuperAdminSettingsPage = () => {
         </div>
       </DecoratedCard>
       <div className='w-100 d-flex flex-wrap'>
-        <Card onClick={() => setDepartmentModal(true)} role='button' className='border-0 shadow-sm m-2' style={{ width: '250px' }}>
+        <Card role='button' className='border-0 shadow-sm m-2' style={{ width: '250px' }}>
           <Card.Header className='fw-bold'>
             Department
           </Card.Header>
-          <Card.Body>
-            <p>Create New department.</p>
-          </Card.Body>
+          <a href='/super-admin/create-dept'>
+            <Card.Body>
+              <p>Create New department.</p>
+            </Card.Body>
+          </a>
+
         </Card>
-        <Card onClick={() => setRoleModal(true)} role='button' className='border-0 shadow-sm m-2' style={{ width: '250px' }}>
+        <Card role='button' className='border-0 shadow-sm m-2' style={{ width: '250px' }}>
           <Card.Header className='fw-bold'>
             Role
           </Card.Header>
-          <Card.Body>
-            <p>Create new role.</p>
-          </Card.Body>
+          <a href='/super-admin/create-role'>
+            <Card.Body>
+              <p>Create new role.</p>
+            </Card.Body>
+          </a>
+
+        </Card>
+        <Card role='button' className='border-0 shadow-sm m-2' style={{ width: '250px' }}>
+          <Card.Header className='fw-bold'>
+            Branch
+          </Card.Header>
+          <a href='/super-admin/create-branch'>
+            <Card.Body>
+              <p>Create new branch.</p>
+            </Card.Body>
+          </a>
+
         </Card>
 
         {/* <Card role='button' className='border-0 shadow-sm m-2' style={{ width: '250px' }}>
@@ -85,22 +104,29 @@ const SuperAdminSettingsPage = () => {
           </Card.Body>
         </Card> */}
 
-        <Card role='button' className='border-0 shadow-sm m-2' style={{ width: '250px' }}>
-          <Card.Header className='fw-bold'>
-            Intrest Rate
-          </Card.Header>
-          <Card.Body>
-            <p>Set Intrest Rate</p>
-          </Card.Body>
-        </Card>
 
         <Card role='button' className='border-0 shadow-sm m-2' style={{ width: '250px' }}>
           <Card.Header className='fw-bold'>
-            Penalty fee
+            Business Rules
           </Card.Header>
-          <Card.Body>
-            <p>Set penalty fee</p>
-          </Card.Body>
+
+          {
+            orgData?.businessRule ?
+            <Card.Body>
+                <table>
+                  <tbody>
+                    <tr><td>Intrest Rate: 2%</td><td>Penalty Fee: 5%</td></tr>
+                  </tbody>
+                </table>
+                <CustomButton onClick={() => setRoleModal(true)} title='Update' />
+              </Card.Body>
+              :
+              
+              <Card.Body>
+                <p>Set Intrest Rate and penalty fees.</p>
+                <CustomButton onClick={() => setNewRuleModal(true)} title='Set New' />
+              </Card.Body>
+          }
         </Card>
       </div>
 
@@ -108,15 +134,17 @@ const SuperAdminSettingsPage = () => {
 
 
 
-      <CreateDeptModal
-        on={departmentModal}
-        off={() => setDepartmentModal(false)}
-      />
+      {
+        newRuleModal&&
+        <CreateRuleModal
+        on={newRuleModal}
+        off={() => setNewRuleModal(false)}
+      />}
 
-      <CreateRoleModal
+      {/* <CreateRoleModal
         on={roleModal}
         off={() => setRoleModal(false)}
-      />
+      /> */}
     </div>
   );
 };

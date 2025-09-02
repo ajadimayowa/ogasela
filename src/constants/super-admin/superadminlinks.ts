@@ -18,10 +18,10 @@ export const SuperAdminNavs = [
                 path: '/super-admin/loan',
             },
             {
-                id: 'super-admin-loan',
-                title: 'Loan Managemnts',
+                id: 'super-admin-loanmanagement',
+                title: 'Loan Management',
                 icon: '',
-                path: '#',
+                path: '/super-admin/loan-management',
             },
             {
                 id: 'super-admin-loan',

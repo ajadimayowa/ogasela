@@ -8,6 +8,7 @@ import './superAdminLoandashboard.scss';
 import DecoratedCard from '../../../../components/cards/decoratedCard';
 import CustomButton from '../../../../components/custom-button/custom-button';
 import ChartCard from '../../../../components/chart/ChartCard';
+import DashboardDataCard from '../../../../components/cards/DashboardDataCard';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -15,6 +16,37 @@ const sampleData = [
   { month: 'Mar', value: 180 },
   { month: 'Apr', value: 250 },
 ];
+
+const cardData = [
+    {
+      label:'Active Loans',
+      value:'256,000.000.00',
+      icon1:'bi bi-credit-card',
+      icon2:'',
+      color:'info'
+    },
+    {
+      label:'Settled Loans',
+      value:'256,000.00',
+      icon1:'bi bi-person-check',
+      icon2:'',
+      color:'success'
+    },
+    {
+      label:'Late Repayments',
+      value:'256,000.00',
+      icon1:'bi bi-exclamation-diamond',
+      color:'warning',
+      icon2:''
+    },
+    {
+      label:'Bad Loans',
+      value:'256,000.00',
+      icon1:'bi bi-exclamation-triangle',
+      icon2:'',
+      color:'danger',
+    },
+  ]
 
 const SuperAdminLoanDashboard = () => {
   const navigate = useNavigate();
@@ -37,15 +69,28 @@ const SuperAdminLoanDashboard = () => {
         }</h4>
         <p>How are you doing today?</p>
         </div>
-        <div>
+        {/* <div>
           <div className='d-flex gap-2'>
             <CustomButton title='+ Manager'/>
             <CustomButton className='border bg-light text-dark' title='+ Branch'/>
           </div>
           <a href='#'>Go to Branch Management</a>
-        </div>
+        </div> */}
        </div>
       </DecoratedCard>
+
+      <div className="module-grid mt-3">
+        {cardData.map(module => (
+          <DashboardDataCard  data={module}/>
+        ))}
+        {/* <div
+          className="module-card bg-secondary text-white"
+          onClick={() => navigate('/settings')}
+        >
+          <i className="bi bi-gear-fill module-icon"></i>
+          <h6 className="mt-2">Settings</h6>
+        </div> */}
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <ChartCard

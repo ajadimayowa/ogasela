@@ -58,7 +58,7 @@ const AddStaffToBranchModal: React.FC<IModalProps> = ({ on, off }) => {
 
     const getBranches = async () => {
         try {
-            const res = await api.get(`/branches?organisationId=${orgProfile?.id}&mode=dropdown&staffLevel=super-admin&userClass=authorizer`);
+            const res = await api.get(`/branches?organizationId=${orgProfile?.id}&mode=dropdown&staffLevel=super-admin&userClass=authorizer`);
             let auths = res?.data?.payload.map((auth: any) => ({
                     value: auth?._id,
                     label: auth?.name

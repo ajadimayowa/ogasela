@@ -39,6 +39,9 @@ import MarketerManageLoansPage from '../pages/protected/marketer-pages/MarketerM
 import MarketerViewGroupPage from '../pages/protected/marketer-pages/loan-pages/MarketerViewGroupPage';
 import MarketerViewCustomerPage from '../pages/protected/marketer-pages/loan-pages/MarketerViewCustormerPage';
 import MarketerDuplicateCheckerPage from '../pages/protected/marketer-pages/duplicate-pages/MarketerDuplicateCheckerPage';
+import SuperAdminViewGroupPage from '../pages/protected/super-admin-pages/loan-pages/SuperAdminViewGroupPage';
+import SuperAdminManageLoansPage from '../pages/protected/super-admin-pages/loan-pages/SuperAdminManageLoansPage';
+import SuperAdminViewCustomerPage from '../pages/protected/super-admin-pages/loan-pages/SuperAdminViewCustormerPage';
 
 
 const AppRouter = () => {
@@ -65,8 +68,13 @@ const AppRouter = () => {
           }
         >
           <Route index path='dashboard' element={<GeneralDashboard />} />
+          <Route path="loan" element={<SuperAdminLoanDashboard />}/>
           <Route path="create-branch" element={<CreateBranchPage />} />
           <Route path="branch-management" element={<SuperAdminManageBranchPage />} />
+
+          <Route path='loan-management' element={<SuperAdminManageLoansPage />} />
+          <Route path='view-group/:id' element={<SuperAdminViewGroupPage/>} />
+          <Route path='view-customer/:id' element={<SuperAdminViewCustomerPage/>} />
 
           <Route path="create-staff" element={<CreateStaffPage />} />
           <Route path="create-dept" element={<CreateDeptPage />} />
@@ -77,10 +85,7 @@ const AppRouter = () => {
           <Route path="duplicate-checker" element={< SuperAdminDuplicateCheckerPage />} />
           <Route path="settings" element={<SuperAdminSettingsPage />} />
 
-          <Route path="loan" element={<SuperAdminLoanDashboard />}>
-            {/* <Route path=''/> */}
-
-          </Route>
+          
           <Route path="users" element={<TestPage />} />
         </Route>
 
@@ -91,15 +96,14 @@ const AppRouter = () => {
           }
         >
           <Route index path='db' element={<MarketerGeneralDashboard />} />
-          <Route path='loan-db' element={<MarketerLoanDashboardComp/>} />
-          <Route path='loan-management' element={<MarketerManageLoansPage/>} />
-          <Route path='view-group/:id' element={<MarketerViewGroupPage/>} />
-          <Route path='view-customer/:id' element={<MarketerViewCustomerPage/>} />
+          <Route path='loan-db' element={<MarketerLoanDashboardComp />} />
+          <Route path='loan-management' element={<MarketerManageLoansPage />} />
+          <Route path='view-group/:id' element={<MarketerViewGroupPage />} />
+          <Route path='view-customer/:id' element={<MarketerViewCustomerPage />} />
 
-          <Route path='create-loan' element={<CreateLoanPage/>} />
-          <Route path='create-loan' element={<CreateLoanPage/>} />
-          <Route path='view-loan' element={<MarketerManageLoansPage/>} />
-          
+          <Route path='create-loan' element={<CreateLoanPage />} />
+          <Route path='view-loan' element={<MarketerManageLoansPage />} />
+
           <Route path="duplicate-checker" element={< MarketerDuplicateCheckerPage />} />
         </Route>
 
