@@ -234,7 +234,7 @@ const CreateLoanForm = () => {
                                                 <div>
                                                     <ReusableInputs
                                                         inputType='number-input'
-                                                        placeholder="Group Name"
+                                                        placeholder="BVN"
                                                         id={`groupMembers[${index}].bvn`}
                                                         // icon='bi bi-envelope-fill'
                                                         // value={values.email}

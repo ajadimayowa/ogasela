@@ -27,11 +27,11 @@ const StaffTopBar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
         onClick={()=>navigate(-1)}
         className='border outline bg-light text-dark'
 
-        />|
-        <div>
+        />
+        {/* <div>
           <p className='p-0 m-0 fw-bold'>{OrgProfile?.nameOfOrg}</p>
           <p className='p-0 m-0 fw-bold text-capitalize'>{StaffProfile?.userClass}</p>
-        </div>
+        </div> */}
       </div>
       <div className='d-flex flex-row align-items-center gap-2'>
          <i className="bi bi-person-circle fs-3"></i>

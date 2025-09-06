@@ -15,6 +15,7 @@ import AddStaffToBranchModal from '../../../../components/modals/super-admin-mod
 import { IGroup, IMember } from '../../../../interfaces/group';
 import { Badge, Card, Spinner } from 'react-bootstrap';
 import DashboardDataCard from '../../../../components/cards/DashboardDataCard';
+import { convertToThousand } from '../../../../utils/helpers';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -152,8 +153,8 @@ const MarketerViewGroupPage = () => {
               <th scope="row">{index + 1}</th>
                <td>{staff?.bvn}</td>
               <td>{staff?.fullName}</td>
-              <td>{staff?.totalAmountBorrowed}</td>
-               <td>{staff?.totalAmountPaidBack}</td>
+              <td>{convertToThousand(staff?.totalAmountBorrowed) }</td>
+               <td>{convertToThousand(staff?.totalAmountPaidBack)}</td>
               <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
                <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
                 <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>

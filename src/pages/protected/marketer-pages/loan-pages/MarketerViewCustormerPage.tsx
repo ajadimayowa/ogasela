@@ -13,6 +13,8 @@ import moment from 'moment';
 import { IStaff, IStaffProfile } from '../../../../interfaces/staff';
 import AddStaffToBranchModal from '../../../../components/modals/super-admin-modals/AddStaffToBranchModal';
 import CustomIconButton from '../../../../components/custom-button/custom-icon-button';
+import RegistrationFormModal from '../../../../components/modals/marketer-modals/MemberFormModal';
+import MemberFormModal from '../../../../components/modals/marketer-modals/MemberFormModal';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -28,6 +30,7 @@ const MarketerViewCustomerPage = () => {
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
   const [staffs, setStaffs] = useState<IStaff[]>([]);
   const [addStaffToBranchModal,setAddStaffToBranchModal] = useState(false)
+  const [completeRegModal,setCompleteRegModal] = useState(false)
   const {id}=useParams()
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
@@ -80,8 +83,9 @@ const MarketerViewCustomerPage = () => {
       <div>
         <div className='w-100 d-flex  justify-content-end mt-2'>
           <div className='d-flex gap-2'>
-            <CustomIconButton onClick={()=>setAddStaffToBranchModal(true)} className='border d-flex gap-2 align-items-center' title='Biometrics'/>
-            <CustomButton className='border bg-light text-dark p-3' title='Update Profile'/>
+            <CustomButton onClick={()=>setCompleteRegModal(true)}  title='Complete Registration'/>
+            <CustomIconButton  onClick={()=>setAddStaffToBranchModal(true)} className='border d-flex gap-2 align-items-center' title='Biometrics'/>
+            
           </div>
         </div>
         <table className="table table-striped mt-3">
@@ -131,6 +135,13 @@ const MarketerViewCustomerPage = () => {
       on={addStaffToBranchModal}
       off={()=>setAddStaffToBranchModal(false)}
       />
+
+      {completeRegModal&&
+        <MemberFormModal
+        memberInfo={memberProfile}
+      on={completeRegModal}
+      off={()=>setCompleteRegModal(false)}
+      />}
     </div>
   );
 };

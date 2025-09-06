@@ -43,7 +43,7 @@ const ReusableDropDownStates: React.FC<CustomInputProps> = ({
         control: (provided: any, state: any) => ({
             ...provided,
             boxShadow: 'none',
-            minWidth: '300px',
+            minWidth: '200px',
             borderColor: state.isFocused ? '#1A5745' : '#ccc',
             '&:hover': {
                 borderColor: '#1A5745',

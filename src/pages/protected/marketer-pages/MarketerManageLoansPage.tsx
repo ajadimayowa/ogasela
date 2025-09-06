@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { IStaff } from '../../../interfaces/staff';
 import { IGroup } from '../../../interfaces/group';
+import { convertToThousand } from '../../../utils/helpers';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -103,7 +104,7 @@ const MarketerManageLoansPage = () => {
               <tr className='p-2' role='button' onClick={()=>navigate(`/marketer/view-group/${staff?._id}`)}>
               <th scope="row">{index + 1}</th>
               <td>{staff?.groupName}</td>
-              <td>{staff?.totalAmountBorrowed}</td>
+              <td>{convertToThousand(staff?.totalAmountBorrowed) }</td>
               <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
               {/* <td><Badge className='bg-warning'>{staff?.isApproved?'Approved':'Pending'}</Badge></td> */}
               <td><Badge className='bg-warning'>{'Pending'}</Badge></td>
