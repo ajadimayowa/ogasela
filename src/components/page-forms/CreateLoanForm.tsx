@@ -78,6 +78,7 @@ const CreateLoanForm = () => {
     const orgData = useSelector((state: RootState) => state.auth.organisationData);
     const deptData = useSelector((state: RootState) => state.auth.departmentData);
     const roleData = useSelector((state: RootState) => state.auth.roleData);
+    const [existingBvn, setExisitingBVN] = useState<number[]>([])
 
     const idOptions = [
         { value: 'bvn', label: 'Bvn' },
@@ -121,10 +122,9 @@ const CreateLoanForm = () => {
                         .length(11, "BVN must be 11 digits")
                         .required("BVN is required"),
                     phoneNumber: Yup.string()
-                        .matches(/^[0-9]{11}$/, "Phone number must be 11 digits")
-                        .required("Phone number is required"),
-                    email: Yup.string().email("Invalid email").required("Email is required"),
-                    loanAmount:Yup.number().required("Amount is required"),
+                        .matches(/^\d{10}$/, "10 digits")
+                        .required("Required"),
+                    email: Yup.string().email("Invalid email").required("Email is required")
                 })
             )
             .min(3, "At least 3 members are required"),
@@ -135,20 +135,24 @@ const CreateLoanForm = () => {
         setLoading(true);
         let payloadData = {
             ...payload,
-            organizationId:orgData?.id,
+            organizationId: orgData?.id,
             branchId: staffProfile?.branch?._id || '',
+             createdBy:staffProfile?.id,
+           
         }
         console.log({ sending: payloadData });
         try {
             const res = await api.post('/group/create', payloadData);
             // navigate('/root-login');
-            toast.success('New record created successfully!');
+            toast.success('New Loan Group Created!');
             setLoading(false);
+            navigate('/marketer/loan-management')
         } catch (error: any) {
             console.log({ errorHere: error })
             setLoading(false);
-            if (error?.data?.message) {
-                toast.error(error?.data?.message)
+            if (error?.data?.error) {
+                toast.error(error?.data?.error)
+                setExisitingBVN(error?.data?.payload)
             } else {
                 console.log({ seeError: error })
                 toast.error(error?.message)
@@ -173,14 +177,14 @@ const CreateLoanForm = () => {
                 initialValues={{
                     groupName: "",
                     groupMembers: [
-                        { fullName: "", bvn: "", phoneNumber: "", loanAmount:"", email: "" },
-                        { fullName: "", bvn: "", phoneNumber: "",loanAmount:"", email: "" },
-                        { fullName: "", bvn: "", phoneNumber: "",loanAmount:"", email: "" },
+                        { fullName: "", bvn: '', phoneNumber: "", email: "" },
+                        { fullName: "", bvn: '', phoneNumber: "", email: "" },
+                        { fullName: "", bvn: '', phoneNumber: "", email: "" },
                     ],
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
-                    handleSubmit(values)
+                    handleSubmit(values);
                     // console.log("Form data:", values);
                     // post to DB with axios/fetch
                 }}
@@ -216,7 +220,7 @@ const CreateLoanForm = () => {
                                             </div>
 
                                             <div className="w-100 d-flex flex-wrap gap-3">
-                                                <div>
+                                                <div className="">
                                                     <ReusableInputs
                                                         inputType='text-input'
                                                         placeholder="Full Name"
@@ -243,7 +247,10 @@ const CreateLoanForm = () => {
                                                         className="mb-3 w-100"
                                                         required
                                                     />
-
+                                                    <p className="p-0 m-0 text-danger">
+                                                        {
+                                                            existingBvn && existingBvn.includes(+values.groupMembers[index].bvn) ? 'Bvn Exist' : ''
+                                                        }</p>
                                                     <ErrorMessage name={`groupMembers[${index}].bvn`} component="div" className="text-danger text-sm" />
                                                 </div>
 
@@ -275,21 +282,6 @@ const CreateLoanForm = () => {
                                                         required
                                                     />
                                                     <ErrorMessage name={`groupMembers[${index}].email`} component="div" className="text-danger text-sm" />
-                                                </div>
-
-                                                <div>
-                                                    <ReusableInputs
-                                                        inputType='number-input'
-                                                        placeholder="Amount"
-                                                        name={`groupMembers[${index}].loanAmount`}
-                                                        // icon='bi bi-envelope-fill'
-                                                        // value={values.email}
-                                                        id={`groupMembers[${index}].loanAmount`}
-                                                        label="Loan Amount"
-                                                        className="mb-3 w-100"
-                                                        required
-                                                    />
-                                                    <ErrorMessage name={`groupMembers[${index}].loanAmount`} component="div" className="text-danger text-sm" />
                                                 </div>
 
                                             </div>

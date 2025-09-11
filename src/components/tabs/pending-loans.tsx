@@ -27,7 +27,7 @@ const PendingLoansTab = ()=>{
     setLoading(true)
     try {
       const res = await api.get(`groups?branchId=${staffProfile?.branch._id}`);
-      setLoans(res?.data?.data);
+      setLoans(res?.data?.payload);
       setLoading(false)
       if (res.status == 200) {
 

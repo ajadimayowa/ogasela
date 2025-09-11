@@ -1,12 +1,14 @@
 import React from "react";
+import { convertToThousand } from "../../utils/helpers";
 
 interface CardProps{
     label:string,
     value:string,
     icon1:string,
-    icon2:string
+    icon2:string,
+    currency:boolean
 }
-const DashboardDataCard : React.FC<any> = ({data})=>{
+const DashboardDataCard : React.FC<any> = ({currency,data})=>{
     return (
         <div
             // key={module.name}
@@ -18,7 +20,7 @@ const DashboardDataCard : React.FC<any> = ({data})=>{
               <i className={data?.icon1}></i>
             </div>
             <div className='d-flex align-items-center justify-content-between gap-2' style={{height:'50px'}}>
-              <div className="fs-4">{data?.value}</div>
+              <div className="fs-4">{currency?convertToThousand(data?.value):data?.value}</div>
               {/* <div>2</div> */}
             </div>
             {/* <div></div>

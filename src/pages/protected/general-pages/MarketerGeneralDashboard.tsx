@@ -98,7 +98,7 @@ const MarketerGeneralDashboard = () => {
 
       <div className="module-grid mt-3">
         {cardData.map(module => (
-          <DashboardDataCard  data={module}/>
+          <DashboardDataCard currency={true}  data={module}/>
         ))}
       </div>
 

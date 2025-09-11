@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import api from '../../app/api';
+import { toast } from 'react-toastify';
 
 interface Member {
   fullName: string;
@@ -47,26 +49,39 @@ const GroupLoanForm: React.FC = () => {
 
   const checkBVNs = async (members: Member[]) => {
     const bvns = members.map(m => m.bvnNumber);
-    const res = await axios.post('/api/users/check-bvns', { bvns });
+    const res = await api.post('/users/check-bvns', { bvns });
     setExistingBvns(res.data.existingBvns);
     return res.data.existingBvns;
   };
 
   const handleSubmit = async (values: FormValues) => {
-    const duplicates = await checkBVNs(values.members);
-    if (duplicates.length > 0) return alert('Some BVNs already exist. Please fix them.');
+  // remove totalGroupAmount before submission if present
+  const { totalGroupAmount, ...submitData } = values;
 
-    // remove totalGroupAmount before submission if present
-    const { totalGroupAmount, ...submitData } = values;
+  try {
+    const res = await api.post("/group/create", submitData);
 
-    try {
-      await axios.post('/api/loans/group-loan', submitData);
-      alert('Group loan submitted successfully!');
-    } catch (err) {
-      console.error(err);
-      alert('Submission failed.');
+    if (res.data.success) {
+      toast.success("Group loan submitted successfully!");
+    } else {
+      toast.error(res.data.error || "Submission failed.");
     }
-  };
+  } catch (err: any) {
+    console.error(err);
+
+    const data = err.response?.data;
+
+    if (data?.existingBVNs?.length > 0) {
+      toast.error(
+        `The following BVNs already exist on record:\n${data.existingBVNs.join(
+          ", "
+        )}`
+      );
+    } else {
+      toast.error(data?.error || "Submission failed. Please try again.");
+    }
+  }
+};
 
   return (
     <Formik
@@ -84,16 +99,16 @@ const GroupLoanForm: React.FC = () => {
             <label>Group Name:</label>
             <Field name="groupName" className="border p-1 mb-2 w-full" />
             <div className='text-danger'>
-<ErrorMessage name="groupName" component="div" className="text-red-500" />
+              <ErrorMessage name="groupName" component="div" className="text-red-500" />
             </div>
-            
+
 
             <label>Group Head BVN:</label>
             <Field name="groupHeadBVN" className="border p-1 mb-2 w-full" />
             <div className='text-danger'>
-<ErrorMessage name="groupHeadBVN" component="div" className="text-red-500" />
+              <ErrorMessage name="groupHeadBVN" component="div" className="text-red-500" />
             </div>
-            
+
 
             <FieldArray name="members">
               {({ push, remove }) => (
@@ -104,9 +119,9 @@ const GroupLoanForm: React.FC = () => {
                       <label>Full Name:</label>
                       <Field name={`members[${index}].fullName`} className="border p-1 w-full" />
                       <div className='text-danger'>
-<ErrorMessage name={`members[${index}].fullName`} component="div" className="text-red-500" />
+                        <ErrorMessage name={`members[${index}].fullName`} component="div" className="text-red-500" />
                       </div>
-                      
+
 
                       <label>BVN Number:</label>
                       <Field name={`members[${index}].bvnNumber`} className="border p-1 w-full" />
@@ -122,14 +137,6 @@ const GroupLoanForm: React.FC = () => {
                       <label>Home Address:</label>
                       <Field name={`members[${index}].homeAddress`} className="border p-1 w-full" />
                       <ErrorMessage name={`members[${index}].homeAddress`} component="div" className="text-red-500" />
-
-                      <label>Requested Amount:</label>
-                      <Field
-                        name={`members[${index}].requestedAmount`}
-                        type="number"
-                        className="border p-1 w-full"
-                      />
-                      <ErrorMessage name={`members[${index}].requestedAmount`} component="div" className="text-red-500" />
 
                       <button type="button" onClick={() => remove(index)} className="text-red-600 mt-2">Remove Member</button>
                     </div>

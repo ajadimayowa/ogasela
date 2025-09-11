@@ -31,33 +31,45 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
     const [depts, setDepts] = useState<any[]>([]);
     const [authorizers, setAuthorizers] = useState([]);
     const [loading, setLoading] = useState(false);
+    console.log({memberInfoFromModal: memberInfo})
 
 
     const initialValues = {
         title:null,
         fullName: memberInfo?.fullName,
+        
+        loanTenure: null,
+        loanPurpose: '',
+        requestedLoanAmount: memberInfo?.loanRecord?.requestedLoanAmount,
+        interestRate: null,
+        dailyLatePercentage: null,
+        penaltyFee: null,
+
+        stateOfOrigin: null,
+        lgaOfOrigin: null,
+        passportPhoto: null,
+        dob: '',
+
         maritalStatus: null,
         modeOfIdentification: null,
         identificationNumber: '',
         memberIdDocumentFile: null,
-        phoneNumber: memberInfo?.phoneNumber,
+        
+        
 
-        requestedLoanAmount: memberInfo?.totalAmountBorrowed,
-        occupation: '',
-        dob: '',
+       
         languageSpoken: '',
-        stateOfOrigin: null,
-        lgaOfOrigin: null,
-
-        officeAddress: '',
         residentialAddress: '',
         residentLengthOfStay: '',
         nearestBusStop: '',
-        passportPhoto: null,
 
+       
+
+        
+        occupation: '',
+        officeAddress: '',
         noOfChildren: '',
-        loanPurpose: '',
-        loanTenure: null,
+        
 
 
 //NOK Step
@@ -108,6 +120,31 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 })
                 .nullable()
                 .required("Title is required"),
+            loanTenure:  Yup.number().required("Required"),
+            loanPurpose:  Yup.string().required("Required"),
+
+            stateOfOrigin: Yup.object()
+                .shape({
+                    value: Yup.string().required(),
+                    label: Yup.string().required(),
+                })
+                .nullable()
+                .required("Required"),
+                
+                lgaOfOrigin: Yup.object()
+                .shape({
+                    value: Yup.string().required(),
+                    label: Yup.string().required(),
+                })
+                .nullable()
+                .required("Required"),
+
+                 passportPhoto: Yup.mixed()
+                .required('A file is required'),
+
+                dob: Yup.string().required("Required"),
+
+
             maritalStatus:Yup.object()
                 .shape({
                     value: Yup.string().required(),
@@ -115,6 +152,7 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 })
                 .nullable()
                 .required("Marital is required"),
+
            modeOfIdentification: Yup.object()
                 .shape({
                     value: Yup.string().required(),
@@ -129,39 +167,18 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 return value && value.type === 'application/pdf';
             }),
 
+             languageSpoken: Yup.string().required("Required"),
+              residentialAddress: Yup.string().required("Required"),
+              residentLengthOfStay: Yup.string().required("Required"),
+               nearestBusStop: Yup.string().required("Required"),
+
             // requestedLoanAmount: memberInfo?.requestedLoanAmount,
             occupation: Yup.string().required("Required"),
-            dob: Yup.string().required("Required"),
-            languageSpoken: Yup.string().required("Required"),
-            stateOfOrigin: Yup.object()
-                .shape({
-                    value: Yup.string().required(),
-                    label: Yup.string().required(),
-                })
-                .nullable()
-                .required("Required"),
-            lgaOfOrigin: Yup.object()
-                .shape({
-                    value: Yup.string().required(),
-                    label: Yup.string().required(),
-                })
-                .nullable()
-                .required("Required"),
-
             officeAddress: Yup.string().required("Required"),
-            residentialAddress: Yup.string().required("Required"),
-            residentLengthOfStay: Yup.string().required("Required"),
-            nearestBusStop: Yup.string().required("Required"),
-             loanTenure: Yup.object()
-                .shape({
-                    value: Yup.string().required(),
-                    label: Yup.string().required(),
-                })
-                .nullable()
-                .required("Required"),
-            passportPhoto: Yup.mixed()
-                .required('A file is required'),
+            noOfChildren: Yup.number().required("Required"),
+           
         }),
+
         Yup.object({
             nokTitle: Yup.object()
                 .shape({
@@ -171,7 +188,9 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 .nullable()
                 .required("Required"),
             nokFullName: Yup.string().required("Required"),
-            nokPhoneNumber: Yup.number().required("Required"),
+            nokPhoneNumber: Yup.string()
+  .matches(/^\d{10}$/, "11 digits")
+  .required("Required"),
             stateOfNok:Yup.object()
                 .shape({
                     value: Yup.string().required(),
@@ -200,7 +219,9 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 .nullable()
                 .required("Required"),
             g1FullName: Yup.string().required("Required"),
-            g1PhoneNumber: Yup.number().required("Required"),
+            g1PhoneNumber: Yup.string()
+  .matches(/^\d{10}$/, "10 digits")
+  .required("Required"),
             stateOfg1:Yup.object()
                 .shape({
                     value: Yup.string().required(),
@@ -209,10 +230,10 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 .nullable()
                 .required("Required"),
          g1Passport: Yup.mixed()
-                .required('A file is required'),
+                .required('Required'),
            
             g1ID: Yup.mixed()
-                .required('A file is required'),
+                .required('Required'),
             g1AttestationDocument: Yup.mixed()
                 .required('Doc is required')
             .test('fileType', 'Only PDF files are accepted', (value: any) => {
@@ -228,7 +249,9 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 .nullable()
                 .required("Required"),
             g2FullName: Yup.string().required("Required"),
-            g2PhoneNumber: Yup.number().required("Required"),
+            g2PhoneNumber:  Yup.string()
+  .matches(/^\d{10}$/, "10 digits")
+  .required("Required"),
             stateOfg2:Yup.object()
                 .shape({
                     value: Yup.string().required(),
@@ -237,10 +260,10 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 .nullable()
                 .required("Required"),
          g2Passport: Yup.mixed()
-                .required('A file is required'),
+                .required('Required'),
            
             g2ID: Yup.mixed()
-                .required('A file is required'),
+                .required('Required'),
             g2AttestationDocument: Yup.mixed()
                 .required('Doc is required')
             .test('fileType', 'Only PDF files are accepted', (value: any) => {
@@ -256,7 +279,9 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                 .nullable()
                 .required("Required"),
             refFullName: Yup.string().required("Required"),
-            refPhoneNumber: Yup.number().required("Required"),
+            refPhoneNumber: Yup.string()
+  .matches(/^\d{10}$/, "10 digits")
+  .required("Required"),
             stateOfref:Yup.object()
                 .shape({
                     value: Yup.string().required(),
@@ -311,30 +336,31 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
         }
     }
 
-    const getDepartments = async () => {
-        try {
-            const res = await api.get(`/department/by-organization/${orgProfile?.id}`);
-            if (res.status == 200) {
-                // console.log({ dataSent: res?.data?.payload })
-                setDepts(res?.data?.payload)
-                const { payload } = res.data;
-                console.log({ seePayloadFromOtp: payload })
-                const staffProfile = payload?.staffData;
-                // dispatch(setToken(payload?.token));
-                // dispatch(setStaffProfile(staffProfile));
-            }
+    // const getDepartments = async () => {
+    //     try {
+    //         const res = await api.get(`/department/by-organization/${orgProfile?.id}`);
+    //         if (res.status == 200) {
+    //             // console.log({ dataSent: res?.data?.payload })
+    //             setDepts(res?.data?.payload)
+    //             const { payload } = res.data;
+    //             console.log({ seePayloadFromOtp: payload })
+    //             const staffProfile = payload?.staffData;
+    //             // dispatch(setToken(payload?.token));
+    //             // dispatch(setStaffProfile(staffProfile));
+    //         }
 
-        } catch (err: any) {
-            // toast.error(err?.response?.data?.message || 'Invalid or expired OTP');
-        } finally {
-            setLoading(false);
-        }
-    }
+    //     } catch (err: any) {
+    //         // toast.error(err?.response?.data?.message || 'Invalid or expired OTP');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
 
 
     const steps = [<MemberFormStep1/>, <MemberFormStep2 />, <MemberFormStep3 />,<MemberFormStep4 />,<MemberFormStep5/>];
 
     const handleSubmit = async (values: any, actions: any) => {
+            console.log({ submittedValues: values });
         if (!isLastStep) {
             setStep((s) => s + 1);
             actions.setTouched({});
@@ -343,33 +369,67 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
             setLoading(true);
             const formData = new FormData();
             formData.append('title', values?.title?.value);
-            formData.append('fullName', values?.fullName);
-            formData.append('phoneNumber', values?.phoneNumber);
-            formData.append('requestedLoanAmount', values?.requestedLoanAmount);
-            
-            formData.append('nokTitle', values?.nokTitle?.value);
+            formData.append('dailyLatePercentage', values?.dailyLatePercentage);
+            formData.append('dob', values?.dob);
+            formData.append('g1AttestationDocument', values?.g1AttestationDocument);
+            formData.append('g1FullName', values?.g1FullName);
+            formData.append('g1ID', values?.g1ID);
+            formData.append('g1Passport', values?.g1Passport);
+            formData.append('g1PhoneNumber', values?.g1PhoneNumber);
+            formData.append('g1Title', values?.g1Title);
             formData.append('g1Title', values?.g1Title?.value);
+            formData.append('g2AttestationDocument', values?.g2AttestationDocument);
+
+            formData.append('g2FullName', values?.g2FullName);
+            formData.append('g2ID', values?.g2ID);
+            formData.append('g2Passport', values?.g2Passport);
+            formData.append('g2PhoneNumber', values?.g2PhoneNumber);
             formData.append('g2Title', values?.g2Title?.value);
+            formData.append('interestRate', values?.interestRate);
+            formData.append('lgaOfOrigin', values?.lgaOfOrigin?.value);
+            formData.append('loanPurpose', values?.loanPurpose);
+            formData.append('loanTenure', values?.loanTenure);
+            formData.append('maritalStatus', values?.maritalStatus?.value);
+            formData.append('memberIdDocumentFile', values?.memberIdDocumentFile);
+            formData.append('modeOfIdentification', values?.modeOfIdentification?.value);
+            formData.append('nearestBusStop', values?.nearestBusStop);
+            formData.append('noOfChildren', values?.noOfChildren);
+            formData.append('nokAttestationDocument', values?.nokAttestationDocument);
+            formData.append('nokFullName', values?.nokFullName);
+            formData.append('nokID', values?.nokID);
+            formData.append('nokPassport', values?.nokPassport);
+            formData.append('nokPhoneNumber', values?.nokPhoneNumber);
+            formData.append('nokTitle', values?.nokTitle?.value);
+            formData.append('occupation', values?.occupation);
+            formData.append('officeAddress', values?.officeAddress);
+            formData.append('passportPhoto', values?.passportPhoto);
+            formData.append('penaltyFee', values?.penaltyFee);
+            formData.append('refAttestationDocument', values?.refAttestationDocument);
+            formData.append('refFullName', values?.refFullName);
+            formData.append('refID', values?.refID);
+            formData.append('refPassport', values?.refPassport);
+            formData.append('refPhoneNumber', values?.refPhoneNumber);
             formData.append('refTitle', values?.refTitle?.value);
-            formData.append('stateOfOrigin', values?.stateOfOrigin?.value);
+            formData.append('relationshipWithNok', values?.relationshipWithNok);
+            formData.append('requestedLoanAmount', values?.requestedLoanAmount);
+            formData.append('residentLengthOfStay', values?.residentLengthOfStay);
+            formData.append('residentialAddress', values?.residentialAddress);
             formData.append('stateOfNok', values?.stateOfNok?.value);
+            formData.append('stateOfOrigin', values?.stateOfOrigin?.value);
+
             formData.append('stateOfg1', values?.stateOfg1?.value);
             formData.append('stateOfg2', values?.stateOfg2?.value);
             formData.append('stateOfref', values?.stateOfref?.value);
-
-            formData.append('modeOfIdentification', values?.modeOfIdentification?.value);
-            formData.append('lgaOfOrigin', values?.lgaOfOrigin?.value);
-            formData.append('maritalStatus', values?.maritalStatus?.value);
-            formData.append('modeOfIdentification', values?.modeOfIdentification?.value);
             console.log("Final Submission:", values);
 
             try {
-                const res = await api.put(`/member/${memberInfo?._id}`, formData, {   headers: { 'Content-Type': 'multipart/form-data' } });
+                const res = await api.put(`/member/apply/${memberInfo?._id}`, formData, {   headers: { 'Content-Type': 'multipart/form-data' } });
                 if (res.status == 200) {
-                    toast.success('Member successfully updated!');
+                    toast.success('Documents uploaded for verification!');
                     actions.resetForm();
                     setStep(0);
                     off();
+                    window.location.reload();
                 }
             } catch (error) {
                 console.error("Submission error:", error);
@@ -382,7 +442,7 @@ const MemberFormModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
 
     useEffect(() => {
         getAuthorizers();
-        getDepartments();
+        // getDepartments();
     }, [])
     return (
         <Modal size="lg" show={on}>

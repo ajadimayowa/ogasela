@@ -26,8 +26,8 @@ const ActiveLoansTab = ()=>{
   const getLoans = async () => {
     setLoading(true)
     try {
-      const res = await api.get(`groups?branchId=${staffProfile?.branch._id}`);
-      setLoans(res?.data?.data);
+      const res = await api.get(`groups?organizationId=${staffProfile?.organization}`);
+      setLoans(res?.data?.payload);
       setLoading(false)
       if (res.status == 200) {
 

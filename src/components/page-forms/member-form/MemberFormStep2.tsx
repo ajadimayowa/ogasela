@@ -268,7 +268,7 @@ const MemberFormStep2 = ({ setFieldValue, values }: any) => {
                                         inputType='text-i'
                                         name='stateOfNok'
                                         id='stateOfNok'
-                                        label='State of Origin'
+                                        label='State'
                                         options={states}
                                         passSelectedValue={(v) => {
                                             let lgaOptions = v.lgas.map((item: any, index: number) => ({ value: item, label: item }))
@@ -294,7 +294,7 @@ const MemberFormStep2 = ({ setFieldValue, values }: any) => {
                                         // icon='bi bi-envelope-fill'
                                         // value={values.email}
                                         name="relationshipWithNok"
-                                        label="Relationship Type"
+                                        label="Relationship"
                                         className="mb-3 w-100"
                                         required
                                     />
@@ -400,11 +400,11 @@ const MemberFormStep2 = ({ setFieldValue, values }: any) => {
                                         <div>
                                             <p className="m-0 p-0">Document</p>
                                             <label htmlFor="nokAttestationDocument" className={`p-2 py-3 w-100 text-center text-primary border-1 m-0 fileUploadLabel`}>
-                                                {<i className="bi bi-image-fill"></i>}
+                                                {<i className="bi bi-file-earmark-pdf"></i>}
                                                 {/* {fileName == '' ? ' Click to upload file' : ' Click to Replace File'} */}
                                                 {values.nokAttestationDocument && (
                                                     <div className="mt-2 text-success">
-                                                        File selected: {cutString(values.nokAttestationDocument.name, 10)}
+                                                       {cutString(values.nokAttestationDocument.name, 10)}
                                                     </div>
                                                 )}
 

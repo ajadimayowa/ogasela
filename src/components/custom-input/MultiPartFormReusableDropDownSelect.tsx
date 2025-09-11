@@ -7,6 +7,7 @@ interface CustomInputProps {
     name: string;
     label?: string;
     className?: string;
+    placeHolder?:string;
     options: any[];
     passSelectedValue?: (v: any) => void;
 }
@@ -15,6 +16,7 @@ const MultiPartFormReusableDropDownSelect: React.FC<CustomInputProps> = ({
     name,
     label,
     options,
+    placeHolder,
     passSelectedValue
 }) => {
     const { setFieldValue } = useFormikContext<any>();
@@ -58,6 +60,7 @@ const MultiPartFormReusableDropDownSelect: React.FC<CustomInputProps> = ({
             <Select
                 id={name}
                 name={name}
+                placeholder={placeHolder}
                 options={options}
                 value={field.value}
                 onChange={(option) => setFieldValue(name, option)}

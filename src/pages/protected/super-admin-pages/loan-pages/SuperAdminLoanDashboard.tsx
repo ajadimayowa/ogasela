@@ -27,21 +27,21 @@ const cardData = [
     },
     {
       label:'Settled Loans',
-      value:'256,000.00',
+      value:'126,350.00',
       icon1:'bi bi-person-check',
       icon2:'',
       color:'success'
     },
     {
       label:'Late Repayments',
-      value:'256,000.00',
+      value:'56,000.00',
       icon1:'bi bi-exclamation-diamond',
       color:'warning',
       icon2:''
     },
     {
       label:'Bad Loans',
-      value:'256,000.00',
+      value:'25,000.00',
       icon1:'bi bi-exclamation-triangle',
       icon2:'',
       color:'danger',
@@ -81,7 +81,7 @@ const SuperAdminLoanDashboard = () => {
 
       <div className="module-grid mt-3">
         {cardData.map(module => (
-          <DashboardDataCard  data={module}/>
+          <DashboardDataCard currency={true}  data={module}/>
         ))}
         {/* <div
           className="module-card bg-secondary text-white"

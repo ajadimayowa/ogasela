@@ -15,6 +15,11 @@ import AddStaffToBranchModal from '../../../../components/modals/super-admin-mod
 import CustomIconButton from '../../../../components/custom-button/custom-icon-button';
 import RegistrationFormModal from '../../../../components/modals/marketer-modals/MemberFormModal';
 import MemberFormModal from '../../../../components/modals/marketer-modals/MemberFormModal';
+import { IMember } from '../../../../interfaces/member';
+import { convertToThousand } from '../../../../utils/helpers';
+import { Badge, Button, Card, Spinner } from 'react-bootstrap';
+import MemberProfileModal from '../../../../components/modals/member-modals/MemberProfileModal';
+import {Image} from 'react-bootstrap';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -26,12 +31,12 @@ const sampleData = [
 const MarketerViewCustomerPage = () => {
   const navigate = useNavigate();
   const userProfile = useSelector((state: RootState) => state.auth.staffProfile);
-  const [memberProfile,setMemberProfile] = useState<IStaffProfile>()
+  const [memberProfile, setMemberProfile] = useState<IMember>()
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
   const [staffs, setStaffs] = useState<IStaff[]>([]);
-  const [addStaffToBranchModal,setAddStaffToBranchModal] = useState(false)
-  const [completeRegModal,setCompleteRegModal] = useState(false)
-  const {id}=useParams()
+  const [addStaffToBranchModal, setAddStaffToBranchModal] = useState(false)
+  const [completeRegModal, setCompleteRegModal] = useState(false)
+  const { id } = useParams()
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
     'marketer',
@@ -43,60 +48,381 @@ const MarketerViewCustomerPage = () => {
   const [loading, setLoading] = useState(false)
   const [roleModal, setRoleModal] = useState(false);
 
-  
 
-    const getMemberInfo = async () => {
+
+  const getMemberInfo = async () => {
     setLoading(true)
-        try {
-            const res = await api.get(`/member/${id}`);
-            console.log({see:res})
-           
-                setMemberProfile(res?.data?.payload);
-                setLoading(false)
-                // const { payload } = res.data;
-                // console.log({ seePayloadFromOtp: payload })
-                // const staffProfile = payload?.staffData;
-                // dispatch(setToken(payload?.token));
-                // dispatch(setStaffProfile(staffProfile));
-           
+    try {
+      const res = await api.get(`/member/${id}`);
+      console.log({ see: res })
 
-        } catch (err: any) {
-            // toast.error(err?.response?.data?.message || 'Invalid or expired OTP');
-        } finally {
-            setLoading(false);
-        }
+      setMemberProfile(res?.data?.payload);
+      setLoading(false)
+      // const { payload } = res.data;
+      // console.log({ seePayloadFromOtp: payload })
+      // const staffProfile = payload?.staffData;
+      // dispatch(setToken(payload?.token));
+      // dispatch(setStaffProfile(staffProfile));
+
+
+    } catch (err: any) {
+      // toast.error(err?.response?.data?.message || 'Invalid or expired OTP');
+    } finally {
+      setLoading(false);
     }
-    useEffect(() => {
-        getMemberInfo()
-    }, [navigate])
+  }
+  useEffect(() => {
+    getMemberInfo()
+  }, [navigate])
 
   return (
     <div className="dashboard-container">
-      <DecoratedCard>
-        <div className='d-flex flex-wrap justify-content-between w-100'>
-          <div>
-            <h4 className="">{`${memberProfile?.fullName} Profile page`}</h4>
-            <p>Track customer loan activities.</p>
-          </div>
-        </div>
-      </DecoratedCard>
-      <div>
-        <div className='w-100 d-flex  justify-content-end mt-2'>
-          <div className='d-flex gap-2'>
-            <CustomButton onClick={()=>setCompleteRegModal(true)}  title='Complete Registration'/>
-            <CustomIconButton  onClick={()=>setAddStaffToBranchModal(true)} className='border d-flex gap-2 align-items-center' title='Biometrics'/>
-            
-          </div>
-        </div>
-        <table className="table table-striped mt-3">
-          <tbody>
-            <tr>
-              <td className=''>{memberProfile?.fullName}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div>
-          <nav aria-label="Page navigation example">
+      {
+        loading ? <div className='w-100 text-center'><Spinner /></div> :
+          <>
+            <DecoratedCard>
+              <div className='d-flex flex-wrap justify-content-between w-100'>
+                <div>
+                  <h4 className="">{`${memberProfile?.fullName} Profile page`}</h4>
+                  <p>Track customer loan activities.</p>
+                </div>
+
+               <div className='rounded bg-light'>
+                 {
+                  memberProfile?.kyc?.passportPhoto&&
+                  <Image
+                 className='rounded'
+                height={100}
+                src={memberProfile?.kyc?.passportPhoto}
+                />}
+               </div>
+              </div>
+            </DecoratedCard>
+            <div>
+              <div className='w-100 d-flex  justify-content-between mt-2'>
+                <div className='d-flex gap-2'>
+                  <CustomIconButton variant='outline' icon='bi bi-credit-card' className='border border-primary text-primary d-flex gap-2 align-items-center p-3' title='New Loan' />
+
+                </div>
+
+                <div className='d-flex gap-2'>
+                  <CustomIconButton variant='outline' icon='bi bi-bell' className='border d-flex gap-2 align-items-center' title='Notify Customer' />
+
+                  {/* <CustomButton onClick={()=>setCompleteRegModal(true)}  title='Complete Application'/> */}
+                  <CustomIconButton icon='bi bi-person-bounding-box' onClick={() => setAddStaffToBranchModal(true)} className='border d-flex gap-2 align-items-center' title='Biometrics' />
+
+                </div>
+
+              </div>
+
+              <hr />
+              <Card className='shadow border-0'>
+                <Card.Header className='d-flex justify-content-between bg-primary text-light'>
+                  <h5 className=''>Loan Record</h5>
+                  {/* <div className='d-flex gap-1' role='button'>
+              <i className="bi bi-person-gear"></i>
+              <a className='text-light' href=''>Update Info</a>
+            </div> */}
+                </Card.Header>
+
+                <Card.Body>
+                  <table className="table table-striped">
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td className=''><span className='fw-bold'></span> {moment().format('DD-MM-YY')}</td>
+                        <td className=''><span className='fw-bold'></span> {convertToThousand(50000)}</td>
+                        <td className=''><span className='fw-bold'></span> <Badge className='bg-danger'>{`Late`}</Badge> </td>
+                      </tr>
+
+                      <tr>
+                        <td>2</td>
+                        <td className=''><span className='fw-bold'></span> {moment().format('DD-MM-YY')}</td>
+                        <td className=''><span className='fw-bold'></span> {convertToThousand(3000)}</td>
+                        <td className=''><span className='fw-bold'></span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                      </tr>
+
+                      <tr>
+                        <td>3</td>
+                        <td className=''><span className='fw-bold'></span> {moment().format('DD-MM-YY')}</td>
+                        <td className=''><span className='fw-bold'></span> {convertToThousand(10000)}</td>
+                        <td className=''><span className='fw-bold'></span> <Badge className='bg-success'>{`Settled`}</Badge> </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+
+                </Card.Body>
+                <Card.Footer className='d-flex justify-content-end'>
+                  <Button variant='outline border border-2'>View More</Button>
+                </Card.Footer>
+
+              </Card>
+
+
+              <hr />
+              <Card className='shadow border-0'>
+                <Card.Header className='d-flex justify-content-between bg-primary text-light'>
+                  <h5 className=''>Customer Details</h5>
+                  <CustomIconButton onClick={()=>setCompleteRegModal(true)} icon='bi bi-person-gear' className='border d-flex gap-2 align-items-center' title='Update profile' />
+
+                </Card.Header>
+
+                <Card.Body>
+                  <table className="table table-striped">
+                    <tbody>
+                      <tr>
+                        <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
+                        <td className=''><span className='fw-bold'>BVN: </span> {memberProfile?.bvn}</td>
+                        <td className=''><span className='fw-bold'>Phone Number : </span> {`0${memberProfile?.phoneNumber}`}</td>
+
+                      </tr>
+                      <tr>
+
+                        <td className=''><span className='fw-bold'>Email : </span> {memberProfile?.email}</td>
+                        <td className=''><span className='fw-bold'>Created At : </span> {moment(memberProfile?.createdAt).format('DD-MM-YY')}</td>
+                        <td className=''><span className='fw-bold'>Approved At : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
+                        <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+                        <td className=''><span className='fw-bold'>DOB : </span> {memberProfile?.dob ? moment(memberProfile?.dob).format('DD-MM-YY') : '-'}</td>
+                      </tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {memberProfile?.homeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {memberProfile?.durationOfStay??'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {memberProfile?.nearestBusStop}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {memberProfile?.occupation??'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {memberProfile?.officeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className={`bg-${memberProfile?.isApproved?'success':'warning'}`}>{memberProfile?.isApproved?'Approve':'Pending'}</Badge> </td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </Card.Body>
+
+
+              </Card>
+
+              <hr />
+              <Card className='shadow border-0'>
+                <Card.Header className='d-flex justify-content-between bg-primary text-light'>
+                  <h5 className=''>Next Of Kin</h5>
+                  <CustomIconButton icon='bi bi-person-gear' className='border d-flex gap-2 align-items-center' title='Update' />
+
+                </Card.Header>
+
+                <Card.Body>
+                  <table className="table table-striped">
+                    <tbody>
+                      <tr>
+                        <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
+                        <td className=''><span className='fw-bold'>BVN: </span> {memberProfile?.bvn}</td>
+                        <td className=''><span className='fw-bold'>Phone Number : </span> {`0${memberProfile?.phoneNumber}`}</td>
+
+                      </tr>
+                      <tr>
+
+                        <td className=''><span className='fw-bold'>Email : </span> {memberProfile?.email}</td>
+                        <td className=''><span className='fw-bold'>Created At : </span> {moment(memberProfile?.createdAt).format('DD-MM-YY')}</td>
+                        <td className=''><span className='fw-bold'>Approved At : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
+                        <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                      </tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </Card.Body>
+
+              </Card>
+
+              <hr />
+              <Card className='shadow border-0'>
+                <Card.Header className='d-flex justify-content-between bg-primary text-light'>
+                  <h5 className=''>Guarantor 1</h5>
+                  <CustomIconButton icon='bi bi-person-gear' className='border d-flex gap-2 align-items-center' title='Update' />
+
+                </Card.Header>
+
+                <Card.Body>
+                  <table className="table table-striped">
+                    <tbody>
+                      <tr>
+                        <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
+                        <td className=''><span className='fw-bold'>BVN: </span> {memberProfile?.bvn}</td>
+                        <td className=''><span className='fw-bold'>Phone Number : </span> {`0${memberProfile?.phoneNumber}`}</td>
+
+                      </tr>
+                      <tr>
+
+                        <td className=''><span className='fw-bold'>Email : </span> {memberProfile?.email}</td>
+                        <td className=''><span className='fw-bold'>Created At : </span> {moment(memberProfile?.createdAt).format('DD-MM-YY')}</td>
+                        <td className=''><span className='fw-bold'>Approved At : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
+                        <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                      </tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </Card.Body>
+
+              </Card>
+
+              <hr />
+              <Card className='shadow border-0'>
+                <Card.Header className='d-flex justify-content-between bg-primary text-light'>
+                  <h5 className=''>Guarantor 2</h5>
+                  <CustomIconButton icon='bi bi-person-gear' className='border d-flex gap-2 align-items-center' title='Update' />
+
+                </Card.Header>
+                <Card.Body>
+                  <table className="table table-striped">
+                    <tbody>
+                      <tr>
+                        <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
+                        <td className=''><span className='fw-bold'>BVN: </span> {memberProfile?.bvn}</td>
+                        <td className=''><span className='fw-bold'>Phone Number : </span> {`0${memberProfile?.phoneNumber}`}</td>
+
+                      </tr>
+                      <tr>
+
+                        <td className=''><span className='fw-bold'>Email : </span> {memberProfile?.email}</td>
+                        <td className=''><span className='fw-bold'>Created At : </span> {moment(memberProfile?.createdAt).format('DD-MM-YY')}</td>
+                        <td className=''><span className='fw-bold'>Approved At : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
+                        <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                      </tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </Card.Body>
+
+              </Card>
+
+              <hr />
+              <Card className='shadow border-0'>
+                <Card.Header className='d-flex justify-content-between bg-primary text-light'>
+                  <h5 className=''>Referre Record</h5>
+                  <CustomIconButton icon='bi bi-person-gear' className='border d-flex gap-2 align-items-center' title='Update' />
+
+                </Card.Header>
+                <Card.Body>
+                  <table className="table table-striped">
+                    <tbody>
+                      <tr>
+                        <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
+                        <td className=''><span className='fw-bold'>BVN: </span> {memberProfile?.bvn}</td>
+                        <td className=''><span className='fw-bold'>Phone Number : </span> {`0${memberProfile?.phoneNumber}`}</td>
+
+                      </tr>
+                      <tr>
+
+                        <td className=''><span className='fw-bold'>Email : </span> {memberProfile?.email}</td>
+                        <td className=''><span className='fw-bold'>Created At : </span> {moment(memberProfile?.createdAt).format('DD-MM-YY')}</td>
+                        <td className=''><span className='fw-bold'>Approved At : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
+                        <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                      </tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+
+                      </tr>
+                      <tr><td className=''></td><td></td><td></td></tr>
+
+                      <tr>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </Card.Body>
+
+              </Card>
+
+
+
+              <div>
+                {/* <nav aria-label="Page navigation example">
   <ul className="pagination">
     <li className="page-item">
       <a className="page-link" href="#" aria-label="Previous">
@@ -112,16 +438,16 @@ const MarketerViewCustomerPage = () => {
       </a>
     </li>
   </ul>
-</nav>
-        </div>
-      </div>
+</nav> */}
+              </div>
+            </div>
 
 
 
 
 
 
-      {/* <CreateDeptModal
+            {/* <CreateDeptModal
         on={departmentModal}
         off={() => setDepartmentModal(false)}
       />
@@ -131,17 +457,19 @@ const MarketerViewCustomerPage = () => {
         off={() => setRoleModal(false)}
       /> */}
 
-      <AddStaffToBranchModal 
-      on={addStaffToBranchModal}
-      off={()=>setAddStaffToBranchModal(false)}
-      />
+            <AddStaffToBranchModal
+              on={addStaffToBranchModal}
+              off={() => setAddStaffToBranchModal(false)}
+            />
 
-      {completeRegModal&&
-        <MemberFormModal
-        memberInfo={memberProfile}
-      on={completeRegModal}
-      off={()=>setCompleteRegModal(false)}
-      />}
+            {completeRegModal &&
+              <MemberProfileModal
+                memberInfo={memberProfile}
+                on={completeRegModal}
+                off={() => setCompleteRegModal(false)}
+              />}
+          </>
+      }
     </div>
   );
 };

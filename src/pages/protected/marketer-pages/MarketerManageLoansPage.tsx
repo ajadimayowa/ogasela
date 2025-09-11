@@ -48,8 +48,8 @@ const MarketerManageLoansPage = () => {
   const getLoans= async () => {
     setLoading(true)
         try {
-            const res = await api.get(`groups?branchId=${staffProfile?.branch._id}`);
-             setLoans(res?.data?.data);
+            const res = await api.get(`groups?createdBy=${staffProfile?.id}`);
+             setLoans(res?.data?.payload);
               setLoading(false)
             if (res.status == 200) {
               
@@ -82,7 +82,7 @@ const MarketerManageLoansPage = () => {
         <div className='d-flex flex-wrap justify-content-between w-100'>
           <div>
             <h4 className="">Manage Loans.</h4>
-            <p>ManageManage all loans created by you.</p>
+            <p>Manage all loans created by you.</p>
           </div>
         </div>
       </DecoratedCard>
@@ -92,7 +92,7 @@ const MarketerManageLoansPage = () => {
             <tr >
               <th scope="col" className='bg-primary text-light'>S/N</th>
               <th scope="col" className='bg-primary text-light'>Group Name</th>
-              <th scope="col" className='bg-primary text-light'>Requested Amount</th>
+              <th scope="col" className='bg-primary text-light'>Members</th>
               <th scope="col" className='bg-primary text-light'>Date Created</th>
               <th scope="col" className='bg-primary text-light'>Status</th>
             </tr>
@@ -101,13 +101,13 @@ const MarketerManageLoansPage = () => {
             {
               !loading &&
               loans.map((staff:IGroup,index)=>(
-              <tr className='p-2' role='button' onClick={()=>navigate(`/marketer/view-group/${staff?._id}`)}>
+              <tr className='p-2' role='button' onClick={()=>navigate(`/marketer/view-group/${staff?.id}`)}>
               <th scope="row">{index + 1}</th>
               <td>{staff?.groupName}</td>
-              <td>{convertToThousand(staff?.totalAmountBorrowed) }</td>
+              <td>{staff.groupMembers.length}</td>
               <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
               {/* <td><Badge className='bg-warning'>{staff?.isApproved?'Approved':'Pending'}</Badge></td> */}
-              <td><Badge className='bg-warning'>{'Pending'}</Badge></td>
+               <td><Badge className='bg-warning'>{staff?.isApproved?'Active':'Pending'}</Badge></td>
             </tr>))
             }
             <tr className='text-center'>

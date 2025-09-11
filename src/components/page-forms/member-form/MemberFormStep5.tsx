@@ -222,7 +222,7 @@ const  MemberFormStep5 = ({ setFieldValue, values }: any) => {
                                         label='Title'
                                         options={titles}
                                     />
-                                    <ErrorMessage name="refTitle" component="div" className="text-danger" />
+                                    {/* <ErrorMessage name="refTitle" component="div" className="text-danger" /> */}
                                 </div>
                             </td>
 
@@ -268,7 +268,7 @@ const  MemberFormStep5 = ({ setFieldValue, values }: any) => {
                                         inputType='text-i'
                                         name='stateOfref'
                                         id='stateOfref'
-                                        label='State of Origin'
+                                        label='State'
                                         options={states}
                                         passSelectedValue={(v) => {
                                             let lgaOptions = v.lgas.map((item: any, index: number) => ({ value: item, label: item }))
@@ -284,7 +284,7 @@ const  MemberFormStep5 = ({ setFieldValue, values }: any) => {
                         {/* line 2 */}
 
                         <tr>
-                            <td className=''>
+                            {/* <td className=''>
                                 <div className='w-100'>
                                     <ReusableInputs
                                         inputType='text-input'
@@ -300,7 +300,7 @@ const  MemberFormStep5 = ({ setFieldValue, values }: any) => {
                                     />
                                     <ErrorMessage name="relationshipWithref" component="div" className="text-danger" />
                                 </div>
-                            </td>
+                            </td> */}
 
                             <td className=''>
                                 <div className='w-100'>
@@ -400,11 +400,11 @@ const  MemberFormStep5 = ({ setFieldValue, values }: any) => {
                                         <div>
                                             <p className="m-0 p-0">Document</p>
                                             <label htmlFor="refAttestationDocument" className={`p-2 py-3 w-100 text-center text-primary border-1 m-0 fileUploadLabel`}>
-                                                {<i className="bi bi-image-fill"></i>}
+                                                {<i className="bi bi-file-earmark-pdf"></i>}
                                                 {/* {fileName == '' ? ' Click to upload file' : ' Click to Replace File'} */}
                                                 {values.refAttestationDocument && (
                                                     <div className="mt-2 text-success">
-                                                        File selected: {cutString(values.refAttestationDocument.name, 10)}
+                                                    {cutString(values.refAttestationDocument.name, 10)}
                                                     </div>
                                                 )}
 

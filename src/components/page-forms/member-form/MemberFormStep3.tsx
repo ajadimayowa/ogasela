@@ -222,7 +222,7 @@ const  MemberFormStep3 = ({ setFieldValue, values }: any) => {
                                         label='Title'
                                         options={titles}
                                     />
-                                    <ErrorMessage name="g1Title" component="div" className="text-danger" />
+                                    {/* <ErrorMessage name="g1Title" component="div" className="text-danger" /> */}
                                 </div>
                             </td>
 

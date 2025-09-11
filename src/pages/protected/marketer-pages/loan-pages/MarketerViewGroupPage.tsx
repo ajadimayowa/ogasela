@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/store';
 import { getAccessibleModules } from '../../../../utils/navUtils';
-import { useNavigate, useParams } from 'react-router-dom';
+import { data, useNavigate, useParams } from 'react-router-dom';
 import './superAdminCreateBranch.scss';
 import DecoratedCard from '../../../../components/cards/decoratedCard';
 import CustomButton from '../../../../components/custom-button/custom-button';
@@ -16,6 +16,7 @@ import { IGroup, IMember } from '../../../../interfaces/group';
 import { Badge, Card, Spinner } from 'react-bootstrap';
 import DashboardDataCard from '../../../../components/cards/DashboardDataCard';
 import { convertToThousand } from '../../../../utils/helpers';
+import AddMemberToGroupModal from '../../../../components/modals/member-modals/AddMemberToGroupModal';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -24,29 +25,7 @@ const sampleData = [
   { month: 'Apr', value: 250 },
 ];
 
-const generalData = [
-    {
-      label:'Collective Loan',
-      value:'45,5000',
-      icon1:'bi bi-credit-card',
-      icon2:'',
-      color:'primary'
-    },
-    {
-      label:'Estimated Repayment',
-      value:'25,600',
-      icon1:'bi bi-credit-card',
-      icon2:'',
-      color:'primary'
-    },
-    {
-      label:'Amount Repaid',
-      value:'340000',
-      icon1:'bi bi-people',
-      icon2:'',
-      color:'primary'
-    },
-  ]
+
 
 const MarketerViewGroupPage = () => {
   const navigate = useNavigate();
@@ -68,16 +47,41 @@ const MarketerViewGroupPage = () => {
   const [loading, setLoading] = useState(false)
   const [roleModal, setRoleModal] = useState(false);
 
-  
+  const generalData = [
+    {
+      label:'Collective Loan',
+      value:500000,
+      icon1:'bi bi-credit-card',
+      icon2:'',
+      color:'primary',
+      isCurrency:true
+    },
+    {
+      label:'Estimated Repayment',
+      value:'25,600',
+      icon1:'bi bi-credit-card',
+      icon2:'',
+      color:'primary',
+      isCurrency:true
+    },
+    {
+      label:'Amount Repaid',
+      value:'340000',
+      icon1:'bi bi-people',
+      icon2:'',
+      color:'primary',
+      isCurrency:true
+    },
+  ]
 
     const getGroupInfo = async () => {
     setLoading(true)
         try {
             const res = await api.get(`/group/${id}`);
-            console.log({see:res?.data?.groupMembers})
+            // console.log({see:res?.data?.groupMembers})
            
-                setGroup(res?.data);
-                setMembers(res?.data?.groupMembers);
+                setGroup(res?.data?.payload);
+                setMembers(res?.data?.payload?.groupMembers);
                 setLoading(false)
                 // const { payload } = res.data;
                 // console.log({ seePayloadFromOtp: payload })
@@ -124,23 +128,20 @@ const MarketerViewGroupPage = () => {
 
 <div className="module-grid mt-3">
         {generalData.map(module => (
-          <DashboardDataCard  data={module}/>
+          <DashboardDataCard currency={module.isCurrency}  data={module}/>
         ))}
       </div>
 
-<Card className='p-1'>
-  <table className="table table-striped mt-3">
+<Card className='p-1 mt-3'>
+  <table className="table table-striped">
           <thead>
             <tr >
               <th scope="col" className='bg-primary text-light'>S/N</th>
               <th scope="col" className='bg-primary text-light'>BVN</th>
               <th scope="col" className='bg-primary text-light'>Full Name</th>
-              <th scope="col" className='bg-primary text-light'>Amount Borrowed</th>
-              <th scope="col" className='bg-primary text-light'>Amount Paid</th>
-              <th scope="col" className='bg-primary text-light'>Application Date</th>
-              <th scope="col" className='bg-primary text-light'>Date Approved</th>
-              <th scope="col" className='bg-primary text-light'>Disbursement Date</th>
-              <th scope="col" className='bg-primary text-light'>Status</th>
+              <th scope="col" className='bg-primary text-light'>Created At</th>
+              <th scope="col" className='bg-primary text-light'>Active Loan</th>
+              <th scope="col" className='bg-primary text-light'>Aproval Status</th>
             </tr>
           </thead>
           <tbody>
@@ -153,13 +154,10 @@ const MarketerViewGroupPage = () => {
               <th scope="row">{index + 1}</th>
                <td>{staff?.bvn}</td>
               <td>{staff?.fullName}</td>
-              <td>{convertToThousand(staff?.totalAmountBorrowed) }</td>
-               <td>{convertToThousand(staff?.totalAmountPaidBack)}</td>
               <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
-               <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
-                <td>{moment(staff?.createdAt).format('DD-MM-YYYY')}</td>
+               <td>{staff?.loanRecord?.loanApprovedDate?moment(staff?.loanRecord?.loanApprovedDate).format('DD-MM-YYYY'):'-'}</td>
               {/* <td><Badge className='bg-warning'>{staff?.isApproved?'Approved':'Pending'}</Badge></td> */}
-              <td><Badge className='bg-warning'>{'Pending'}</Badge></td>
+              <td><Badge className={`bg-${staff?.isApproved?'success':'warning'}`}>{staff?.isApproved?'Active':'Pending'}</Badge></td>
             </tr>))
             }
             <tr className='text-center'>
@@ -214,7 +212,7 @@ const MarketerViewGroupPage = () => {
         off={() => setRoleModal(false)}
       /> */}
 
-      <AddStaffToBranchModal 
+      <AddMemberToGroupModal 
       on={addStaffToBranchModal}
       off={()=>setAddStaffToBranchModal(false)}
       />

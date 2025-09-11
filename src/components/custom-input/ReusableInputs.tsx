@@ -30,6 +30,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
     type,
     icon,
     maxInput,
+    disabled,
     icon2
 }) => {
     const [field, meta] = useField(name);
@@ -57,6 +58,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
                         {...field}
                         type="number"
                         name={name}
+                        disabled={disabled}
                         className="form-control p-2"
                         id={id}
                         max={maxInput}
@@ -87,6 +89,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
                         type={type}
                         name={name}
                         className="form-control p-2"
+                        disabled={disabled}
                         id={id}
                         placeholder={placeholder}
                     />
@@ -101,6 +104,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
                         className="form-control p-2"
                         id={id}
                         placeholder={placeholder}
+                        disabled={disabled}
                     />
                 );
 
@@ -112,6 +116,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
                         className="form-control p-2 rounded-0 outline-0"
                         id={id}
                         placeholder={placeholder}
+                        disabled={disabled}
                     />
                 );
         }
@@ -124,7 +129,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
                     {label}
                 </label>
             )}
-            <div className="d-flex align-items-center" style={{maxWidth:'250px'}}>
+            <div className="d-flex align-items-center">
                 {renderIcon(icon)}
                 {renderInputField()}
                 {inputType === "password" && renderEndIcon(icon2, () => setSecured(!secured))}
