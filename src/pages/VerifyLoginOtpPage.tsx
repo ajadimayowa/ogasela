@@ -85,10 +85,10 @@ const VerifyLoginOtpPage = () => {
                         navigate('/super-admin/dashboard',{replace:true});
                         break;
                     case 'approver':
-                        navigate('/approver/');
+                        navigate('/manager/db');
                         break;
                     case 'branch-manager':
-                        navigate('/manager/');
+                        navigate('/manager/db');
                         break;
                     case 'marketer':
                         navigate('/marketer/db');

@@ -152,7 +152,7 @@ const CreateRuleModal: React.FC<IModalProps> = ({ on, off }) => {
                                                             <div className="d-flex justify-content-between w-100">
                                                                 <div className="d-flex gap-2">
                                                                     <div className="text-danger">
-                                                                        <ReusableInputs maxInput={12} label="Duration (Month)" name={`interestRates[${dayIndex}].duration`} inputType="number-input" />
+                                                                        <ReusableInputs maxInput={12} label="Duration (Week)" name={`interestRates[${dayIndex}].duration`} inputType="number-input" />
                                                                         <ErrorMessage name={`interestRates[${dayIndex}].duration`} component="div" />
                                                                     </div>
                                                                     <div className="text-danger">

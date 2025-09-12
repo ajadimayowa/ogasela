@@ -15,13 +15,14 @@ import MemberFormStep3 from "../../page-forms/member-form/MemberFormStep3"
 import React from "react"
 import MemberFormStep4 from "../../page-forms/member-form/MemberFormStep4"
 import MemberFormStep5 from "../../page-forms/member-form/MemberFormStep5"
+import LoanForm from "../../page-forms/member-form/LoanForm"
 
 interface IModalProps {
     memberInfo: any
     on: boolean,
     off: () => void
 }
-const MemberProfileModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
+const NewLoanModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
     const [step, setStep] = useState(0);
 
 
@@ -214,7 +215,7 @@ const MemberProfileModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
             <Modal.Header>
                 <div className="d-flex justify-content-between w-100">
                     <div>
-                        <p className="m-0 p-0 fw-bold">Update Customer Profile</p>
+                        <p className="m-0 p-0 fw-bold">New Loan</p>
                     </div>
                     <i onClick={off} role="button" className="bi bi-x-circle"></i>
 
@@ -230,7 +231,7 @@ const MemberProfileModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
                         ({ handleSubmit, values, setFieldValue }) => (
                             <Form onSubmit={handleSubmit}>
 
-                                {React.cloneElement(<MemberFormStep1 />, { setFieldValue, values })}
+                                {React.cloneElement(<LoanForm/>, { setFieldValue, values })}
 
                                 <div className="w-100 justify-content-end d-flex gap-3" style={{ marginTop: "20px" }}>
                                     {step > 0 && (
@@ -259,4 +260,4 @@ const MemberProfileModal: React.FC<IModalProps> = ({ on, off, memberInfo }) => {
     )
 
 }
-export default MemberProfileModal;
+export default NewLoanModal;

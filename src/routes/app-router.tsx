@@ -42,6 +42,8 @@ import MarketerDuplicateCheckerPage from '../pages/protected/marketer-pages/dupl
 import SuperAdminViewGroupPage from '../pages/protected/super-admin-pages/loan-pages/SuperAdminViewGroupPage';
 import SuperAdminManageLoansPage from '../pages/protected/super-admin-pages/loan-pages/SuperAdminManageLoansPage';
 import SuperAdminViewCustomerPage from '../pages/protected/super-admin-pages/loan-pages/SuperAdminViewCustormerPage';
+import ManagerProtectedRoute from '../components/ManagerProtectedRoute';
+import SuperAdminViewBranchPage from '../pages/protected/super-admin-pages/branch/SuperAdminViewBranchPage';
 
 
 const AppRouter = () => {
@@ -69,8 +71,13 @@ const AppRouter = () => {
         >
           <Route index path='dashboard' element={<GeneralDashboard />} />
           <Route path="loan" element={<SuperAdminLoanDashboard />}/>
+          
           <Route path="create-branch" element={<CreateBranchPage />} />
           <Route path="branch-management" element={<SuperAdminManageBranchPage />} />
+          <Route path='branch-management/:id' element={<SuperAdminViewBranchPage />} />
+
+          <Route path="group-management" element={<SuperAdminManageBranchPage />} />
+          <Route path='group-management/:id' element={<SuperAdminViewGroupPage />} />
 
           <Route path='loan-management' element={<SuperAdminManageLoansPage />} />
           <Route path='view-group/:id' element={<SuperAdminViewGroupPage/>} />
@@ -93,6 +100,25 @@ const AppRouter = () => {
           path="/marketer"
           element={
             <MarketerProtectedRoute />
+          }
+        >
+          <Route index path='db' element={<MarketerGeneralDashboard />} />
+          <Route path='loan-db' element={<MarketerLoanDashboardComp />} />
+          <Route path='loan-management' element={<MarketerManageLoansPage />} />
+          <Route path='view-group/:id' element={<MarketerViewGroupPage />} />
+          <Route path='view-customer/:id' element={<MarketerViewCustomerPage />} />
+
+          <Route path='create-loan' element={<CreateLoanPage />} />
+          <Route path='view-loan' element={<MarketerManageLoansPage />} />
+
+          <Route path="duplicate-checker" element={< MarketerDuplicateCheckerPage />} />
+        </Route>
+
+
+        <Route
+          path="/manager"
+          element={
+            <ManagerProtectedRoute />
           }
         >
           <Route index path='db' element={<MarketerGeneralDashboard />} />

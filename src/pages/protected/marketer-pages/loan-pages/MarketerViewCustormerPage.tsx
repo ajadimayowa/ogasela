@@ -20,6 +20,7 @@ import { convertToThousand } from '../../../../utils/helpers';
 import { Badge, Button, Card, Spinner } from 'react-bootstrap';
 import MemberProfileModal from '../../../../components/modals/member-modals/MemberProfileModal';
 import {Image} from 'react-bootstrap';
+import NewLoanModal from '../../../../components/modals/member-modals/NewLoanModal';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -35,7 +36,8 @@ const MarketerViewCustomerPage = () => {
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
   const [staffs, setStaffs] = useState<IStaff[]>([]);
   const [addStaffToBranchModal, setAddStaffToBranchModal] = useState(false)
-  const [completeRegModal, setCompleteRegModal] = useState(false)
+  const [completeRegModal, setCompleteRegModal] = useState(false);
+  const[newLoanModal,setNewLoanModal] = useState(false)
   const { id } = useParams()
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
@@ -101,7 +103,7 @@ const MarketerViewCustomerPage = () => {
             <div>
               <div className='w-100 d-flex  justify-content-between mt-2'>
                 <div className='d-flex gap-2'>
-                  <CustomIconButton variant='outline' icon='bi bi-credit-card' className='border border-primary text-primary d-flex gap-2 align-items-center p-3' title='New Loan' />
+                  <CustomIconButton onClick={()=>setNewLoanModal(true)} variant='outline' icon='bi bi-credit-card' className='border border-primary text-primary d-flex gap-2 align-items-center p-3' title='New Loan' />
 
                 </div>
 
@@ -208,6 +210,25 @@ const MarketerViewCustomerPage = () => {
                       </tr>
                     </tbody>
                   </table>
+                  <Card.Footer className='d-flex gap-2'>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>Utility Bill</p>
+                      {
+                        memberProfile?.kyc?.utilityBillPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.utilityBillPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| ID Card</p>
+                      {memberProfile?.kyc?.idCardPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.idCardPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| Document</p>
+                      {memberProfile?.kyc?.attestationDocumentFile &&
+                        <a target='blank' href={memberProfile?.kyc?.attestationDocumentFile} className='text-danger'><i className="bi bi-file-pdf-fill fs-3"></i></a>}
+                      
+                    </div>
+                  </Card.Footer>
                 </Card.Body>
 
 
@@ -222,12 +243,12 @@ const MarketerViewCustomerPage = () => {
                 </Card.Header>
 
                 <Card.Body>
-                  <table className="table table-striped">
+                   <table className="table table-striped">
                     <tbody>
                       <tr>
-                        <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
-                        <td className=''><span className='fw-bold'>BVN: </span> {memberProfile?.bvn}</td>
-                        <td className=''><span className='fw-bold'>Phone Number : </span> {`0${memberProfile?.phoneNumber}`}</td>
+                        <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.nok?.fullName}</td>
+                        <td className=''><span className='fw-bold'>BVN: </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Phone Number : </span> {`-`}</td>
 
                       </tr>
                       <tr>
@@ -242,25 +263,44 @@ const MarketerViewCustomerPage = () => {
                       <tr>
                         <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
                         <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
-                        <td className=''><span className='fw-bold'>Status : </span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                        <td className=''><span className='fw-bold'>DOB : </span> {memberProfile?.dob ? moment(memberProfile?.dob).format('DD-MM-YY') : '-'}</td>
                       </tr>
 
                       <tr>
-                        <td className=''><span className='fw-bold'>Home Address : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {memberProfile?.homeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {memberProfile?.durationOfStay??'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {memberProfile?.nearestBusStop}</td>
 
                       </tr>
                       <tr><td className=''></td><td></td><td></td></tr>
 
                       <tr>
-                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Office Address : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {memberProfile?.occupation??'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {memberProfile?.officeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className={`bg-${memberProfile?.isApproved?'success':'warning'}`}>{memberProfile?.isApproved?'Approve':'Pending'}</Badge> </td>
 
                       </tr>
                     </tbody>
                   </table>
+                  <Card.Footer className='d-flex gap-2'>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>Passport</p>
+                      {
+                        memberProfile?.kyc?.utilityBillPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.utilityBillPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| ID Card</p>
+                      {memberProfile?.kyc?.idCardPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.idCardPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| Document</p>
+                      {memberProfile?.kyc?.attestationDocumentFile &&
+                        <a target='blank' href={memberProfile?.kyc?.attestationDocumentFile} className='text-danger'><i className="bi bi-file-pdf-fill fs-3"></i></a>}
+                      
+                    </div>
+                  </Card.Footer>
                 </Card.Body>
 
               </Card>
@@ -274,7 +314,7 @@ const MarketerViewCustomerPage = () => {
                 </Card.Header>
 
                 <Card.Body>
-                  <table className="table table-striped">
+                   <table className="table table-striped">
                     <tbody>
                       <tr>
                         <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
@@ -294,25 +334,44 @@ const MarketerViewCustomerPage = () => {
                       <tr>
                         <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
                         <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
-                        <td className=''><span className='fw-bold'>Status : </span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                        <td className=''><span className='fw-bold'>DOB : </span> {memberProfile?.dob ? moment(memberProfile?.dob).format('DD-MM-YY') : '-'}</td>
                       </tr>
 
                       <tr>
-                        <td className=''><span className='fw-bold'>Home Address : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {memberProfile?.homeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {memberProfile?.durationOfStay??'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {memberProfile?.nearestBusStop}</td>
 
                       </tr>
                       <tr><td className=''></td><td></td><td></td></tr>
 
                       <tr>
-                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Office Address : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {memberProfile?.occupation??'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {memberProfile?.officeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className={`bg-${memberProfile?.isApproved?'success':'warning'}`}>{memberProfile?.isApproved?'Approve':'Pending'}</Badge> </td>
 
                       </tr>
                     </tbody>
                   </table>
+                  <Card.Footer className='d-flex gap-2'>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>Passport</p>
+                      {
+                        memberProfile?.kyc?.utilityBillPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.utilityBillPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| ID Card</p>
+                      {memberProfile?.kyc?.idCardPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.idCardPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| Document</p>
+                      {memberProfile?.kyc?.attestationDocumentFile &&
+                        <a target='blank' href={memberProfile?.kyc?.attestationDocumentFile} className='text-danger'><i className="bi bi-file-pdf-fill fs-3"></i></a>}
+                      
+                    </div>
+                  </Card.Footer>
                 </Card.Body>
 
               </Card>
@@ -325,7 +384,7 @@ const MarketerViewCustomerPage = () => {
 
                 </Card.Header>
                 <Card.Body>
-                  <table className="table table-striped">
+                   <table className="table table-striped">
                     <tbody>
                       <tr>
                         <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
@@ -345,25 +404,44 @@ const MarketerViewCustomerPage = () => {
                       <tr>
                         <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
                         <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
-                        <td className=''><span className='fw-bold'>Status : </span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                        <td className=''><span className='fw-bold'>DOB : </span> {memberProfile?.dob ? moment(memberProfile?.dob).format('DD-MM-YY') : '-'}</td>
                       </tr>
 
                       <tr>
-                        <td className=''><span className='fw-bold'>Home Address : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {memberProfile?.homeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {memberProfile?.durationOfStay??'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {memberProfile?.nearestBusStop}</td>
 
                       </tr>
                       <tr><td className=''></td><td></td><td></td></tr>
 
                       <tr>
-                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Office Address : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {memberProfile?.occupation??'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {memberProfile?.officeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className={`bg-${memberProfile?.isApproved?'success':'warning'}`}>{memberProfile?.isApproved?'Approve':'Pending'}</Badge> </td>
 
                       </tr>
                     </tbody>
                   </table>
+                  <Card.Footer className='d-flex gap-2'>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>Passport</p>
+                      {
+                        memberProfile?.kyc?.utilityBillPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.utilityBillPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| ID Card</p>
+                      {memberProfile?.kyc?.idCardPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.idCardPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| Document</p>
+                      {memberProfile?.kyc?.attestationDocumentFile &&
+                        <a target='blank' href={memberProfile?.kyc?.attestationDocumentFile} className='text-danger'><i className="bi bi-file-pdf-fill fs-3"></i></a>}
+                      
+                    </div>
+                  </Card.Footer>
                 </Card.Body>
 
               </Card>
@@ -376,7 +454,7 @@ const MarketerViewCustomerPage = () => {
 
                 </Card.Header>
                 <Card.Body>
-                  <table className="table table-striped">
+                   <table className="table table-striped">
                     <tbody>
                       <tr>
                         <td className=''><span className='fw-bold'>Full Name: </span> {memberProfile?.fullName}</td>
@@ -396,25 +474,44 @@ const MarketerViewCustomerPage = () => {
                       <tr>
                         <td className=''><span className='fw-bold'>Created By : </span> {memberProfile?.createdBy?.fullName}</td>
                         <td className=''><span className='fw-bold'>Approved By : </span> {memberProfile?.isApproved ? moment(memberProfile?.createdAt).format('DD-MM-YY') : '-'}</td>
-                        <td className=''><span className='fw-bold'>Status : </span> <Badge className='bg-warning'>{`Pending`}</Badge> </td>
+                        <td className=''><span className='fw-bold'>DOB : </span> {memberProfile?.dob ? moment(memberProfile?.dob).format('DD-MM-YY') : '-'}</td>
                       </tr>
 
                       <tr>
-                        <td className=''><span className='fw-bold'>Home Address : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Home Address : </span> {memberProfile?.homeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Duration of Stay : </span> {memberProfile?.durationOfStay??'-'}</td>
+                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {memberProfile?.nearestBusStop}</td>
 
                       </tr>
                       <tr><td className=''></td><td></td><td></td></tr>
 
                       <tr>
-                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Office Address : </span> {'-'}</td>
-                        <td className=''><span className='fw-bold'>Nearest Bus Stop : </span> {'-'}</td>
+                        <td className=''><span className='fw-bold'>Ocupation/Nature of Work : </span> {memberProfile?.occupation??'-'}</td>
+                        <td className=''><span className='fw-bold'>Office Address : </span> {memberProfile?.officeAddress??'-'}</td>
+                        <td className=''><span className='fw-bold'>Status : </span> <Badge className={`bg-${memberProfile?.isApproved?'success':'warning'}`}>{memberProfile?.isApproved?'Approve':'Pending'}</Badge> </td>
 
                       </tr>
                     </tbody>
                   </table>
+                  <Card.Footer className='d-flex gap-2'>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>Passport</p>
+                      {
+                        memberProfile?.kyc?.utilityBillPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.utilityBillPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| ID Card</p>
+                      {memberProfile?.kyc?.idCardPhoto &&
+                        <Image height={50} src={memberProfile?.kyc?.idCardPhoto}/>}
+                    </div>
+                    <div className='text-center'>
+                      <p className='p-0 m-0'>| Document</p>
+                      {memberProfile?.kyc?.attestationDocumentFile &&
+                        <a target='blank' href={memberProfile?.kyc?.attestationDocumentFile} className='text-danger'><i className="bi bi-file-pdf-fill fs-3"></i></a>}
+                      
+                    </div>
+                  </Card.Footer>
                 </Card.Body>
 
               </Card>
@@ -467,6 +564,13 @@ const MarketerViewCustomerPage = () => {
                 memberInfo={memberProfile}
                 on={completeRegModal}
                 off={() => setCompleteRegModal(false)}
+              />}
+
+               {newLoanModal &&
+              <NewLoanModal
+                memberInfo={newLoanModal}
+                on={newLoanModal}
+                off={() => setNewLoanModal(false)}
               />}
           </>
       }
