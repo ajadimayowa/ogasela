@@ -21,6 +21,7 @@ export interface IStaffProfile {
     createdAt: string,
     branch:{
       _id:string;
+      id:string;
       name:string;
     };
     department: string,
@@ -92,6 +93,7 @@ const initialState: IStaffProfile = {
     firstName: '',
     branch:{
       _id:'',
+      id:'',
       name:''
     },
     fullName: '',

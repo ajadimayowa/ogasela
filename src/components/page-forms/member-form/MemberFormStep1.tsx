@@ -454,7 +454,7 @@ const MemberFormStep1 = ({ setFieldValue, values }: any) => {
                                                 />
                                             </div>
                                         </div>
-                                        
+
                                         <ErrorMessage name="idCardPhoto" component="div" className="text-danger" />
                                     </div>
                                 </td>
@@ -484,7 +484,7 @@ const MemberFormStep1 = ({ setFieldValue, values }: any) => {
                                                 />
                                             </div>
                                         </div>
-                                        
+
                                         <ErrorMessage name="passportPhoto" component="div" className="text-danger" />
                                     </div>
                                 </td>
@@ -577,7 +577,7 @@ const MemberFormStep1 = ({ setFieldValue, values }: any) => {
                                         <ErrorMessage name="homeAddress" component="div" className="text-danger" />
                                     </div>
                                 </td>
-<td className=''>
+                                <td className=''>
                                     <div className='w-100'>
                                         <ReusableInputs
                                             inputType='text-input'
@@ -613,7 +613,7 @@ const MemberFormStep1 = ({ setFieldValue, values }: any) => {
                                     </div>
                                 </td>
 
-                                
+
 
                             </tr>
 
@@ -660,30 +660,30 @@ const MemberFormStep1 = ({ setFieldValue, values }: any) => {
                                 </td>
 
                                 <td className=''>
-                                <div className='w-100'>
-                            <MultiPartFormReusableDropDownSelect
-                                name='selectedModeOfIdentification'
-                                label='Mode of ID'
-                                options={idOptions}
-                            />
-                        </div>
+                                    <div className='w-100'>
+                                        <MultiPartFormReusableDropDownSelect
+                                            name='selectedModeOfIdentification'
+                                            label='Mode of ID'
+                                            options={idOptions}
+                                        />
+                                    </div>
 
-                            </td>
+                                </td>
 
-                            <td className=''>
-                               <div className='w-100'>
-                            <ReusableInputs
-                                inputType='text-input'
-                                name='idIdentificationNumber'
-                                id='idIdentificationNumber'
-                                label='ID Number'
-                                placeholder='ID Number'
-                                className='w-100'
-                            />
-                            <ErrorMessage name="idIdentificationNumber" component="div" className="text-danger" />
-                        </div>
+                                <td className=''>
+                                    <div className='w-100'>
+                                        <ReusableInputs
+                                            inputType='text-input'
+                                            name='idIdentificationNumber'
+                                            id='idIdentificationNumber'
+                                            label='ID Number'
+                                            placeholder='ID Number'
+                                            className='w-100'
+                                        />
+                                        <ErrorMessage name="idIdentificationNumber" component="div" className="text-danger" />
+                                    </div>
 
-                            </td>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

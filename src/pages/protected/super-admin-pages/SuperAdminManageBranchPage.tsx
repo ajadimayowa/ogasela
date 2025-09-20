@@ -102,7 +102,7 @@ const SuperAdminManageBranchPage = () => {
                 <tbody>
                   {!loading &&
                     branches.map((branch: any, index) => (
-                      <tr role='button' onClick={() => navigate(`/super-admin/branch-management/${branch?._id}`)}>
+                      <tr role='button' onClick={() => navigate(`/super-admin/branch-management/${branch?.id}`)}>
                         <th scope="row">{index + 1}</th>
                         <td>{branch?.name}</td>
                         <td>{branch?.manager?.fullName}</td>

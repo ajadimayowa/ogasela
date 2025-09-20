@@ -28,7 +28,7 @@ const SuperAdminDashboardDataCard : React.FC<any> = ({currency,data,extra})=>{
               extra&&
               <div className='d-flex align-items-center gap-2 mt-2'>
                 <p className="p-0 m-0 text-primary">Total Funding :</p>
-                <p className="p-0 m-0">{convertToThousand(1000000000000)}</p>
+                <p className="p-0 m-0">{convertToThousand(data?.totalFunded)}</p>
               </div>
             }
 

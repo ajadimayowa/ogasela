@@ -62,7 +62,7 @@ export const MarketerNavs = [
         id: 'super-admin-hrmanager',
         title: 'Settings',
         icon: 'bi bi-gear',
-        path: '/super-admin/settings',
+        path: '#',
         subPages: []
     },
 ]

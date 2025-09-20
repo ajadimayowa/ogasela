@@ -21,6 +21,7 @@ import { Badge, Button, Card, Spinner } from 'react-bootstrap';
 import MemberProfileModal from '../../../../components/modals/member-modals/MemberProfileModal';
 import {Image} from 'react-bootstrap';
 import NewLoanModal from '../../../../components/modals/member-modals/NewLoanModal';
+import CreateLoanModal from '../../../../components/modals/branch-modals/CreateLoanModal';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -567,8 +568,8 @@ const MarketerViewCustomerPage = () => {
               />}
 
                {newLoanModal &&
-              <NewLoanModal
-                memberInfo={newLoanModal}
+              <CreateLoanModal
+                memberInfo={memberProfile}
                 on={newLoanModal}
                 off={() => setNewLoanModal(false)}
               />}

@@ -14,10 +14,14 @@ import moment from 'moment';
 import { IStaffProfile } from '../../../../interfaces/staff';
 // import { IGroup, IMember } from '../../../../interfaces/group';
 import {  IGroup,IMember } from '../../../../interfaces/group';
-import { Badge, Card, Spinner, Tab, Tabs } from 'react-bootstrap';
+import { Badge, Button, Card, Spinner, Tab, Tabs } from 'react-bootstrap';
 import DashboardDataCard from '../../../../components/cards/DashboardDataCard';
 import AddMemberToGroupModal from '../../../../components/modals/member-modals/AddMemberToGroupModal';
 import SuperAdminDashboardDataCard from '../../../../components/cards/SuperAdminDashboardDataCard';
+import UpdateBranchModal from '../../../../components/modals/branch-modals/UpdateBranchModal';
+import { IBranch } from '../../../../interfaces/branch';
+import UpdateBranchAccountModal from '../../../../components/modals/branch-modals/UpdateBranchAccountModal';
+import FundBranchModal from '../../../../components/modals/branch-modals/FundBranchModal';
 
 const sampleData = [
   { month: 'Jan', value: 100 },
@@ -33,9 +37,14 @@ const SuperAdminViewBranchPage = () => {
   const userProfile = useSelector((state: RootState) => state.auth.staffProfile);
   const [staffProfile,setStaffProfile] = useState<IStaffProfile>()
   const orgProfile = useSelector((state: RootState) => state.auth.organisationData);
-  const [group, setGroup] = useState<IGroup>();
+  const [branch, setBranch] = useState<IBranch>();
+  const [fundingHistory, setFundingHistory] = useState<any[]>([]);
+  const [totalFunded,setTotalFunded] = useState()
   const [members, setMembers] = useState<IMember[]>([]);
   const [addStaffToBranchModal,setAddStaffToBranchModal] = useState(false)
+  const [updateBranchModal,setUpdateBranchModal] = useState(false);
+  const [updateBranchAccountModal,setUpdateBranchAccountModal] = useState(false);
+   const [fundBranchModal,setFundBranchModal] = useState(false);
   const {id}=useParams()
   const modules = getAccessibleModules(
     // staff?.staffLevel || '',
@@ -51,9 +60,10 @@ const SuperAdminViewBranchPage = () => {
   const generalData = [
     {
       label:'Current Balance',
-      value:5000000,
+      value:branch?.currentBalance,
       icon1:'bi bi-credit-card',
       icon2:'',
+      totalFunded:totalFunded,
       color:'primary',
       isCurrency:true,
       extraData:true
@@ -78,14 +88,16 @@ const SuperAdminViewBranchPage = () => {
     },
   ]
 
-    const getGroupInfo = async () => {
+    const getBranchInfo = async () => {
     setLoading(true)
         try {
-            const res = await api.get(`/group/${id}`);
+            const res = await api.get(`/branch/${id}`);
             // console.log({see:res?.data?.groupMembers})
            
-                setGroup(res?.data?.payload);
-                setMembers(res?.data?.payload?.groupMembers);
+                setBranch(res?.data?.payload?.branch);
+                setFundingHistory(res?.data?.payload?.fundHistory);
+                setTotalFunded(res?.data?.payload?.totalFunding )
+                let totalFunding = res?.data?.payload?.fundHistory.map((fund:any)=>fund.amount)
                 setLoading(false)
                 // const { payload } = res.data;
                 // console.log({ seePayloadFromOtp: payload })
@@ -101,7 +113,7 @@ const SuperAdminViewBranchPage = () => {
         }
     }
     useEffect(() => {
-        getGroupInfo()
+        getBranchInfo()
     }, [navigate])
 
   return (
@@ -109,7 +121,7 @@ const SuperAdminViewBranchPage = () => {
       <DecoratedCard>
         <div className='d-flex flex-wrap justify-content-between w-100'>
           <div>
-            <h4 className="">{group?.groupName} Branch</h4>
+            <h4 className="">{branch?.name} Branch</h4>
             <p>See branch information and all of its loan groups and members.</p>
           </div>
         </div>
@@ -117,8 +129,8 @@ const SuperAdminViewBranchPage = () => {
       <div>
         <div className='w-100 d-flex  justify-content-end mt-2'>
           <div className='d-flex gap-2'>
-            <CustomButton className='border bg-light text-dark p-3' title='Update Branch'/>
-            <CustomButton onClick={()=>setAddStaffToBranchModal(true)} className='border' title='Fund Wallet'/>
+            <CustomButton onClick={()=>setUpdateBranchModal(true)} className='border bg-light text-dark p-3' title='Update Branch'/>
+            <CustomButton onClick={()=>setFundBranchModal(true)} className='border' title='Fund Wallet'/>
             
           </div>
         </div>
@@ -136,6 +148,42 @@ const SuperAdminViewBranchPage = () => {
         ))}
       </div>
 
+
+<div className='mt-3 d-flex flex-wrap align-items-center gap-3'>
+  <Card className='border-0 shadow-sm'>
+    <Card.Header className='d-flex justify-content-between align-items-center fw-bold gap-3'>
+      <div>Bank Details</div>
+      <Button onClick={()=>setUpdateBranchAccountModal(true)}>{branch?.bankDetails?`Update`:`Add New`}</Button>
+    </Card.Header>
+    <Card.Body>
+{
+  branch?.bankDetails?
+  <div className='fw-bold w-100'>
+  <p> {`Account Name : ${branch.bankDetails.accountName}`}</p>
+  <p> {`Account Number  : ${branch.bankDetails.accountNumber}`}</p>
+  <p> {`Name of Bank : ${branch.bankDetails.bankName}`}</p>
+ 
+</div>:
+<div className='d-flex text-center justify-content-center'>
+No Bank Information
+</div>
+
+}
+    </Card.Body>
+  </Card>
+
+  {/* <Card>
+    <Card.Header className='d-flex justify-content-between align-items-center fw-bold'>
+      <div></div>
+    </Card.Header>
+    <Card.Body>
+<div className='fw-bold'>
+  <p> {`Account Name : Zone 1 Account`}</p>
+ 
+</div>
+    </Card.Body>
+  </Card> */}
+</div>
 
 <div className="mt-5">
   <h5>Loan Applications</h5>
@@ -161,7 +209,7 @@ const SuperAdminViewBranchPage = () => {
                   </thead>
                   <tbody>
                     {!loading &&
-                      members.map((branch: any, index) => (
+                      [].map((branch: any, index) => (
                         <tr role='button' onClick={() => navigate(`/super-admin/branch-management/${branch?._id}`)}>
                           <th scope="row">{index + 1}</th>
                           <td>{branch?.name}</td>
@@ -178,7 +226,7 @@ const SuperAdminViewBranchPage = () => {
 
                     <tr className='text-center'>
                       {
-                        <td className='fw-bold' colSpan={5}>{!loading && members.length < 1 && 'No Data Available'}</td>
+                        <td className='fw-bold' colSpan={5}>{!loading && [].length < 1 && 'No Data Available'}</td>
                       }
                     </tr>
 
@@ -220,7 +268,7 @@ const SuperAdminViewBranchPage = () => {
                   </thead>
                   <tbody>
                     {!loading &&
-                      members.map((branch: any, index:number) => (
+                      [].map((branch: any, index:number) => (
                         <tr role='button' onClick={() => navigate(`/super-admin/branch-management/${branch?._id}`)}>
                           <th scope="row">{index + 1}</th>
                           <td>{branch?.name}</td>
@@ -237,7 +285,7 @@ const SuperAdminViewBranchPage = () => {
 
                     <tr className='text-center'>
                       {
-                        <td className='fw-bold' colSpan={5}>{!loading && members.length < 1 && 'No Data Available'}</td>
+                        <td className='fw-bold' colSpan={5}>{!loading && [].length < 1 && 'No Data Available'}</td>
                       }
                     </tr>
 
@@ -279,7 +327,7 @@ const SuperAdminViewBranchPage = () => {
                   </thead>
                   <tbody>
                     {!loading &&
-                      members.map((branch: any, index) => (
+                     [].map((branch: any, index) => (
                         <tr role='button' onClick={() => navigate(`/super-admin/branch-management/${branch?._id}`)}>
                           <th scope="row">{index + 1}</th>
                           <td>{branch?.name}</td>
@@ -296,7 +344,7 @@ const SuperAdminViewBranchPage = () => {
 
                     <tr className='text-center'>
                       {
-                        <td className='fw-bold' colSpan={5}>{!loading && members.length < 1 && 'No Data Available'}</td>
+                        <td className='fw-bold' colSpan={5}>{!loading && [].length < 1 && 'No Data Available'}</td>
                       }
                     </tr>
 
@@ -347,6 +395,26 @@ const SuperAdminViewBranchPage = () => {
         on={roleModal}
         off={() => setRoleModal(false)}
       /> */}
+      <UpdateBranchModal
+      on={updateBranchModal}
+      off={()=>setUpdateBranchModal(false)}
+      branchInfo={branch}
+
+      />
+
+<FundBranchModal
+      on={fundBranchModal}
+      off={()=>setFundBranchModal(false)}
+      branchInfo={branch}
+
+      />
+
+      <UpdateBranchAccountModal
+      on={updateBranchAccountModal}
+      off={()=>setUpdateBranchAccountModal(false)}
+      branchInfo={branch}
+
+      />
 
       <AddMemberToGroupModal 
       on={addStaffToBranchModal}

@@ -1,73 +1,74 @@
+export interface INok {
+  fullName: string;
+  relationship: string;
+  phoneNumber: string;
+  address?: string;
+}
+
 export interface IMember {
-    _id: string;
-    fullName: string;
-    bvn: number;
-    dob: Date;
-    phoneNumber: string;
-    officeAddress: string;
-    durationOfStay: string;
-    nearestBusStop: string;
-    email: string;
-    occupation: string;
-    description: string;
-    organization: string;
-    totalAmountBorrowed: number;
-    homeAddress: string;
-    totalAmountPaidBack: number;
-    amountToSettle: number;
-    repaymentHistory: any[];
-    __v: number;
+  _id: string;
+  id: string;
+  alias: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  bvn: number;
+  dob: string | Date;
+  title: string;
+  gender: string;
+  maritalStatus: string;
+  noOfKids: number;
+  occupation: string;
+  durationOfStay: string;
+  homeAddress: string;
+  officeAddress: string;
+  nearestBusStop: string;
+  state: string;
+  lga: string;
+  language: string;
+
+  organization: string;
+  branch: string;
+  group: {
+    id: string;
+    groupName: string;
+    isApproved: boolean;
+    isDisable: boolean;
+    kyc: {
+      isVerified: boolean;
+    };
+    groupMembers: string[];
     createdAt: string;
     updatedAt: string;
-    branch: string;
-    group: string;
-    isDisable: boolean;
-    isApproved: boolean;
-    createdBy: {
-        fullName: ''
-    }
-    loanRecord: {
-        requestedLoanAmount: number | null;
-        totalAmountLeft: number | null;
-        loanDisbursedDate: Date | null;
-        loanApprovedDate: Date | null;
-        interestRate: number | null;
-        loanVerificationId: string | null;
-        calculatedAmountToBePaid: number | null;
-        dailyLatePercentage: number | null;
-        lateRepaymentIncurred: number | null;
-        loanPurpose: string | null;
-        loanStartDate: Date | null;
-        loanStatus: string | null;
-        loanTenure: number | null;
-        loanTenureInDays: number | null;
-        penaltyFee: number | null;
-        penaltyPaymentIncurred: number | null;
-        repaymentHistory: []
-        totalAmountPaid: number | null;
-    },
-    nok: {
-        isVerified: boolean
-        title?: string;
+    createdBy: string;
+  };
+
+  nok?: INok; // 👈 Added Next of Kin
+
+  createdAt: string;
+  updatedAt: string;
+  createdBy:
+  {
         fullName: string;
-        phoneNumber: string;
-        relationshipWithNok: string;
+        email: string;
+        phoneNumber: string | number;
+        staffLevel: string;
+        description?: string;
+      };
 
-        address: string;
-        state: string;
+  kyc: {
+    isVerified: boolean;
+    attestationDocumentFile: string;
+    idCardPhoto: string;
+    idIdentificationNumber: string;
+    passportPhoto: string;
+    selectedModeOfIdentification: string;
+    utilityBillPhoto: string;
+  };
 
-        attestationDocument: string;
-        idCard: string;
-        passport: string;
-    },
-    kyc: {
-        isVerified: boolean
-        passportPhoto: string;
-        attestationDocumentFile: string;
-        idCardPhoto: string;
-        selectedModeOfIdentification: string;
-        utilityBillPhoto: string;
-    },
+  isVerified: boolean;
+  isApproved: boolean;
+  isDisable: boolean;
 
-
+  __v: number;
 }
