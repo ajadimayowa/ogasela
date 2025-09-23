@@ -7,9 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { logout } from '../features/auth/authSlice';
 import { persistor } from '../store/store'; // where you setup Redux Persist
-import SuperAdminSidebar from './sidebars/super-admin-sidebar';
 import { toast } from 'react-toastify';
-import RootAdminSidebar from './sidebars/root-admin-sidebar';
 import RootAdminTopBar from './bars/RootAdminTopBar';
 
 interface ProtectedRouteProps {
@@ -33,10 +31,7 @@ const RootAdminProtectedRoute: React.FC<any> = () => {
   return (
   <div className="d-flex p-0 m-0" style={{ height: '100vh'}}>
     {/* Sidebar */}
-    <RootAdminSidebar
-    isOpen={isSidebarOpen} 
-    toggleSidbar={()=>setIsSidebarOpen(!isSidebarOpen)} 
-    />
+    
 
     {/* Right side: Topbar + main */}
     <div className="d-flex flex-column flex-grow-1 w-100">

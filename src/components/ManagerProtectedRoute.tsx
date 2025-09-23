@@ -1,17 +1,10 @@
 import React, { ReactNode, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { isTokenValid } from '../utils/tokenUtils';
-import Sidebar from './sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { logout } from '../features/auth/authSlice';
 import { persistor } from '../store/store'; // where you setup Redux Persist
-import SuperAdminSidebar from './sidebars/super-admin-sidebar';
-import { toast } from 'react-toastify';
-import SuperAdminTopbar from './bars/SuperAdminTopBar';
 import StaffTopBar from './bars/StaffTopBar';
-import MarketerSidebar from './sidebars/marketer-sidebar';
-import ManagerSidebar from './sidebars/manager-sidebar';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -38,10 +31,7 @@ const ManagerProtectedRoute: React.FC<any> = () => {
   return (
   <div className="d-flex p-0 m-0" style={{ height: '100vh'}}>
     {/* Sidebar */}
-    <ManagerSidebar
-    isOpen={isSidebarOpen} 
-    toggleSidbar={()=>setIsSidebarOpen(!isSidebarOpen)} 
-    />
+   
 
     {/* Right side: Topbar + main */}
     <div className="d-flex flex-column flex-grow-1 w-100">

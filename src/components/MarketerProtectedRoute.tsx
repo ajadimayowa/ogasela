@@ -5,12 +5,9 @@ import Sidebar from './sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { logout } from '../features/auth/authSlice';
-import { persistor } from '../store/store'; // where you setup Redux Persist
-import SuperAdminSidebar from './sidebars/super-admin-sidebar';
 import { toast } from 'react-toastify';
 import SuperAdminTopbar from './bars/SuperAdminTopBar';
 import StaffTopBar from './bars/StaffTopBar';
-import MarketerSidebar from './sidebars/marketer-sidebar';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -24,19 +21,9 @@ const MarketerProtectedRoute: React.FC<any> = () => {
   const token = useSelector((state:RootState) => state.auth.token);
 
 
-  if (!token||staffProfile?.staffLevel !=='marketer') {
-    dispatch(logout());
-    persistor.purge();
-    return <Navigate to="/login"  replace />;
-  }
-
   return (
   <div className="d-flex p-0 m-0" style={{ height: '100vh'}}>
     {/* Sidebar */}
-    <MarketerSidebar
-    isOpen={isSidebarOpen} 
-    toggleSidbar={()=>setIsSidebarOpen(!isSidebarOpen)} 
-    />
 
     {/* Right side: Topbar + main */}
     <div className="d-flex flex-column flex-grow-1 w-100">
