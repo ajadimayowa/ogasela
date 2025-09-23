@@ -1,0 +1,27 @@
+.decorated-card-container {
+    display: flex;
+    align-items: center;
+    height: 156px;
+
+    background:
+        linear-gradient(135deg, #FFFFFF 0%, #E6CDD3 100%),
+         url('../../assets/svgs/pattern.svg');
+        
+
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom;
+    background-blend-mode: overlay;
+
+    @media (max-width: 768px) {
+       background:
+        linear-gradient(135deg, #FFFFFF 0%, #E6CDD3 100%),
+         url('../../assets/svgs/pattern-mobile.svg');
+        
+
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom;
+    background-blend-mode: overlay;
+    }
+}

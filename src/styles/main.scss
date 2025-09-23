@@ -1,0 +1,134 @@
+// Theme Variables
+$primary: #1A5745;
+$secondary: #f9f9f9;
+$light: #ffffff;
+$info: #ff5722;
+
+// Font Variables
+$font-base-size: 16px;
+$font-primary: 'DM Sans', sans-serif;
+$font-secondary: 'Lato', sans-serif;
+
+// Global Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $font-primary;
+}
+
+@keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+/* For Chrome, Safari, Edge, Opera */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input.form-control:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+input{
+  // min-width: 260px !important;
+  border-radius: 5px !important;
+}
+
+input:focus,
+select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+// Body Styling
+body {
+  font-size: $font-base-size;
+  font-family: $font-primary;
+  background-color: #f4f6f8;
+  color: #333;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 60px; // adjust if navbar is taller
+  padding-bottom: 100px;
+}
+
+// App Wrapper
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #F6F6F6;
+}
+
+// Headings Styling
+h1, h2, h3 {
+  font-family: $font-secondary;
+  font-weight: bold;
+}
+
+p {
+  font-family: $font-primary;
+  line-height: 1.6;
+  color: #555;
+}
+
+label {
+  font-family: $font-primary;
+  color: $primary;
+  font-weight: 500;
+}
+
+input, textarea, select {
+  font-family: $font-primary;
+  font-size: $font-base-size;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 2px rgba($primary, 0.2);
+    outline: none;
+  }
+}
+
+// Example: use theme colors easily
+.btn-primary {
+  background-color: $primary;
+  border: none;
+  font-family: $font-primary;
+  font-size: $font-base-size;
+
+  &:hover {
+    background-color: darken($primary, 10%);
+  }
+}
+
+.text-secondary {
+  color: $secondary;
+}
+
+.bg-light {
+  background-color: $light;
+}
+
+// Import Bootstrap (must come after variable declarations if you want to override them)
+@import "bootstrap/scss/bootstrap";

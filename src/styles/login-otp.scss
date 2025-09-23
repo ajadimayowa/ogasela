@@ -1,0 +1,36 @@
+.verify-otp-page {
+  // Background image with transparent linear gradient overlay
+  background: 
+    linear-gradient(rgba(56, 189, 150, 0.7), rgba(26, 87, 69, 0.7)),
+    url('../assets/images/home-bg-web.png'); // Replace with actual image name
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 2rem;
+    background:linear-gradient(rgba(56, 189, 150, 0.7), rgba(26, 87, 69, 0.7)),
+      url('../assets/images/home-bg-mobile.png'); // Mobile-specific background
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+
+.otp-box {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.1rem rgba(0,123,255,.25);
+  }
+}
+
+
