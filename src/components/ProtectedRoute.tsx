@@ -17,14 +17,33 @@ const ProtectedRoute: React.FC<any> = () => {
   }
 
   return (
-    <div className="d-flex min-vh-100 p-0 m-0">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-      <div className="w-100">
+  <div className="d-flex p-0 m-0" style={{ height: '100vh', overflow: 'hidden' }}>
+    {/* Sidebar */}
+    <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+
+    {/* Right side: Topbar + main */}
+    <div className="d-flex flex-column flex-grow-1 w-100">
+      {/* Topbar occupies height in flow */}
+      <div style={{ height: '60px', flexShrink: 0 }}>
         <Topbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main style={{overflowY:'scroll', height:'90vh'}} className="p-4">{<Outlet/>}</main>
       </div>
+
+      {/* Main content fills the rest */}
+      <main
+        className="p-3"
+        style={{
+          flexGrow: 1,
+          scrollbarWidth:'none',
+          overflowY: 'auto',
+          marginTop: '20px',
+          marginBottom:'20px'
+        }}
+      >
+        <Outlet />
+      </main>
     </div>
-  );
+  </div>
+);
 };
 
 export default ProtectedRoute;

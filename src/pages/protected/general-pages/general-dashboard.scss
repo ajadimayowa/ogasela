@@ -1,0 +1,45 @@
+.dashboard-container {
+  padding: 1rem;
+  overflow: auto;
+
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .module-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #e2e6ea;
+      transform: translateY(-3px);
+    }
+
+    .module-icon {
+      font-size: 2rem;
+      color: #0d6efd;
+    }
+
+    h6 {
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .module-card {
+      padding: 1rem;
+    }
+
+    .module-icon {
+      font-size: 1.8rem;
+    }
+  }
+}

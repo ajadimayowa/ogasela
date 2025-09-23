@@ -37,7 +37,7 @@ const CustomInput: React.FC<CustomInputProps> = ({ id, name, label, placeholder,
 
                 <input
                     {...field}
-                    type={secured && type == 'password' ? 'password' : "text"}
+                    type={secured && type == 'password' ? 'password' : 'text'}
                     name={id}
                     className="form-control p-2 rounded-0 outline-0"
                     id={id}

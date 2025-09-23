@@ -1,7 +1,7 @@
 // src/pages/Login.tsx
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { setToken } from '../features/auth/authSlice';
 import { Form, Button, Card, Image } from 'react-bootstrap';
 import '../styles/login.scss';
@@ -11,6 +11,7 @@ import CustomButton from '../components/custom-button/custom-button';
 import { ErrorMessage, Formik } from 'formik';
 import * as Yup from 'yup';
 import api from '../app/api';
+import { toast } from 'react-toastify';
 
 export interface ILogin {
   email: string;
@@ -42,27 +43,18 @@ const LoginPage = () => {
     // console.log({sending:payload});
     try {
       const res = await api.post('/staff/login',payload);
-      navigate('/verify-otp', { state: { email: payload.email } });
+      navigate('/verify-login-otp', { state: { email: payload.email } });
       setLoading(false);
-    } catch (error) {
-       setLoading(false);
+    } catch (error:any) {
+      console.log({errorHere:error})
+      setLoading(false);
+       if(error?.data?.message){
+        toast.error(error?.data?.message)
+       } else{
+       console.log({seeError:error})
+       toast.error(error?.message)
+       }
     }
-    // setError('');
-    // try {
-    //   // Simulated login API call
-    //   if (email === 'testy@gmail.com' && password === 'password') {
-    //     const fakeToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNlZGVjMTRjLWI1MmUtNGMxOS1hM2QyLTgwMzRlNTgyNjU2YyIsIm5hbWUiOiIgICIsImVtYWlsIjoidGVzdHlAZ21haWwuY29tIiwicm9sZUlkIjoiM2I4ZjNkMjYtZmEzZC00MGY3LWE4NDAtYTcyZGViZjgzYzg2IiwiaG9zcGl0YWxJZCI6IjRjMzU5OGFkLTEyYjktNDAwYS1iZDg3LTBkN2UzZmJmMmM3YyIsImNpdmlzSG9zcGl0YWxJZCI6IlRFUy04WjZCIiwiaWF0IjoxNzQ1NzcyODU3LCJleHAiOjE3NDU4MTYwNTd9.sowkV2uLI-uFmPE3oUYJu4ZRALqxWZE5YR3v2hEAmzw'; // You would get a real token from backend
-    //     dispatch(setToken(fakeToken));
-    //     // const payload = JSON.parse(atob(fakeToken.split('.')[1]));
-    //     // console.log(payload)
-    //     navigate('/');
-    //   } else {
-    //     setError('Invalid email or password.');
-    //   }
-    // } catch (err) {
-    //   console.log(err)
-    //   setError('An error occurred. Please try again.');
-    // }
   };
 
   return (
@@ -136,7 +128,7 @@ const LoginPage = () => {
         
         <div className="text-center mt-2">
           <p>
-            Forgot your password? <a href="/signup" className='text-info fw-medium'>Reset it here</a>
+            Forgot your password? <a href='/request-password-reset-otp' className='text-info fw-medium'>Reset it here</a>
           </p>
         </div>
       </Card>

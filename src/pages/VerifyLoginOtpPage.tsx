@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { setStaffProfile, setToken } from '../features/auth/authSlice';
+import { setOrganisationData, setStaffProfile, setToken } from '../features/auth/authSlice';
 import api from '../app/api';
 import { Card, Form, Image } from 'react-bootstrap';
 import CustomButton from '../components/custom-button/custom-button';
@@ -9,7 +9,7 @@ import compnayLogo from '../assets/images/bc-kash-logo.png';
 import { toast } from 'react-toastify';
 import '../styles/login-otp.scss'; // Ensure you have this CSS file for styling
 
-const VerifyOtpPage = () => {
+const VerifyLoginOtpPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -26,7 +26,7 @@ const VerifyOtpPage = () => {
     useEffect(() => {
         if (!email) {
             toast.warning('Email not found. Please login again.');
-            navigate('/login');
+            navigate('/login', {replace:true});
         }
     }, [email, navigate]);
 
@@ -71,25 +71,27 @@ const VerifyOtpPage = () => {
         try {
             const res = await api.post('/staff/verify-otp', { email, otp: finalOtp });
             if (res.status == 200) {
-                const { token, payload } = res.data;
-                const staffProfile = res?.data?.payload?.staffInfo;
-                dispatch(setToken(token));
+                console.log({dataSent:res?.data?.payload})
+                const { payload } = res.data;
+                console.log({seePayloadFromOtp:payload})
+                const staffProfile = payload?.staffData;
+                const orgData = payload?.organisationData;
+                dispatch(setToken(payload?.token));
                 dispatch(setStaffProfile(staffProfile));
+                dispatch(setOrganisationData(orgData));
                 toast.success('Login successful!');
-
-
-                switch (payload?.staffInfo?.staffLevel) {
+                switch (payload?.staffData?.staffLevel) {
                     case 'super-admin':
-                        navigate('/super-admin/');
+                        navigate('/super-admin/dashboard',{replace:true});
                         break;
                     case 'approver':
-                        navigate('/approver/');
+                        navigate('/manager/db');
                         break;
                     case 'branch-manager':
-                        navigate('/manager/');
+                        navigate('/manager/db');
                         break;
                     case 'marketer':
-                        navigate('/marketer/');
+                        navigate('/marketer/db');
                         break;
                     default:
                         navigate('/login');
@@ -134,6 +136,8 @@ const VerifyOtpPage = () => {
                             <input
                                 key={index}
                                 type="text"
+                                inputMode="numeric"
+                                pattern="\d*"
                                 maxLength={1}
                                 value={digit}
                                 onChange={(e) => handleChange(index, e.target.value)}
@@ -170,4 +174,4 @@ const VerifyOtpPage = () => {
     );
 };
 
-export default VerifyOtpPage;
+export default VerifyLoginOtpPage;

@@ -1,0 +1,39 @@
+.owner-page {
+  // Background image with transparent linear gradient overlay
+  background: 
+    linear-gradient(rgba(25,34,82, 0.7), rgba(50, 124, 133, 0.7)),
+    url('../assets/images/fsh-bg-img.png'); // Replace with actual image name
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  padding: 1rem;
+  overflow: auto;
+
+  a {
+    color: #007bff;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Responsive layout adjustments
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 2rem;
+    background:linear-gradient(rgba(25,34,82, 0.7), rgba(50, 124, 133, 0.7)),
+      url('../assets/images/fsh-bg-img.png'); // Mobile-specific background
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  @media (min-width: 769px) {
+    .login-form {
+      width: 400px;
+    }
+  }
+}

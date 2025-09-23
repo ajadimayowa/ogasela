@@ -1,12 +1,20 @@
 // src/styles/Topbar.scss
+
 .topbar {
-    height: 60px;
-    z-index: 999;
+  .sidebar-toggle-button{
+      display: none;
+    }
+ 
+    height: 70px;
+    z-index: 10000000;
+
     
-    .toggle-btn {
+    &.toggle-btn {
       cursor: pointer;
       color: #343a40;
     }
+
+    
   
     .user-info {
       font-weight: 500;
@@ -15,6 +23,28 @@
       img {
         object-fit: cover;
       }
+    }
+
+    @media (max-width: 768px) {
+    .sidebar-toggle-button{
+      display: flex;
+    }
+    &.open{
+    position: absolute;
+    width: 350px;
+    background-color: #b31868;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 10000;
+    padding-top: 15px;
+    }
+
+    &.collapsed {
+        width: 0;
+        overflow: hidden;
+    }
     }
   }
   

@@ -1,11 +1,18 @@
 // src/components/Sidebar.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-// import { List } from 'react-bootstrap-icons';
-import '../styles/sidebar.scss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/auth/authSlice';
-import { persistor } from '../store/store'; // where you setup Redux Persist
+import { persistor, RootState } from '../store/store';
+import { getSidebarLinks } from '../utils/navUtils';
+import '../styles/sidebar.scss';
+
+// Define SidebarSubLink type if not imported
+interface SidebarSubLink {
+  path: string;
+  title: string;
+  icon?: string;
+}
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,41 +20,72 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [openModule, setOpenModule] = useState<string | null>(null);
+
+  const role = useSelector((state: RootState) => state.auth.staffProfile?.staffLevel || '');
+  const subscriptionType = useSelector(
+    (state: RootState) => state.auth.organisationData?.orgSubscriptionPlan || 'basic'
+  );
+  const sidebarLinks = getSidebarLinks('branch-manager', 'pro');
+
   const handleLogout = async () => {
     dispatch(logout());
-    await persistor.purge(); // Clears localStorage or storage engine
-  // Optional: Redirect
-  window.location.href = '/login';
-    
-  }
+    await persistor.purge();
+    window.location.href = '/login';
+  };
+
+  const toggleModule = (name: string) => {
+    setOpenModule(prev => (prev === name ? null : name));
+  };
+
   return (
-    <div className={`bg-primary sidebar`}>
-      <div onClick={toggleSidebar} className="sidebar-header d-flex align-items-center justify-content-between p-3">
-        <h4 className="m-0">Admin</h4>
-        <i className="bi bi-gear-fill me-2"></i>
+    <div className={`sidebar bg-primary ${isOpen ? 'open' : 'collapsed'} h-100`}>
+      <div className="sidebar-header d-flex justify-content-between align-items-center p-3">
+        <h4 className="text-white m-0">Admin</h4>
+        <i className="bi bi-x-circle" onClick={toggleSidebar}></i>
       </div>
 
-      <nav className="sidebar-nav flex-column">
-        <NavLink to="/" className="nav-link">
-          <i className="bi bi-house-door-fill me-2"></i> Dashboard
-        </NavLink>
+      <nav className="sidebar-nav px-2">
+        {sidebarLinks.map(({ name, path, links }:any) => (
+          <div key={name} className="mb-2">
+            {name === 'Dashboard' || name === 'Settings' ? (
+              <NavLink to={path || (name === 'Settings' ? '/settings' : '/')} className="nav-link">
+                <i className={`bi ${name === 'Dashboard' ? 'bi-house-door-fill' : 'bi-gear-fill'} me-2`}></i>
+                {isOpen && name}
+              </NavLink>
+            ) : (
+              <>
+                <div
+                  className="nav-link d-flex align-items-center"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => toggleModule(name)}
+                >
+                  <i className="bi bi-folder-fill me-2"></i>
+                  {isOpen && <span>{name}</span>}
+                  {isOpen && (
+                    <i className={`ms-auto bi ${openModule === name ? 'bi-chevron-up' : 'bi-chevron-down'}`}></i>
+                  )}
+                </div>
+                {openModule === name && isOpen && (
+                    <div className="ps-3">
+                    {links.map((link: SidebarSubLink) => (
+                      <NavLink to={link.path} key={link.path} className="nav-link small">
+                      <i className={`${link.icon || 'bi bi-dot'} me-2`}></i>
+                      {link.title}
+                      </NavLink>
+                    ))}
+                    </div>
+                )}
+              </>
+            )}
+          </div>
+        ))}
 
-        <NavLink to="/users" className="nav-link">
-          <i className="bi bi-people-fill me-2"></i> Users
-        </NavLink>
-
-        <NavLink to="/settings" className="nav-link">
-          <i className="bi bi-gear-fill me-2"></i> Settings
-        </NavLink>
-
-        <NavLink to="/reports" className="nav-link">
-          <i className="bi bi-graph-up-arrow me-2"></i> Reports
-        </NavLink>
-
-        <NavLink onClick={handleLogout} to="/login" className="nav-link">
-          <i className="bi bi-graph-up-arrow me-2"></i> Logout
-        </NavLink>
+        <div onClick={handleLogout} className="nav-link" style={{ cursor: 'pointer' }}>
+          <i className="bi bi-box-arrow-right me-2"></i>
+          {isOpen && 'Logout'}
+        </div>
       </nav>
     </div>
   );

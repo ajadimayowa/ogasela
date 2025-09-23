@@ -1,57 +1,51 @@
 // src/routes/AppRouter.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from '../pages/login';
-import SignupPage from '../pages/signup';
-// import ResetPassword from '../pages/ResetPassword';  // Uncomment if you have the reset password page
-import DashboardPage from '../pages/dashboard';
-import DashboardLayout from '../layouts/dashboard-layout';
-import ProtectedRoute from '../components/ProtectedRoute';
-import ProfilePage from '../pages/test-page';
-import TestPage from '../pages/protected/sample-page';
-import VerifyOtpPage from '../pages/VerifyOtpPage';
-import SuperAdminProtectedRoutes from '../components/SuperAdminProtectedRoute';
-import SuperAdminDashboard from '../pages/super-admin-pages/SuperAdminDashboard';
+import MarketerProtectedRoute from '../components/MarketerProtectedRoute';
+import MarketerGeneralDashboard from '../pages/protected/general-pages/MarketerGeneralDashboard';
+import CreateLoanPage from '../pages/protected/marketer-pages/CreateLoanPage';
+import MarketerLoanDashboardComp from '../pages/protected/marketer-pages/loan-pages/MarketerGeneralDashboard';
+import MarketerManageLoansPage from '../pages/protected/marketer-pages/MarketerManageLoansPage';
+import MarketerViewGroupPage from '../pages/protected/marketer-pages/loan-pages/MarketerViewGroupPage';
+import MarketerViewCustomerPage from '../pages/protected/marketer-pages/loan-pages/MarketerViewCustormerPage';
+import MarketerDuplicateCheckerPage from '../pages/protected/marketer-pages/duplicate-pages/MarketerDuplicateCheckerPage';
+
+import HomePage from '../pages/public/HomePage';
+
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
         {/* Public Routes: Accessible without authentication */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/verify-otp" element={<VerifyOtpPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/" element={<HomePage />} />
         {/* Uncomment the following line if ResetPassword page is implemented */}
         {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
 
         {/* Private Route: Protects access to the Dashboard, requires authentication */}
-        <Route
-          path="/*"
-          element={
-            <ProtectedRoute />
-          }
-        >
-          {/* Nested routes inside DashboardLayout */}
-          <Route index element={<DashboardPage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="users" element={<TestPage />} />
-          {/* Add additional nested routes here as needed */}
-        </Route>
+        
 
         <Route
-          path="/super-admin"
+          path="/marketer"
           element={
-            <SuperAdminProtectedRoutes />
+            <MarketerProtectedRoute />
           }
         >
-          {/* Nested routes inside DashboardLayout */}
-          <Route index element={<SuperAdminDashboard />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="users" element={<TestPage />} />
-          {/* Add additional nested routes here as needed */}
+          <Route index path='db' element={<MarketerGeneralDashboard />} />
+          <Route path='loan-db' element={<MarketerLoanDashboardComp />} />
+          <Route path='loan-management' element={<MarketerManageLoansPage />} />
+          <Route path='view-group/:id' element={<MarketerViewGroupPage />} />
+          <Route path='view-customer/:id' element={<MarketerViewCustomerPage />} />
+
+          <Route path='create-loan' element={<CreateLoanPage />} />
+          <Route path='view-loan' element={<MarketerManageLoansPage />} />
+
+          <Route path="duplicate-checker" element={< MarketerDuplicateCheckerPage />} />
         </Route>
 
-        {/* Catch-all Route: Redirect unknown paths to login page */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+
+        
+
+        {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
       </Routes>
     </Router>
   );

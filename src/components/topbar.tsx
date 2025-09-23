@@ -2,32 +2,43 @@
 import React from 'react';
 // import { BsList } from 'react-icons/bs';
 import '../styles/topbar.scss';
+import { Image } from 'react-bootstrap';
+import CustomButton from './custom-button/custom-button';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+import { useNavigate } from 'react-router-dom';
 
 interface TopbarProps {
   toggleSidebar: () => void;
 }
 
-const Topbar = ({ toggleSidebar }: TopbarProps) => {
+const Topbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
+  const navigate= useNavigate()
+   const rootAdminProfile = useSelector((state: RootState) => state.auth.rootAdminProfile);
   return (
-    <nav className="topbar d-flex align-items-center justify-content-between px-3 py-2 shadow-sm">
-      <div className="d-flex align-items-center">
-        <i className="bi bi-gear-fill me-2" onClick={toggleSidebar}></i>
-        <h5 className="m-0">Admin Portal</h5>
-      </div>
+    <div className="topbar d-flex justify-content-between shadow-sm align-items-center px-4 py-3 bg-light">
+      <div className='d-flex gap-2 align-items-center'>
+          <i className="sidebar-toggle-button bi bi-list d-md-none fs-3" onClick={toggleSidebar}></i>
+        
+        <CustomButton
+        title='Go Back'
+        type='button'
+        onClick={()=>navigate(-1)}
+        className='border outline bg-light text-dark'
 
-      <div className="d-flex align-items-center">
-        <div className="user-info d-flex align-items-center">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile"
-            className="rounded-circle me-2"
-            width="40"
-            height="40"
-          />
-          <span>Admin</span>
-        </div>
+        />
       </div>
-    </nav>
+      <div className='d-flex flex-row align-items-center gap-2'>
+         <i className="bi bi-person-circle fs-3"></i>
+        <div className=''>
+          <p className='p-0 m-0 fw-bold'>{rootAdminProfile?.fullName}</p>
+          <small className='m-0 p-0 text-capitalize'>Root Admin</small>
+        </div>
+       
+      </div>
+      {/* <h5 className="m-0">App Name</h5> */}
+      {/* <Image src='https://wok9jamedia.s3.eu-north-1.amazonaws.com/bcklogo.jpg' height={24}/> */}
+    </div>
   );
 };
 
