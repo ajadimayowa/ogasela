@@ -18,9 +18,12 @@ const CustomIconButton: React.FC<CustomButtonProps> = ({onClick,style,icon, clas
         // style={{...style,backgroundColor: color ?? '#1A5745' }} 
         onClick={onClick} className={className} type={type} {...props} disabled={loading} 
         // style={{...props.style}}
+        style={{maxWidth:'400px'}}
          >
-        <i className={icon}></i>
+        
         {loading ? <Spinner animation="grow" size="sm" role="status" aria-hidden="true" /> :title}
+        <i className={icon}></i>
+        
         </Button>
     );
 }
