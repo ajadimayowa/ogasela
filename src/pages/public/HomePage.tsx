@@ -26,6 +26,7 @@ import serviceCatIcon from '../../assets/icons/product-category/services.png';
 import progCatIcon from '../../assets/icons/product-category/programing.png';
 import cosCatIcon from '../../assets/icons/product-category/cosmetics.png';
 import { IAd } from '../../interfaces/ad';
+import ReusableInputs from '../../components/custom-input/ReusableInputs';
 
 export interface ILogin {
     email: string;
@@ -33,17 +34,17 @@ export interface ILogin {
 }
 
 export interface ICategory {
-    id:string;
-    image:string;
-    name:string;
-    slug:string
+    id: string;
+    image: string;
+    name: string;
+    slug: string
 }
 
 export interface IHomeSlide {
-    id:string;
-    image:string;
-    name:string;
-    slug:string
+    id: string;
+    image: string;
+    name: string;
+    slug: string
 }
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -51,10 +52,11 @@ const HomePage = () => {
     const [loading, setLoading] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [categories,setCategories] = useState<ICategory[]>([]);
-    const [recentlyPosted,setRecentlyPosted] = useState<IAd[]>([]);
-    const [homeSlides,sethomeSlides] = useState<ICategory[]>([]);
-    const [authModal,setAuthModal] = useState(false);
+    const [categories, setCategories] = useState<ICategory[]>([]);
+    const [recentlyPosted, setRecentlyPosted] = useState<IAd[]>([]);
+    const [homeSlides, sethomeSlides] = useState<ICategory[]>([]);
+    const [authModal, setAuthModal] = useState(false);
+    const [loginModal, setLoginModal] = useState(false);
 
     const initialValues = {
         email: '',
@@ -99,7 +101,7 @@ const HomePage = () => {
     };
 
     const handleLogin = () => {
-        setIsLoggedIn(true);
+        setLoginModal(true);
         setAuthModal(false);
     };
 
@@ -110,7 +112,7 @@ const HomePage = () => {
             subtitle: "Find amazing deals near you",
             image: 'https://images.pexels.com/photos/4971966/pexels-photo-4971966.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
             buttonText: "Start Shopping",
-            onButtonClick: () =>handleCheckAuth('/post'),
+            onButtonClick: () => handleCheckAuth('/post'),
         },
         {
             id: 2,
@@ -118,7 +120,7 @@ const HomePage = () => {
             subtitle: "Sell faster, reach more buyers",
             image: "https://www.kedglobal.com/data/ked/image/2022/05/02/ked202205020034.700x.0.jpg",
             buttonText: "Post Now",
-            onButtonClick: () =>handleCheckAuth('/post'),
+            onButtonClick: () => handleCheckAuth('/post'),
         },
         {
             id: 3,
@@ -144,13 +146,26 @@ const HomePage = () => {
 
     }
 
-    const handleCheckAuth = (path:string)=>{
-        console.log({seePath:path});
+    const handleCheckAuth = (path: string) => {
+        console.log({ seePath: path });
         const token = localStorage.getItem('userToken') || '';
-        if(!token){
+        if (!token) {
             setAuthModal(true)
         } else {
             navigate(path)
+        }
+    }
+
+    const  loginUser = async (v:any)=>{
+        setLoading(true)
+        try {
+            
+        const res = await api.post('auth/login',v);
+        // localStorage.setItem("userToken",)
+        console.log({seeDat:res})
+        setLoading(false)
+        } catch (error) {
+            setLoading(false)
         }
     }
 
@@ -185,9 +200,9 @@ const HomePage = () => {
                         {
                             loading &&
                             <Col md={12} className='text-center'>
-                                <Spinner/>
+                                <Spinner />
                             </Col>
-                            
+
                         }
                         {categories.map((cat, idx) => (
                             <Col key={idx}>
@@ -210,92 +225,92 @@ const HomePage = () => {
             {
                 !loading &&
                 <>
-                <Container className="mt-5">
-                <div className="d-flex justify-content-between fw-bold">
-                    <h4 className="fw-bold">Recently Posted</h4>
-                </div>
+                    <Container className="mt-5">
+                        <div className="d-flex justify-content-between fw-bold">
+                            <h4 className="fw-bold">Recently Posted</h4>
+                        </div>
 
-                <Row className="g-3">
-                    {recentlyPosted.map((product:IAd) => (
-                        <Col xs={6} sm={6} md={3} key={product.id} className='mt-4'>
-                            <ProductAdCard
-                                id={product.id}
-                                image={product.images[0]}
-                                title={product.title}
-                                sellerName={product.sellerName}
-                                reviewCount={product.reviewCount}
-                                price={product?.price}
-                                description={product.description}
-                                onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
-                                onCardClick={() => alert(`Go to product page for ${product.title}`)}
-                            />
-                        </Col>
-                    ))}
-                </Row>
-                <div className='w-100 text-end'>
-                    <a href="#">See more</a>
-                </div>
-            </Container>
+                        <Row className="g-3">
+                            {recentlyPosted.map((product: IAd) => (
+                                <Col xs={6} sm={6} md={3} key={product.id} className='mt-4'>
+                                    <ProductAdCard
+                                        id={product.id}
+                                        image={product.images[0]}
+                                        title={product.title}
+                                        sellerName={product.sellerName}
+                                        reviewCount={product.reviewCount}
+                                        price={product?.price}
+                                        description={product.description}
+                                        onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
+                                        onCardClick={() => alert(`Go to product page for ${product.title}`)}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                        <div className='w-100 text-end'>
+                            <a href="#">See more</a>
+                        </div>
+                    </Container>
 
-            <Container className="mt-5">
-                <div className="d-flex justify-content-between fw-bold">
-                    <h4 className="fw-bold">Best sellers</h4>
-                </div>
+                    <Container className="mt-5">
+                        <div className="d-flex justify-content-between fw-bold">
+                            <h4 className="fw-bold">Best sellers</h4>
+                        </div>
 
-                <Row className="g-3">
-                    {recentlyPosted.map((product:IAd) => (
-                        <Col xs={6} sm={6} md={3} key={product.id} className='mt-4'>
-                            <ProductAdCard
-                                id={product.id}
-                                image={product.images[0]}
-                                title={product.title}
-                                sellerName={product.sellerName}
-                                reviewCount={product.reviewCount}
-                                price={product?.price}
-                                description={product.description}
-                                onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
-                                onCardClick={() => alert(`Go to product page for ${product.title}`)}
-                            />
-                        </Col>
-                    ))}
-                </Row>
-                <div className='w-100 text-end'>
-                    <a href="#">See more</a>
-                </div>
-            </Container>
-            <Container className="mt-5">
-                <div className="d-flex justify-content-between fw-bold">
-                    <h4 className="fw-bold">Best deals</h4>
-                </div>
+                        <Row className="g-3">
+                            {recentlyPosted.map((product: IAd) => (
+                                <Col xs={6} sm={6} md={3} key={product.id} className='mt-4'>
+                                    <ProductAdCard
+                                        id={product.id}
+                                        image={product.images[0]}
+                                        title={product.title}
+                                        sellerName={product.sellerName}
+                                        reviewCount={product.reviewCount}
+                                        price={product?.price}
+                                        description={product.description}
+                                        onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
+                                        onCardClick={() => alert(`Go to product page for ${product.title}`)}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                        <div className='w-100 text-end'>
+                            <a href="#">See more</a>
+                        </div>
+                    </Container>
+                    <Container className="mt-5">
+                        <div className="d-flex justify-content-between fw-bold">
+                            <h4 className="fw-bold">Best deals</h4>
+                        </div>
 
-                <Row className="g-3">
-                    {recentlyPosted.map((product:IAd) => (
-                        <Col xs={6} sm={6} md={3} key={product.id} className='mt-4'>
-                            <ProductAdCard
-                                id={product.id}
-                                image={product.images[0]}
-                                title={product.title}
-                                sellerName={product.sellerName}
-                                reviewCount={product.reviewCount}
-                                price={product?.price}
-                                description={product.description}
-                                onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
-                                onCardClick={() => alert(`Go to product page for ${product.title}`)}
-                            />
-                        </Col>
-                    ))}
-                </Row>
-                <div className='w-100 text-end'>
-                    <a href="#">See more</a>
-                </div>
-            </Container>
-            </>
+                        <Row className="g-3">
+                            {recentlyPosted.map((product: IAd) => (
+                                <Col xs={6} sm={6} md={3} key={product.id} className='mt-4'>
+                                    <ProductAdCard
+                                        id={product.id}
+                                        image={product.images[0]}
+                                        title={product.title}
+                                        sellerName={product.sellerName}
+                                        reviewCount={product.reviewCount}
+                                        price={product?.price}
+                                        description={product.description}
+                                        onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
+                                        onCardClick={() => alert(`Go to product page for ${product.title}`)}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                        <div className='w-100 text-end'>
+                            <a href="#">See more</a>
+                        </div>
+                    </Container>
+                </>
             }
 
-            <BottomNavbar checkAuthStatus ={(path:string)=>handleCheckAuth(path)}/>
+            <BottomNavbar checkAuthStatus={(path: string) => handleCheckAuth(path)} />
 
             {/* Login/Signup Modal */}
-            <Modal show={authModal} onHide={() => setAuthModal(false)} ccentered>
+            <Modal show={authModal} onHide={() => setAuthModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Login / Sign Up</Modal.Title>
                 </Modal.Header>
@@ -311,6 +326,36 @@ const HomePage = () => {
                     <Button className="w-100" variant="outline-secondary text-dark border">
                         Sign Up
                     </Button>
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={loginModal} onHide={() => setAuthModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title></Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='text-center'>
+                    <Formik
+                        initialValues={{ email: '', password: '' }}
+                        onSubmit={(v) => loginUser(v)}
+                    >
+                        {
+                            ({handleSubmit }) => (
+                                <Form onSubmit={handleSubmit}>
+                                    <p>Please log in to continue.</p>
+                                    <div className='text-start'>
+                                        <ReusableInputs label='Email' placeholder='Enter email' inputType='email' name={'email'} id={'email'} />
+                                    </div>
+                                    <div className='text-start'>
+                                        <ReusableInputs icon2='bi bi-eye-slash' label='Password' placeholder='Enter password' className='mt-3' inputType='password' name='password' id='password' />
+                                    </div>
+
+                                    <CustomButton className='w-100 mt-3' title='Login' type='submit' loading={loading} />
+                                    <div className='mt-3'> New user? <a href='#' className='fw-bold'>Register</a></div>
+                                </Form>
+                            )
+                        }
+                    </Formik>
+
                 </Modal.Body>
             </Modal>
         </div>

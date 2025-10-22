@@ -123,7 +123,7 @@ const ReusableInputs: React.FC<CustomInputProps> = ({
     };
 
     return (
-        <div className="form-group w-100">
+        <div className="form-group w-100 mt-2">
             {label && (
                 <label htmlFor={id} className="fw-medium m-1 text-dark">
                     {label}
