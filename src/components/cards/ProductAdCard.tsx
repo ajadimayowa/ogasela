@@ -6,7 +6,7 @@ type ProductAdCardProps = {
   title: string;
   sellerName: string;
   reviewCount: number;
-  price: string;
+  price: string | number;
   description: string;
   onReviewClick: () => void;
   onCardClick: () => void;
