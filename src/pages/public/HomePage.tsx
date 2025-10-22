@@ -329,7 +329,7 @@ const HomePage = () => {
                 </Modal.Body>
             </Modal>
 
-            <Modal show={loginModal} onHide={() => setAuthModal(false)} centered>
+            <Modal show={loginModal} onHide={() => setLoginModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title></Modal.Title>
                 </Modal.Header>
