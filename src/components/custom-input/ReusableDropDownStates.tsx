@@ -108,7 +108,7 @@ const ReusableDropDownStates: React.FC<CustomInputProps> = ({
                     <Select
                         {...field}
                         name={name}
-                        className="rounded-0 outline-0"
+                        className="rounded-0 outline- w-100"
                         id={id}
                         value={field.value}
                         placeholder={placeholder}

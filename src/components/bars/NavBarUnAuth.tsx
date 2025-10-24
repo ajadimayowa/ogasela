@@ -4,7 +4,11 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import ogaselaLog from "../../assets/images/ogasela-logo.svg";
 import CustomButton from "../custom-button/custom-button";
 
-const NavbarUnAuth = () => {
+interface ITopBar {
+    gotoProfile:()=>void;
+    gotToPostAd:()=>void;
+}
+const NavbarUnAuth:React.FC<ITopBar> = ({gotoProfile,gotToPostAd}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [open, setOpen] = useState(false);
@@ -18,10 +22,10 @@ const NavbarUnAuth = () => {
                 </Navbar.Brand>
 
                 <div className="d-flex align-items-center gap-2">
-                    <a href="#">
+                    <a onClick={gotToPostAd} href="#">
                         Post Ad
                     </a>
-                    <i className="bi bi-person-circle fs-2 text-primary" role="button"></i>
+                    <i onClick={gotoProfile} className="bi bi-person-circle fs-2 text-primary" role="button"></i>
 
                     {/* <CustomButton
                 title=""

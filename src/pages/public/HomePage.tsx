@@ -27,6 +27,10 @@ import progCatIcon from '../../assets/icons/product-category/programing.png';
 import cosCatIcon from '../../assets/icons/product-category/cosmetics.png';
 import { IAd } from '../../interfaces/ad';
 import ReusableInputs from '../../components/custom-input/ReusableInputs';
+import LoginModal from '../../components/modals/auth/LoginModal';
+import AuthenticationModal from '../../components/modals/auth/AuthModal';
+import SignUpModal from '../../components/modals/auth/SignUpModal';
+import VerifyEmailModal from '../../components/modals/auth/VerifyEmailModal';
 
 export interface ILogin {
     email: string;
@@ -54,9 +58,11 @@ const HomePage = () => {
     const [showModal, setShowModal] = useState(false);
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [recentlyPosted, setRecentlyPosted] = useState<IAd[]>([]);
+    const [bestSelling, setBestSelling] = useState<IAd[]>([]);
     const [homeSlides, sethomeSlides] = useState<ICategory[]>([]);
     const [authModal, setAuthModal] = useState(false);
     const [loginModal, setLoginModal] = useState(false);
+    const [signUpModal, setSignUpModal] = useState(false);
 
     const initialValues = {
         email: '',
@@ -102,6 +108,13 @@ const HomePage = () => {
 
     const handleLogin = () => {
         setLoginModal(true);
+        setSignUpModal(false)
+        setAuthModal(false);
+    };
+
+    const handleSignUp = () => {
+        setLoginModal(false);
+        setSignUpModal(true);
         setAuthModal(false);
     };
 
@@ -112,7 +125,7 @@ const HomePage = () => {
             subtitle: "Find amazing deals near you",
             image: 'https://images.pexels.com/photos/4971966/pexels-photo-4971966.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
             buttonText: "Start Shopping",
-            onButtonClick: () => handleCheckAuth('/post'),
+            onButtonClick: () => handleCheckAuth('/dashboard/post-ad'),
         },
         {
             id: 2,
@@ -120,7 +133,7 @@ const HomePage = () => {
             subtitle: "Sell faster, reach more buyers",
             image: "https://www.kedglobal.com/data/ked/image/2022/05/02/ked202205020034.700x.0.jpg",
             buttonText: "Post Now",
-            onButtonClick: () => handleCheckAuth('/post'),
+            onButtonClick: () => handleCheckAuth('/dashboard/post-ad'),
         },
         {
             id: 3,
@@ -135,7 +148,8 @@ const HomePage = () => {
         try {
             const res = await api.get('home');
             setCategories(res?.data?.payload?.categories.reverse());
-            setRecentlyPosted(res?.data?.payload?.recentlyPosted.reverse());
+            setRecentlyPosted(res?.data?.payload?.recentlyPosted);
+            setBestSelling(res?.data?.payload?.topRatedSellers);
             // setHomeSlides8(res?.data?.payload?.categories.reverse());
             console.log({ seeRes: res });
             setLoading(false);
@@ -156,32 +170,34 @@ const HomePage = () => {
         }
     }
 
-    const  loginUser = async (v:any)=>{
+    const loginUser = async (v: any) => {
         setLoading(true)
         try {
-            
-        const res = await api.post('auth/login',v);
-        // localStorage.setItem("userToken",)
-        console.log({seeDat:res})
-        setLoading(false)
+
+            const res = await api.post('auth/login', v);
+            // localStorage.setItem("userToken",)
+            console.log({ seeDat: res })
+            setLoading(false)
         } catch (error) {
             setLoading(false)
         }
     }
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getHomeData()
     }, [navigate])
 
     return (
         <div className="homepage">
             {/* Header / Navbar */}
-            <NavbarUnAuth />
+            <NavbarUnAuth gotoProfile={()=>handleCheckAuth('/dashboard/profile')} gotToPostAd={()=>handleCheckAuth('/dashboard/post-ad')} />
 
             {/* Main Body */}
             <div className="text-center p-0 w-100 bg-primary">
                 <div className="w-100 d-flex align-items-center justify-content-center mt-3">
                     <CustomIconButton
+                    onClick={()=>navigate('/search')}
                         icon="bi bi-search"
                         variant="outline"
                         className="border bg-light text-dark border-2 w-100 text-start m-3 d-flex justify-content-between"
@@ -196,21 +212,22 @@ const HomePage = () => {
                     <div className="d-flex justify-content-between fw-bold">
                         <h4 className="fw-bold">Categories</h4>
                     </div>
-                    <Row xs={3} sm={8} md={4} className="g-1">
-                        {
+                     {
                             loading &&
                             <Col md={12} className='text-center'>
                                 <Spinner />
                             </Col>
 
                         }
+                    <Row xs={3} sm={8} md={4} className="g-1">
+                       
                         {categories.map((cat, idx) => (
                             <Col key={idx}>
                                 <ProductCategoryCard
                                     id={cat.id}
                                     title={cat.name}
                                     image={cat.image}
-                                    onClick={() => alert(`Go to ${cat.slug}`)}
+                                    onClick={() => navigate(`category/${cat.id}`)}
                                 />
                             </Col>
                         ))}
@@ -241,24 +258,24 @@ const HomePage = () => {
                                         reviewCount={product.reviewCount}
                                         price={product?.price}
                                         description={product.description}
-                                        onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
-                                        onCardClick={() => alert(`Go to product page for ${product.title}`)}
+                                        onReviewClick={() => navigate(`/ad/${product.id}`)}
+                                        onCardClick={() => navigate(`/ad/${product.id}`)}
                                     />
                                 </Col>
                             ))}
                         </Row>
                         <div className='w-100 text-end'>
-                            <a href="#">See more</a>
+                            <a href="/search">See more</a>
                         </div>
                     </Container>
 
                     <Container className="mt-5">
                         <div className="d-flex justify-content-between fw-bold">
-                            <h4 className="fw-bold">Best sellers</h4>
+                            <h4 className="fw-bold">Best selling</h4>
                         </div>
 
                         <Row className="g-3">
-                            {recentlyPosted.map((product: IAd) => (
+                            {bestSelling.map((product: IAd) => (
                                 <Col xs={6} sm={6} md={3} key={product.id} className='mt-4'>
                                     <ProductAdCard
                                         id={product.id}
@@ -268,14 +285,14 @@ const HomePage = () => {
                                         reviewCount={product.reviewCount}
                                         price={product?.price}
                                         description={product.description}
-                                        onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
-                                        onCardClick={() => alert(`Go to product page for ${product.title}`)}
+                                        onReviewClick={() => navigate(`/ad/${product.id}`)}
+                                        onCardClick={() => navigate(`/ad/${product.id}`)}
                                     />
                                 </Col>
                             ))}
                         </Row>
                         <div className='w-100 text-end'>
-                            <a href="#">See more</a>
+                           <a href="/search">See more</a>
                         </div>
                     </Container>
                     <Container className="mt-5">
@@ -294,14 +311,14 @@ const HomePage = () => {
                                         reviewCount={product.reviewCount}
                                         price={product?.price}
                                         description={product.description}
-                                        onReviewClick={() => alert(`Go to reviews for ${product.title}`)}
-                                        onCardClick={() => alert(`Go to product page for ${product.title}`)}
+                                        onReviewClick={() => navigate(`/ad/${product.id}`)}
+                                        onCardClick={() => navigate(`/ad/${product.id}`)}
                                     />
                                 </Col>
                             ))}
                         </Row>
                         <div className='w-100 text-end'>
-                            <a href="#">See more</a>
+                            <a href="/search">See more</a>
                         </div>
                     </Container>
                 </>
@@ -310,54 +327,10 @@ const HomePage = () => {
             <BottomNavbar checkAuthStatus={(path: string) => handleCheckAuth(path)} />
 
             {/* Login/Signup Modal */}
-            <Modal show={authModal} onHide={() => setAuthModal(false)} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Login / Sign Up</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>Please log in to continue.</p>
-                    <Button
-                        className="w-100 mb-2"
-                        variant="primary"
-                        onClick={handleLogin}
-                    >
-                        Login
-                    </Button>
-                    <Button className="w-100" variant="outline-secondary text-dark border">
-                        Sign Up
-                    </Button>
-                </Modal.Body>
-            </Modal>
-
-            <Modal show={loginModal} onHide={() => setLoginModal(false)} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title></Modal.Title>
-                </Modal.Header>
-                <Modal.Body className='text-center'>
-                    <Formik
-                        initialValues={{ email: '', password: '' }}
-                        onSubmit={(v) => loginUser(v)}
-                    >
-                        {
-                            ({handleSubmit }) => (
-                                <Form onSubmit={handleSubmit}>
-                                    <p>Please log in to continue.</p>
-                                    <div className='text-start'>
-                                        <ReusableInputs label='Email' placeholder='Enter email' inputType='email' name={'email'} id={'email'} />
-                                    </div>
-                                    <div className='text-start'>
-                                        <ReusableInputs icon2='bi bi-eye-slash' label='Password' placeholder='Enter password' className='mt-3' inputType='password' name='password' id='password' />
-                                    </div>
-
-                                    <CustomButton className='w-100 mt-3' title='Login' type='submit' loading={loading} />
-                                    <div className='mt-3'> New user? <a href='#' className='fw-bold'>Register</a></div>
-                                </Form>
-                            )
-                        }
-                    </Formik>
-
-                </Modal.Body>
-            </Modal>
+            <AuthenticationModal handleLogin={handleLogin} handleSignUp={handleSignUp} on={authModal} off={()=>setAuthModal(false)}/>
+            <LoginModal on={loginModal} off={() => setLoginModal(false)} onSignUp={handleSignUp}/>
+            <SignUpModal on={signUpModal} off={() => setSignUpModal(false)} onLogin={handleLogin}/>
+            <VerifyEmailModal on={false} off={()=>console.log('ok')} email=''/>
         </div>
     );
 };

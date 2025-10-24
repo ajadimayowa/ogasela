@@ -10,6 +10,17 @@ import MarketerViewCustomerPage from '../pages/protected/marketer-pages/loan-pag
 import MarketerDuplicateCheckerPage from '../pages/protected/marketer-pages/duplicate-pages/MarketerDuplicateCheckerPage';
 
 import HomePage from '../pages/public/HomePage';
+import UserProfilePage from '../pages/dashboard/ProfilePage';
+import RouteProtector from '../components/RouteProtector';
+import DashboardLayout from '../components/DashboardLayout';
+import FavoritesPage from '../pages/dashboard/Favorites';
+import PostAdPage from '../pages/dashboard/PostAdPage';
+import MessagesPage from '../pages/dashboard/MessagesPage';
+import ViewAdPage from '../pages/public/ViewAdInformation';
+import NotFound from '../pages/public/NotFound';
+import ProductSearchPage from '../pages/public/ProductSearchPage';
+import CategoryProductsPage from '../pages/public/CategoryProductsPage';
+import MyAds from '../pages/dashboard/MyAds';
 
 
 const AppRouter = () => {
@@ -18,6 +29,20 @@ const AppRouter = () => {
       <Routes>
         {/* Public Routes: Accessible without authentication */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/search" element={<ProductSearchPage />} />
+        <Route path='*' element={<NotFound/>}/>
+        <Route path='/ad/:id' element={<ViewAdPage/>}/>
+        <Route path='/category/:categoryId' element={<CategoryProductsPage/>}/>
+        
+        <Route path="/dashboard" element={<RouteProtector><DashboardLayout /></RouteProtector>}>
+        <Route path="favorites" element={<FavoritesPage/>} />
+        <Route path="post-ad" element={<PostAdPage/>} />
+        <Route path='ads' element={<MyAds/>} />
+        <Route path="messages" element={<MessagesPage/>} />
+        <Route path="profile" element={<UserProfilePage/>} />
+
+        </Route>
+        
         {/* Uncomment the following line if ResetPassword page is implemented */}
         {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
 

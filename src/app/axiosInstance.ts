@@ -23,12 +23,12 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error?.response?.status;
-    if (status === 401) {
-      localStorage.clear();
-      if (!window.location.pathname.includes('/login')) {
-        window.location.href = '/login'; // or customize as needed
-      }
-    }
+    // if (status === 401) {
+    //   localStorage.clear();
+    //   if (!window.location.pathname.includes('/')) {
+    //     window.location.href = '/'; // or customize as needed
+    //   }
+    // }
     return Promise.reject(error?.response || error);
   }
 );
