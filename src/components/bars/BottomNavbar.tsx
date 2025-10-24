@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Nav } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface BottomNavbarProps {
   checkAuthStatus: (path: string) => void; // pass the path to parent
 }
 
 const BottomNavbar: React.FC<BottomNavbarProps> = ({ checkAuthStatus }) => {
+
+    const currentPath = useLocation().pathname
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Helper function to handle click
@@ -15,53 +18,47 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ checkAuthStatus }) => {
     checkAuthStatus(path); // pass the path to parent
   };
 
+  const navLinks =[
+    {
+        label:'Home',
+        path:'/',
+        icon:'bi bi-house'
+    },
+    {
+        label:'Favorites',
+        path:'/dashboard/favorites',
+        icon:'bi bi-heart'
+    },
+    {
+        label:'Sell',
+        path:'/dashboard/post-ad',
+        icon:'bi bi-plus-circle'
+    },
+    {
+        label:'Messages',
+        path:'/dashboard/messages',
+        icon:'bi bi-chat'
+    },
+    {
+        label:'Profile',
+        path:'/dashboard/profile',
+        icon:'bi bi-person'
+    },
+]
+
   return (
     <div className="d-sm-none fixed-bottom bg-light shadow-lg border-top">
       <Nav className="d-flex justify-content-around py-2">
-        <Nav.Link
-          href="#home"
+        {
+            navLinks.map((link,index)=>(<Nav.Link
+          href={link.path}
           className="text-center"
-          onClick={(e) => handleNavClick(e, "/home")}
+          onClick={(e) => handleNavClick(e, link.path)}
         >
-          <i className="bi bi-house fs-4"></i>
-          <div className="small">Home</div>
-        </Nav.Link>
-
-        <Nav.Link
-          href="/favorites"
-          className="text-center"
-          onClick={(e) => handleNavClick(e, "/favorites")}
-        >
-          <i className="bi bi-heart fs-4"></i>
-          <div className="small">Favorites</div>
-        </Nav.Link>
-
-        <Nav.Link
-          href="#sell"
-          className="text-center"
-          onClick={(e) => handleNavClick(e, "/sell")}
-        >
-          <i className="bi bi-plus-circle fs-4 text-success"></i>
-          <div className="small">Sell</div>
-        </Nav.Link>
-
-        <Nav.Link
-          href="#messages"
-          className="text-center"
-          onClick={(e) => handleNavClick(e, "/messages")}
-        >
-          <i className="bi bi-chat fs-4"></i>
-          <div className="small">Messages</div>
-        </Nav.Link>
-
-        <Nav.Link
-          href="#profile"
-          className="text-center"
-          onClick={(e) => handleNavClick(e, "/profile")}
-        >
-          <i className="bi bi-person fs-4"></i>
-          <div className="small">Profile</div>
-        </Nav.Link>
+          <i className={`${link.icon}${currentPath===link.path?'-fill':''} fs-4`}></i>
+          <div className="small">{link.label}</div>
+        </Nav.Link>))
+        }
       </Nav>
     </div>
   );

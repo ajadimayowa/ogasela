@@ -1,4 +1,5 @@
 import { Card, Button } from "react-bootstrap";
+import { convertToThousand } from "../../utils/helpers";
 
 type ProductAdCardProps = {
   id: string;
@@ -50,7 +51,7 @@ const ProductAdCard: React.FC<ProductAdCardProps> = ({
             {reviewCount} <i className="bi bi-star text-danger"></i>
           </span>
         </Card.Subtitle>
-        <h5 className="text-success fw-bold">{price}</h5>
+        <h5 className="text-success fw-bold">{convertToThousand(price)}</h5>
         <Card.Text className="text-truncate">{description}</Card.Text>
         <Button
           variant="outline-primary"

@@ -22,7 +22,11 @@ export interface IAd {
         startDate: string
     };
     reviewCount :number;
-    seller :string;
+    seller :{
+        contact:{
+            phoneNumber:string
+        }
+    }
     sellerName : string;
     title : string;
     updatedAt :string;
