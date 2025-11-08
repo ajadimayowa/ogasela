@@ -12,10 +12,11 @@ const NavbarUnAuth:React.FC<ITopBar> = ({gotoProfile,gotToPostAd}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [open, setOpen] = useState(false);
+    const donationUrl = process.env.REACT_APP_DONATION
 
     return (
-        <Navbar bg="light" expand="sm" fixed="top" className="shadow-sm">
-            <Container>
+        <Navbar bg="light" expand="sm" fixed="top" className="shadow-sm d-flex flex-column">
+            <Container className="m-0 p-0">
                 {/* Brand / Logo */}
                 <Navbar.Brand href="/">
                     <Image src={ogaselaLog} alt="Ogasela Logo" height={32} />
@@ -46,6 +47,7 @@ const NavbarUnAuth:React.FC<ITopBar> = ({gotoProfile,gotToPostAd}) => {
 
 
             </Container>
+            <small className="text-danger p-0 m-0">Support our journey <a  href={donationUrl || 'https://paystack.shop/pay/support-ogasela'}>click here</a> to donate</small>
         </Navbar>
     );
 };
