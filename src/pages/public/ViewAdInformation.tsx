@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Carousel, Container, Row, Col, Card, Badge, Spinner, Collapse, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../app/api";
 import BottomNavbar from "../../components/bars/BottomNavbar";
 import AuthenticationModal from "../../components/modals/auth/AuthModal";
@@ -11,6 +11,7 @@ import NavbarUnAuth from "../../components/bars/NavBarUnAuth";
 import { IAd } from "../../interfaces/ad";
 import { convertToThousand } from "../../utils/helpers";
 import moment from "moment";
+import IconButton from "../../components/custom-button/IconButton";
 
 const ViewAdPage = () => {
     const { id } = useParams();
@@ -71,15 +72,16 @@ const ViewAdPage = () => {
                 gotoProfile={() => handleCheckAuth("/dashboard/profile")}
                 gotToPostAd={() => handleCheckAuth("/dashboard/post-ad")}
             />
-            <Container className="my-4">
-                {loading ? (
-                    <div className="text-center my-5">
-                        <Spinner animation="border" />
-                    </div>
-                ) : (
-                    <>
-                    {/* === Main Carousel === */}
-                        <div className="bg-danger">
+            <div className="bg-primary py-5 p-2 d-flex gap-2 align-items-center">
+        <IconButton className="d-flex gap-2 bg-light text-dark" onClick={() => navigate(-1)} icon="bi bi-chevron-left" title="Back" />
+        {/* <Button
+          variant="fw-bold border bg-light"
+          onClick={}
+        >
+          Go Back
+        </Button> */}
+      </div>
+      <div className="bg-danger">
                     <div className='d-flex justify-content-between p-2 align-items-center text-light'>
                         <p className='text-light fw-bold p-0 m-0'>Warning!</p>
                         <Button
@@ -104,8 +106,15 @@ const ViewAdPage = () => {
                         </div>
                     </Collapse>
                 </div>
-
-                <Button variant="outline fw-bold border mt-2" onClick={()=>navigate(-1)}>Go Back</Button>
+            <Container className="my-4">
+                {loading ? (
+                    <div className="text-center my-5">
+                        <Spinner animation="border" />
+                    </div>
+                ) : (
+                    <>
+                    {/* === Main Carousel === */}
+                        
                       
                         <Carousel
                             activeIndex={selectedIndex}
@@ -205,7 +214,7 @@ const ViewAdPage = () => {
                                 </Col>
                                 <Col md={4}>
                                     <p>
-                                        <strong>Phone Number:</strong> {adInfo?.views}
+                                        <strong>Num of viewers:</strong> {adInfo?.views}
                                     </p>
                                 </Col>
                                 <Col md={4}>
@@ -223,6 +232,20 @@ const ViewAdPage = () => {
                                         <strong>Address:</strong> {showCont?'locat********':adInfo?.location.address}
                                     </p>
                                 </Col>
+
+                                <Col md={4} >
+                                <Link to={'https://wa.me/message/YLK4QJBSIGZ5M1'}>
+<div className="d-flex gap-2 text-primary" role="button">
+                                     <i className="bi bi-whatsapp"></i>
+                                    <p className="text-primary">
+                                        <strong>Whatsapp Message</strong>
+                                    </p>
+                                </div>
+                                </Link>
+                                
+                                
+                                </Col>
+                               
                             </Row>
                         </Card>
                     </>

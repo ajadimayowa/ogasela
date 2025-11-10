@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate, useNavigation } from 'react-router-dom';
-import { setToken } from '../../features/auth/authSlice';
 import { Form, Button, Card, Image, Navbar, Container, Nav, Modal, Row, Col, Spinner, Collapse } from 'react-bootstrap';
 import '../../styles/home.scss';
 import compnayLogo from '../assets/images/bc-kash-logo.png'; // Adjust the path as necessary
@@ -14,22 +13,13 @@ import api from '../../app/api';
 import { toast } from 'react-toastify';
 import NavbarUnAuth from '../../components/bars/NavBarUnAuth';
 import BottomNavbar from '../../components/bars/BottomNavbar';
-import ContentSlider, { Slide } from '../../components/sliders/ContentSlider';
-import CustomIconButton from '../../components/custom-button/custom-icon-button';
-import ProductCategoryCard from '../../components/cards/ProductCategoryCard';
-import ProductAdCard from '../../components/cards/ProductAdCard';
-import slideImg1 from '../../assets/slides/ogasela-carousel-phones-web.jpg';
-
-import phoneCatIcon from '../../assets/icons/product-category/phones.png';
-import groceCatIcon from '../../assets/icons/product-category/grocery.png';
-import serviceCatIcon from '../../assets/icons/product-category/services.png';
-import progCatIcon from '../../assets/icons/product-category/programing.png';
-import cosCatIcon from '../../assets/icons/product-category/cosmetics.png';
 import { IAd } from '../../interfaces/ad';
 import ReusableInputs from '../../components/custom-input/ReusableInputs';
 import LoginModal from '../../components/modals/auth/LoginModal';
 import AuthenticationModal from '../../components/modals/auth/AuthModal';
 import SignUpModal from '../../components/modals/auth/SignUpModal';
+import { IUser, IUserData } from '../../features/auth/authSlice';
+import IconButton from '../../components/custom-button/IconButton';
 
 export interface ILogin {
     email: string;
@@ -62,8 +52,8 @@ const UserProfilePage = () => {
     const [loginModal, setLoginModal] = useState(false);
     const [signUpModal, setSignUpModal] = useState(false);
     const token = localStorage.getItem('userToken') || '';
-        const userId = localStorage.getItem('userId') || '';
-    const [userData, setUserData] = useState<any>()
+    const userId = localStorage.getItem('userId') || '';
+    const [userData, setUserData] = useState<IUser>();
 
     const [openInfo, setOpenInfo] = useState(false);
     const handleLogout = () => {
@@ -214,30 +204,6 @@ const UserProfilePage = () => {
         setAuthModal(false);
     };
 
-    const slides: Slide[] = [
-        {
-            id: 1,
-            title: "Buy and Sell Easily",
-            subtitle: "Find amazing deals near you",
-            image: 'https://images.pexels.com/photos/4971966/pexels-photo-4971966.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            buttonText: "Start Shopping",
-            onButtonClick: () => handleCheckAuth('/post'),
-        },
-        {
-            id: 2,
-            title: "Post Your Ad",
-            subtitle: "Sell faster, reach more buyers",
-            image: "https://www.kedglobal.com/data/ked/image/2022/05/02/ked202205020034.700x.0.jpg",
-            buttonText: "Post Now",
-            onButtonClick: () => handleCheckAuth('/post'),
-        },
-        {
-            id: 3,
-            title: "Safe & Secure",
-            subtitle: "We keep your transactions safe",
-            image: "https://www.shutterstock.com/image-photo/different-modern-devices-gadgets-on-260nw-2399256463.jpg",
-        },
-    ];
 
     const getHomeData = async () => {
         setLoading(true);
@@ -256,27 +222,27 @@ const UserProfilePage = () => {
     }
 
     const getUserData = async () => {
-  setLoading(true);
-  try {
-    const res = await api.get(`user/${userId}`, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        setLoading(true);
+        try {
+            const res = await api.get(`user/${userId}`, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-    setUserData(res?.data?.payload);
-    console.log({ seeRes: res });
-  } catch (error) {
-    console.log({ seeErr: error });
-  } finally {
-    setLoading(false);
-  }
-};
+            setUserData(res?.data?.payload);
+            console.log({ seeRes: res });
+        } catch (error) {
+            console.log({ seeErr: error });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleCheckAuth = (path: string) => {
         console.log({ seePath: path });
-        
+
         if (!token) {
             setAuthModal(true)
         } else {
@@ -307,8 +273,17 @@ const UserProfilePage = () => {
         <div>
 
             {/* Main Body */}
+            <div className="bg-primary py-3 p-2 d-flex gap-2 align-items-center">
+        <IconButton className="d-flex gap-2 bg-light text-dark" onClick={() => navigate(-1)} icon="bi bi-chevron-left" title="Back" />
+        {/* <Button
+          variant="fw-bold border bg-light"
+          onClick={}
+        >
+          Go Back
+        </Button> */}
+      </div>
 
-            <div className="text-center p-0 w-100 bg-info">
+            <div className="text-center w-100 bg-info">
                 <div>
                     <div className='d-flex justify-content-between p-2 align-items-center text-light'>
 
@@ -337,13 +312,13 @@ const UserProfilePage = () => {
                 </div>
 
             </div>
-            <Button variant="outline fw-bold border mt-2" onClick={() => navigate(-1)}>Go Back</Button>
+            <div className=' px-2'><Button variant="outline fw-bold border mt-2" onClick={() => navigate(-1)}>Go Back</Button></div>
 
             {
                 !loading &&
                 <div>
                     <Container className="p-2 mt-3">
-                        <h4 >Hello {userData?.profile?.firstName}</h4>
+                        <h4 >Hello {userData?.profile.firstName}</h4>
                         <Row xs={2} sm={8} md={2} className="g-1">
                             {
                                 loading &&

@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate, useNavigation } from 'react-router-dom';
-import { setToken } from '../../features/auth/authSlice';
 import { Form, Button, Card, Image, Navbar, Container, Nav, Modal, Row, Col, Spinner, Collapse } from 'react-bootstrap';
 import '../../styles/home.scss';
 import compnayLogo from '../assets/images/bc-kash-logo.png'; // Adjust the path as necessary

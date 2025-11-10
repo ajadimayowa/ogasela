@@ -15,8 +15,8 @@ const NavbarUnAuth:React.FC<ITopBar> = ({gotoProfile,gotToPostAd}) => {
     const donationUrl = process.env.REACT_APP_DONATION
 
     return (
-        <Navbar bg="light" expand="sm" fixed="top" className="shadow-sm d-flex flex-column">
-            <Container className="m-0 p-0">
+        <Navbar bg="light" expand="sm" fixed="top"  className="shadow-sm d-flex flex-column px-3 ">
+            <Container className="p-0">
                 {/* Brand / Logo */}
                 <Navbar.Brand href="/">
                     <Image src={ogaselaLog} alt="Ogasela Logo" height={32} />

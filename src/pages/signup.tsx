@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setToken } from '../features/auth/authSlice';
 import { Form, Button, Card } from 'react-bootstrap';
 import '../styles/signup.scss';
 

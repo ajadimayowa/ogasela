@@ -7,6 +7,9 @@ import ReusableInputs from "../../custom-input/ReusableInputs";
 import CustomButton from "../../custom-button/custom-button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../../features/auth/authSlice";
+import { ReusableForm } from "../../forms/ReusableForm";
 
 interface IAuthModal {
   on: boolean;
@@ -36,7 +39,8 @@ const LoginModal: React.FC<IAuthModal> = ({ on, off, onSignUp }) => {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [userEmail, setUserEmail] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const loginUser = async (values: any) => {
     setLoading(true);
@@ -63,11 +67,13 @@ const LoginModal: React.FC<IAuthModal> = ({ on, off, onSignUp }) => {
       console.log("See data", res.data);
       navigate('/dashboard/profile');
       setLoading(false);
-      localStorage.setItem('userToken',res.data?.payload?.token);
-      localStorage.setItem('userId',res.data?.payload?.userBio?.id);
+      console.log({savedToRedux:res.data?.payload?.userBio})
+      dispatch(setUserData(res.data?.payload?.userBio))
+      localStorage.setItem('userToken', res.data?.payload?.token);
+      localStorage.setItem('userId', res.data?.payload?.userBio?.id);
       off();
     } catch (error) {
-    toast.error('Login error!')
+      toast.error('Login error!')
       console.error(error);
       setLoading(false);
     }
@@ -97,74 +103,67 @@ const LoginModal: React.FC<IAuthModal> = ({ on, off, onSignUp }) => {
     <Modal show={on} onHide={off} centered>
       <Modal.Header closeButton>
         <Modal.Title className="d-flex gap-3">
-        {step>1&& <i onClick={() => setStep(1)} className="bi bi-arrow-left" role="button"></i>}
+          {step > 1 && <i onClick={() => setStep(1)} className="bi bi-arrow-left" role="button"></i>}
           {step === 1 ? "Welcome Back" : "OTP Verification"}
         </Modal.Title>
       </Modal.Header>
 
       <Modal.Body className="text-center">
         {step === 1 && (
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            validationSchema={loginSchema}
-            onSubmit={loginUser}
-          >
-            {({ handleSubmit }) => (
-              <Form onSubmit={handleSubmit} noValidate>
-                <p className="mb-4">Please log in to continue.</p>
-
-                <div className="text-start mb-3">
-                  <ReusableInputs
-                    label="Email"
-                    placeholder="Enter your email"
-                    inputType="email"
-                    name="email"
-                    id="email"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="text-danger small mt-1"
-                  />
-                </div>
-
-                <div className="text-start mb-3">
-                  <ReusableInputs
-                    icon2="bi bi-eye-slash"
-                    label="Password"
-                    placeholder="Enter your password"
-                    inputType="password"
-                    name="password"
-                    id="password"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="text-danger small mt-1"
-                  />
-                </div>
-
-                <CustomButton
-                  className="w-100 mt-3"
-                  title="Login"
-                  type="submit"
-                  loading={loading}
+          <>
+            <ReusableForm
+            buttonTitle="Login"
+              loading={loading}
+              initialValues={{ email: "", password: "" }}
+              validationSchema={loginSchema}
+              onSubmit={loginUser}
+            >
+              <p className="mb-4">Please log in to continue.</p>
+              <div className="text-start mb-3">
+                <ReusableInputs
+                  label="Email"
+                  placeholder="Enter your email"
+                  inputType="email"
+                  name="email"
+                  id="email"
                 />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-danger small mt-1"
+                />
+              </div>
 
-                <div className="mt-3">
-                  New user?{" "}
-                  <a
-                    href="#"
-                    className="fw-bold"
-                    onClick={onSignUp}
-                    role="button"
-                  >
-                    Register
-                  </a>
-                </div>
-              </Form>
-            )}
-          </Formik>
+              <div className="text-start mb-3">
+                <ReusableInputs
+                  icon2="bi bi-eye-slash"
+                  label="Password"
+                  placeholder="Enter your password"
+                  inputType="password"
+                  name="password"
+                  id="password"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-danger small mt-1"
+                />
+              </div>
+
+              <div className="mt-3">
+                New user?{" "}
+                <a
+                  href="#"
+                  className="fw-bold"
+                  onClick={onSignUp}
+                  role="button"
+                >
+                  Register
+                </a>
+              </div>
+
+            </ReusableForm>
+          </>
         )}
 
         {step === 2 && (

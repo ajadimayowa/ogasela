@@ -41,7 +41,7 @@ const DashboardLayout: React.FC = () => {
                 {/* Example: add navbar, sidebar, etc. */}
                 <NavbarUnAuth gotoProfile={() => handleCheckAuth('/dashboard/profile')} gotToPostAd={() => handleCheckAuth('/dashboard/post-ad')} />
 
-                <div className="dashboard-content">
+                <div className="dashboard-content my-4">
                     {/* Render nested routes */}
                     <Outlet />
                 </div>

@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { setStaffProfile, setToken } from '../features/auth/authSlice';
 import api from '../app/api';
 import { Card, Form, Image } from 'react-bootstrap';
 import CustomButton from '../components/custom-button/custom-button';

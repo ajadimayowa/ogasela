@@ -9,9 +9,13 @@ import { ICategory } from "./ProfilePage";
 import { useNavigate } from "react-router-dom";
 import MultiPartFormReusableDropDownSelect from "../../components/custom-input/MultiPartFormReusableDropDownSelect";
 import ReusableDropDownStates from "../../components/custom-input/ReusableDropDownStates";
-import LoanForm from "../../components/page-forms/member-form/LoanForm";
 import { ILga, IState } from "../../interfaces/interface";
 import ReusableDropDownSelect from "../../components/custom-input/ReusableDropDownSelect";
+import { convertToThousand } from "../../utils/helpers";
+import { userInfo } from "os";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import IconButton from "../../components/custom-button/IconButton";
 
 // ✅ Custom file picker component
 const ImageUploader = ({ images, setImages }: any) => {
@@ -89,6 +93,7 @@ const PostAdPage = () => {
     const [states, setStates] = useState<IState[]>([]);
     const [lgas, setLgas] = useState<ILga[]>([]);
     const token = localStorage.getItem('userToken') || ''
+    const sellerData = useSelector((state : RootState)=>state.auth.userProfile)
 
     const getHomeData = async () => {
         setLoading(true);
@@ -166,6 +171,7 @@ const PostAdPage = () => {
     });
 
     const handleSubmit = async (values: any) => {
+        setLoading(true)
   try {
     const formData = new FormData();
 
@@ -193,7 +199,7 @@ const PostAdPage = () => {
     Object.entries(cleanValues).forEach(([key, value]) =>
       formData.append(key, value as string)
     );
-    formData.append("sellerName",'Tester James')
+    formData.append("sellerName",sellerData?.profile?.fullName)
 
     // ✅ Append images properly
     images.forEach((file) => formData.append("images", file));
@@ -206,13 +212,14 @@ const PostAdPage = () => {
     const res = await api.post("/ad", formData, {
       headers: {
   "Content-Type": "multipart/form-data",
-  Authorization: `Bearer ${token}`,
 },
     });
-
+ setLoading(false)
     toast.success(res.data.message || "Ad created successfully!");
+    navigate('/dashboard/ads')
   } catch (err: any) {
     toast.error(err.response?.data?.message || "Failed to create ad");
+    setLoading(false)
   }
 };
 
@@ -221,9 +228,16 @@ const PostAdPage = () => {
 
     return (
         <>
-        <Button variant="outline fw-bold border mt-2" onClick={()=>navigate(-1)}>Go Back</Button>
+        <div className="bg-primary py-3 p-2 d-flex gap-2 align-items-center">
+        <IconButton className="d-flex gap-2 bg-light text-dark" onClick={() => navigate(-1)} icon="bi bi-chevron-left" title="Back" />
+        {/* <Button
+          variant="fw-bold border bg-light"
+          onClick={}
+        >
+          Go Back
+        </Button> */}
+      </div>
         <Card className="shadow-sm p-4 mx-auto mt-4" style={{ maxWidth: 700 }}>
-            
             <h4 className="fw-bold mb-3">Create New Ad</h4>
             <div className="text-end">{step} of {5}</div>
             <ProgressBar now={(step / totalSteps) * 100} className="mb-4" />
@@ -341,10 +355,11 @@ const PostAdPage = () => {
                                     {[{ label: "free", price: '0', duration: '7 Days' }, { label: "basic", price: '3000', duration: '14 Days' }, { label: "standard", price: '10000', duration: '31 Days' }, { label: "premium", price: '50000', duration: '60 Days' }].map((plan, index) => (
                                         <label
                                             key={index}
-                                            className={`border p-3 rounded ${values.promotionPlan === plan.label ? "bg-light border-primary d-flex gap-3" : "d-flex gap-2"
+                                            className={`border p-3 rounded ${values.promotionPlan === plan.label ? "bg-light border-primary d-flex gap-3 justify-content-between" : "d-flex gap-2 justify-content-between"
                                                 }`}
                                         >
-                                            <Field
+                                            <div className="d-flex gap-2">
+                                                 <Field
                                                 type="radio"
                                                 name="promotionPlan"
                                                 value={plan.label}
@@ -354,6 +369,12 @@ const PostAdPage = () => {
                                                 <p className="p-0 m-0">{plan.label.toUpperCase()}</p>
                                                 <p className="p-0 m-0 text-danger">{plan.duration.toUpperCase()}</p>
                                             </div>
+                                            </div>
+
+                                            <div>
+                                                <p className="p-0 m-0 text-danger">{convertToThousand(plan?.price)}</p>
+                                            </div>
+                                           
                                         </label>
                                     ))}
                                 </div>
@@ -410,7 +431,7 @@ const PostAdPage = () => {
                                 </Button>
                             )}
                             {step === totalSteps && (
-                                <Button type="submit" variant="success">
+                                <Button disabled={loading} type="submit" variant="success">
                                     {loading ? <Spinner size="sm" /> : 'Submit'}
                                 </Button>
                             )}

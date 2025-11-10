@@ -20,6 +20,7 @@ import AuthenticationModal from "../../components/modals/auth/AuthModal";
 import LoginModal from "../../components/modals/auth/LoginModal";
 import SignUpModal from "../../components/modals/auth/SignUpModal";
 import VerifyEmailModal from "../../components/modals/auth/VerifyEmailModal";
+import IconButton from "../../components/custom-button/IconButton";
 
 const CategoryProductsPage: React.FC = () => {
   const [products, setProducts] = useState<IAd[]>([]);
@@ -43,7 +44,7 @@ const CategoryProductsPage: React.FC = () => {
   const limit = 8;
 
   // optional if category data was passed via navigation state
-  const categoryName = (location.state as any)?.categoryName || "Products";
+  const [categoryName,setCategoryName] = useState('Products');
 
   const handleLogin = () => {
     setLoginModal(true);
@@ -84,6 +85,7 @@ const CategoryProductsPage: React.FC = () => {
 
       const res = await api.get("/ads", { params });
       setProducts(res?.data?.data || []);
+      setCategoryName(res?.data?.data[0]?.category?.name)
       setTotalPages(res?.data?.pagination?.totalPages || 1);
     } catch (error) {
       console.error("Error fetching category products:", error);
@@ -124,9 +126,15 @@ const CategoryProductsPage: React.FC = () => {
         gotToPostAd={() => handleCheckAuth("/dashboard/post-ad")}
       />
 
-      <Button variant="outline fw-bold border mt-2" onClick={() => navigate(-1)}>
-        Go Back
-      </Button>
+      <div className="bg-primary py-5 p-2 d-flex gap-2 align-items-center">
+        <IconButton className="d-flex gap-2 bg-light text-dark" onClick={() => navigate(-1)} icon="bi bi-chevron-left" title="Back" />
+        {/* <Button
+          variant="fw-bold border bg-light"
+          onClick={}
+        >
+          Go Back
+        </Button> */}
+      </div>
 
       <Container className="py-5">
         <h2 className="text-center mb-4 fw-bold">
@@ -136,17 +144,7 @@ const CategoryProductsPage: React.FC = () => {
         {/* Search, Filters & Sort */}
         <Form onSubmit={handleSearch} className="mb-4">
           <Row className="g-3">
-            <Col md={4}>
-              <Form.Control
-                type="text"
-                placeholder="Search by product or seller name..."
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setPage(1);
-                }}
-              />
-            </Col>
+           
 
             <Col md={2}>
               <Form.Select
@@ -194,18 +192,6 @@ const CategoryProductsPage: React.FC = () => {
               </Form.Select>
             </Col>
           </Row>
-
-          <Row className="mt-3">
-            <Col md={{ span: 2, offset: 10 }}>
-              <Button
-                type="submit"
-                variant="primary"
-                className="w-100 fw-semibold"
-              >
-                Search
-              </Button>
-            </Col>
-          </Row>
         </Form>
 
         {/* Products Section */}
@@ -220,11 +206,15 @@ const CategoryProductsPage: React.FC = () => {
             {products.map((product) => (
               <Col md={3} key={product.id}>
                 <ProductAdCard
+                condition={product.condition}
+                  sellerVerfied={false}
                   id={product.id}
                   image={product.images[0]}
                   title={product.title}
                   sellerName={product.sellerName}
+                  location={`${product?.location.city},${product?.location.state}`}
                   reviewCount={product.reviewCount}
+                  views={product.views}
                   price={product.price}
                   description={product.description}
                   onReviewClick={() =>

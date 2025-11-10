@@ -6,6 +6,7 @@ import { convertToThousand } from "../../utils/helpers"; // optional formatting 
 import ProductAdCard from "../../components/cards/ProductAdCard";
 import { IAd } from "../../interfaces/ad";
 import { useNavigate } from "react-router-dom";
+import IconButton from "../../components/custom-button/IconButton";
 
 type Ad = {
     _id: string;
@@ -70,8 +71,18 @@ const MyAds: React.FC = () => {
     }, [key]);
 
     return (
-        <Container className="my-4">
-            <Button variant="outline fw-bold border mt-2" onClick={() => navigate(-1)}>Go Back</Button>
+        <>
+         <div className="bg-primary py-5 p-2 d-flex gap-2 align-items-center">
+        <IconButton className="d-flex gap-2 bg-light text-dark" onClick={() => navigate(-1)} icon="bi bi-chevron-left" title="Back" />
+        {/* <Button
+          variant="fw-bold border bg-light"
+          onClick={}
+        >
+          Go Back
+        </Button> */}
+      </div>
+      <Container className="my-4">
+           
             <h4 className="fw-bold mb-3 text-center">My Ads</h4>
             <Tabs
                 id="myads-tabs"
@@ -97,10 +108,14 @@ const MyAds: React.FC = () => {
                 <Col xs={6} sm={6} md={3} key={ad.id} className='mt-4'>
                 <ProductAdCard
                                         id={ad.id}
+                                        condition={ad.condition}
+                  sellerVerfied={false}
                                         image={ad.images[0]}
                                         title={ad.title}
                                         sellerName={ad.sellerName}
+                                        location={`${ad?.location.city},${ad?.location.state}`}
                                         reviewCount={ad.reviewCount}
+                                        views={ad.views}
                                         price={ad?.price}
                                         description={ad.description}
                                         onReviewClick={() => alert(`Go to reviews for ${ad.title}`)}
@@ -118,6 +133,8 @@ const MyAds: React.FC = () => {
                 </div>
             )}
         </Container>
+        </>
+        
     );
 };
 

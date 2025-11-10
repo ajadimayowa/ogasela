@@ -1,175 +1,135 @@
 // src/features/auth/authSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { persistor, RootState } from "../../store/store";
+import { RootState } from '../../store/store';
 
-interface IBusinessRule {
-  duration:number | null,
-  rate:number | null,
+// Define interfaces for clarity and type safety
+interface IProfile {
+  fullName: string;
+  firstName: string;
+  lastName: string;
+  isVerified: boolean;
 }
-export interface IStaffProfile {
-  token: string | null;
-  rootAdminProfile: {
-    id: string,
-    fullName: string,
-    firstName: string,
-    email: string,
-    phoneNumber: string,
-    isRootAdmin: boolean,
 
-  }| null;
-  staffProfile: {
-    createdAt: string,
-    branch:{
-      _id:string;
-      id:string;
-      name:string;
-    };
-    department: string,
-    organization:string,
-    emailIsVerified: boolean | null,
-    firstName: string,
-    fullName: string,
-    homeAddress: string,
-    id: string,
-    isApproved: boolean | null,
-    isCreator: boolean | null,
-    isDisabled: boolean | null,
-    isPasswordUpdated: boolean | null,
-    isSuperAdmin: boolean | null,
-    lga: string,
-    phoneNumber: string,
-    staffKycInformation: {}
-    staffLevel: string,
-    userClass: string,
-    staffNokInformation: {}
-    state: string,
-    updatedAt: string
-  } | null;
-  organisationData: {
-    id: string,
-    nameOfOrg: string,
-    orgEmail: string,
-    orgAddress: string,
-    orgLga: string,
-    orgState: string,
-    orgPhoneNumber: string,
-    orgSubscriptionPlan: string,
-    orgRegNumber: string,
-    createdAt: string,
-    updatedAt: string,
-    businessRule:IBusinessRule[]
+interface IContact {
+  email: string;
+  phoneNumber: string;
+}
 
-  } | null;
+interface IKyc {
+  isKycCompleted: boolean;
+}
 
-  departmentData: {
-    id: string,
-    name: string
-  } | null;
+export interface IUser {
+  profile: IProfile;
+  contact: IContact;
+  kyc: IKyc;
+  ads: string[];
+  isSeller: boolean;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
+  emailVerificationExpires: string;
+  isDisable: boolean;
+  isBanned: boolean;
+  isActive: boolean;
+  rating: number;
+  totalSales: number;
+  createdAt: string;
+  updatedAt: string;
+  resetPasswordOtpExpires: string;
+  id: string;
+}
 
-  roleData: {
-    id: string,
-    name: string,
-    permissions:string[],
+export interface IUserData {
+  userProfile: {
+    profile: IProfile;
+    contact: IContact;
+    kyc: IKyc;
+    ads: string[];
+    isSeller: boolean;
+    isEmailVerified: boolean;
+    isPhoneVerified: boolean;
+    emailVerificationExpires: string;
+    isDisable: boolean;
+    isBanned: boolean;
+    isActive: boolean;
+    rating: number;
+    totalSales: number;
+    createdAt: string;
+    updatedAt: string;
+    resetPasswordOtpExpires: string;
+    id: string;
+  };
+  userLocation: {
+    lat: number | null;
+    lon: number | null
   } | null
-
 }
 
-const initialState: IStaffProfile = {
-  token: localStorage.getItem('token') || null,
-  rootAdminProfile: {
-    id: '',
-    fullName: '',
-    firstName: '',
-    email: '',
-    phoneNumber: '',
-    isRootAdmin: false
-  },
-  staffProfile: {
-    id: '',
-    createdAt: '',
-    department: '',
-    organization:'',
-    emailIsVerified: null,
-    firstName: '',
-    branch:{
-      _id:'',
-      id:'',
-      name:''
+// Initial state
+const initialState: IUserData = {
+  userProfile: {
+    profile: {
+      fullName: 'Mayowa Ajadi',
+      firstName: 'Mayowa',
+      lastName: 'Ajadi',
+      isVerified: false,
     },
-    fullName: '',
-    homeAddress: '',
-    isApproved: null,
-    isCreator: null,
-    isDisabled: null,
-    isPasswordUpdated: null,
-    isSuperAdmin: null,
-    lga: '',
-    phoneNumber: '',
-    staffKycInformation: {},
-    staffLevel: '',
-    userClass:'',
-    staffNokInformation: {},
-    state: '',
-    updatedAt: '',
-  },
-  organisationData: {
-    id: '',
-    nameOfOrg: '',
-    orgEmail: '',
-    orgAddress: '',
-    orgLga: '',
-    orgState: '',
-    orgPhoneNumber: '',
-    orgSubscriptionPlan: '',
-    orgRegNumber: '',
+    contact: {
+      email: 'ajadimayowa879@gmail.com',
+      phoneNumber: '8166064166',
+    },
+    kyc: {
+      isKycCompleted: false,
+    },
+    ads: [],
+    isSeller: false,
+    isEmailVerified: false,
+    isPhoneVerified: false,
+    emailVerificationExpires: '',
+    isDisable: false,
+    isBanned: false,
+    isActive: false,
+    rating: 0,
+    totalSales: 0,
     createdAt: '',
     updatedAt: '',
-    businessRule:[]
-  },
-  departmentData: {
+    resetPasswordOtpExpires: '',
     id: '',
-    name: ''
   },
-  roleData: {
-    id: '',
-    name: '',
-    permissions:[]
+  userLocation: {
+    lat: null,
+    lon: null
   }
 };
 
+// Slice
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setToken: (state, action: any) => {
-      state.token = action.payload;
-      localStorage.setItem('token', action.payload);
+    setUserData: (state, action: PayloadAction<any>) => {
+      console.log({dispatched:action.payload})
+      state.userProfile = action.payload;
     },
-    setRootAdminProfile: (state, action: any) => {
-      state.rootAdminProfile = action.payload;
-    },
-    setStaffProfile: (state, action: PayloadAction<IStaffProfile['staffProfile']>) => {
-      state.staffProfile = action.payload;
-    },
-    setOrganisationData: (state, action: PayloadAction<IStaffProfile['organisationData']>) => {
-      state.organisationData = action.payload;
-    },
-    
-    setDeptData: (state, action: PayloadAction<IStaffProfile['departmentData']>) => {
-      state.departmentData = action.payload;
-    },
-    setRoleData: (state, action: PayloadAction<IStaffProfile['roleData']>) => {
-      state.roleData = action.payload;
+    setUserLocation: (
+      state,
+      action: PayloadAction<{ lat: number; lon: number }>
+    ) => {
+      state.userLocation = action.payload;
     },
     logout: (state) => {
-      state.token = null;
-      state.staffProfile = null; // or {}
-       state.rootAdminProfile = null; // or {}
+      // Reset the state to initial on logout
+      state.userProfile = initialState.userProfile;
       localStorage.removeItem('token');
     },
   },
 });
 
-export const { setToken,setRootAdminProfile, setStaffProfile, setOrganisationData, logout } = authSlice.actions;
+// Actions
+export const { setUserData, setUserLocation, logout } = authSlice.actions;
 
+// Selector
+export const selectUserProfile = (state: RootState) => state.auth.userProfile;
+
+// Reducer
 export default authSlice.reducer;

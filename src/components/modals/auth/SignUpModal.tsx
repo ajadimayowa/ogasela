@@ -6,6 +6,7 @@ import CustomButton from "../../custom-button/custom-button";
 import ReusableInputs from "../../custom-input/ReusableInputs";
 import api from "../../../app/api";
 import { toast } from "react-toastify";
+import { ReusableForm } from "../../forms/ReusableForm";
 
 interface IAuthModal {
     on: boolean;
@@ -104,8 +105,11 @@ const SignUpModal: React.FC<IAuthModal> = ({ on, off, onLogin }) => {
 
                 {/* STEP 1 — Basic Info */}
                 {step === 1 && (
-                    <Formik
-                        initialValues={{
+                    <>
+                    <ReusableForm
+                    buttonTitle={'Next'}
+                    loading={loading}
+initialValues={{
                             fullName: formData.fullName,
                             email: formData.email,
                             phoneNumber: formData.phoneNumber,
@@ -113,9 +117,7 @@ const SignUpModal: React.FC<IAuthModal> = ({ on, off, onLogin }) => {
                         validationSchema={userInfoSchema}
                         onSubmit={handleNext}
                     >
-                        {({ handleSubmit }) => (
-                            <Form onSubmit={handleSubmit}>
-                                <div className="text-start mb-3">
+                        <div className="text-start mb-3">
                                     <ReusableInputs
                                         label="Full Name"
                                         placeholder="Enter your full name"
@@ -158,10 +160,9 @@ const SignUpModal: React.FC<IAuthModal> = ({ on, off, onLogin }) => {
                                     />
                                 </div>
 
-                                <CustomButton className="w-100 mt-3" title="Next" type="submit" />
-                            </Form>
-                        )}
-                    </Formik>
+                    </ReusableForm>
+                   
+                    </>
                 )}
 
                 {/* STEP 2 — Password */}
