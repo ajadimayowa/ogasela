@@ -29,24 +29,24 @@ export function ReusableForm<T extends FormikValues>({
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values, helpers) => {
-                if (!token) {
-                    helpers.setSubmitting(false);
-                    toast.error('Please verify you’re human!');
-                    return;
-                }
+                // if (!token) {
+                //     helpers.setSubmitting(false);
+                //     toast.error('Please verify you’re human!');
+                //     return;
+                // }
                 onSubmit(values, token, helpers);
             }}
         >
             {({ handleSubmit }) => (
                 <Form onSubmit={handleSubmit}>
                     {children}
-                    <div style={{ marginTop: 20 }}>
+                    {/* <div style={{ marginTop: 20 }}>
                         <Turnstile
                             sitekey={process.env.REACT_APP_CLOUDFLARE_TURNSTILE_SITE_KEY!}
                             onVerify={(newToken) => setToken(newToken)}
                             onExpire={() => setToken('')}
                         />
-                    </div>
+                    </div> */}
 
                     <CustomButton
                         className="w-100 mt-3"

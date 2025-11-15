@@ -14,6 +14,7 @@ import ProductSearchPage from '../pages/public/ProductSearchPage';
 import CategoryProductsPage from '../pages/public/CategoryProductsPage';
 import MyAds from '../pages/dashboard/MyAds';
 import UserSearchPage from '../pages/public/UserSearchPage';
+import AllAdsPage from '../pages/public/AllAdsPage';
 
 
 const AppRouter = () => {
@@ -25,6 +26,7 @@ const AppRouter = () => {
         <Route path="/search" element={<ProductSearchPage />} />
         <Route path="/user-search" element={<UserSearchPage />} />
         <Route path='*' element={<NotFound/>}/>
+        <Route path='/ads' element={<AllAdsPage/>}/>
         <Route path='/ad/:id' element={<ViewAdPage/>}/>
         <Route path='/category/:categoryId' element={<CategoryProductsPage/>}/>
         

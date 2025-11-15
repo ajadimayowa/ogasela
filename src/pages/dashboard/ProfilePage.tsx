@@ -1,8 +1,8 @@
 // src/pages/Login.tsx
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useNavigation } from 'react-router-dom';
-import { Form, Button, Card, Image, Navbar, Container, Nav, Modal, Row, Col, Spinner, Collapse } from 'react-bootstrap';
+import { Form, Button, Card, Image, Navbar, Container, Nav, Modal, Row, Col, Spinner, Collapse, Badge } from 'react-bootstrap';
 import '../../styles/home.scss';
 import compnayLogo from '../assets/images/bc-kash-logo.png'; // Adjust the path as necessary
 import CustomInput from '../../components/custom-input/CustormInput';
@@ -20,6 +20,10 @@ import AuthenticationModal from '../../components/modals/auth/AuthModal';
 import SignUpModal from '../../components/modals/auth/SignUpModal';
 import { IUser, IUserData } from '../../features/auth/authSlice';
 import IconButton from '../../components/custom-button/IconButton';
+import { persistor, RootState } from '../../store/store';
+import moment from 'moment';
+import UpdateProfileModal from '../../components/modals/auth/UpdateProfileModal';
+import Footer from '../../components/bars/Footer';
 
 export interface ILogin {
     email: string;
@@ -54,12 +58,16 @@ const UserProfilePage = () => {
     const token = localStorage.getItem('userToken') || '';
     const userId = localStorage.getItem('userId') || '';
     const [userData, setUserData] = useState<IUser>();
+    const [updateProfileModal,setUpdateProfileModal] = useState(false)
+    // const userProfile = userData?userData: useSelector((user:RootState)=>user.auth.userProfile)
+    const userProfile = userData
 
     const [openInfo, setOpenInfo] = useState(false);
     const handleLogout = () => {
         toast.success('ok')
         navigate('/');
         localStorage.clear();
+        persistor.purge()
     }
 
     const handleGoToRoute = (path: string) => {
@@ -274,14 +282,14 @@ const UserProfilePage = () => {
 
             {/* Main Body */}
             <div className="bg-primary py-3 p-2 d-flex gap-2 align-items-center">
-        <IconButton className="d-flex gap-2 bg-light text-dark" onClick={() => navigate(-1)} icon="bi bi-chevron-left" title="Back" />
-        {/* <Button
+                <IconButton className="d-flex gap-2 bg-light text-dark" onClick={() => navigate(-1)} icon="bi bi-chevron-left" title="Back" />
+                {/* <Button
           variant="fw-bold border bg-light"
           onClick={}
         >
           Go Back
         </Button> */}
-      </div>
+            </div>
 
             <div className="text-center w-100 bg-info">
                 <div>
@@ -312,7 +320,6 @@ const UserProfilePage = () => {
                 </div>
 
             </div>
-            <div className=' px-2'><Button variant="outline fw-bold border mt-2" onClick={() => navigate(-1)}>Go Back</Button></div>
 
             {
                 !loading &&
@@ -349,6 +356,72 @@ const UserProfilePage = () => {
                                 </Col>
                             ))}
                         </Row>
+                        <hr />
+                        <Card className='mt-3'>
+                            <Card.Header className='fw-bold d-flex justify-content-between'>
+                                <div className='text-primary'> Profile Information</div>
+                                <Button onClick={()=>setUpdateProfileModal(true)} variant='outline border border-primary' className=''>
+                                    <i className="bi bi-pencil-square m-2"></i>
+                                    Update</Button>
+                            </Card.Header>
+                            <Card.Body className='border rounded'>
+
+                                <Container>
+                                    <Row>
+                                        <Col><span className='fw-bold'><i className="bi bi-person-fill"></i></span>{userProfile?.profile.fullName}</Col>
+                                        <Col><span className='fw-bold'><i className="bi bi-calendar-check-fill"></i></span>{moment(userProfile?.createdAt).format('dd-mm-y')}</Col>
+                                        <Col><span className='fw-bold'><i className="bi bi-patch-exclamation"></i></span> <Badge className={`bg-${userProfile?.kyc.isKycCompleted ? 'success' : 'danger'}`}>{userProfile?.kyc.isKycCompleted ? 'Verified' : 'Unverified'}</Badge></Col>
+                                    </Row>
+
+                                    <Row className='mt-3'>
+
+                                        <Col><span className='fw-bold'><i className="bi bi-house-fill"></i></span> {userProfile?.contact.address ?? '-'}</Col>
+                                        <Col><span className='fw-bold'><i className="bi bi-envelope-fill"></i></span> {userProfile?.contact.email}</Col>
+                                        <Col><span className='fw-bold'><i className="bi bi-telephone-fill"></i></span>{userProfile?.contact.phoneNumber}</Col>
+                                    </Row>
+                                </Container>
+                            </Card.Body>
+                        </Card>
+
+                        <Card className='mt-3'>
+                            <Card.Header className='fw-bold d-flex justify-content-between'>
+                                <div className='text-primary'> Business Information</div>
+                                <Button disabled variant='outline border border-primary' className=''>
+                                    <i className="bi bi-pencil-square m-2"></i>
+                                    Update</Button>
+                            </Card.Header>
+                            <Card.Body className='border rounded'>
+
+                                <Container>
+                                    <Row>
+                                        <Col>
+                                            <p className='m-0 p-0 fw-bold'>Store/Business Name</p>
+                                            <p>-</p>
+                                        </Col>
+
+                                        <Col>
+                                            <p className='m-0 p-0 fw-bold'>Reg No</p>
+                                            <p>-</p>
+                                        </Col>
+
+
+                                    </Row>
+
+                                    <Row className='mt-3'>
+                                        <Col>
+                                            <p className='m-0 p-0 fw-bold'>Office Address</p>
+                                            <p>-</p>
+                                        </Col>
+
+                                        <Col>
+                                            <p className='m-0 p-0 fw-bold'>Status</p>
+                                            <Badge className='bg-warning'>Pending</Badge>
+                                        </Col>
+
+                                    </Row>
+                                </Container>
+                            </Card.Body>
+                        </Card>
 
                     </Container>
 
@@ -362,10 +435,15 @@ const UserProfilePage = () => {
 
                 }
             </Row>
+            <Footer gotoProfile={()=>console.log('')} gotToPostAd={()=>console.log('')}/>
 
             <BottomNavbar checkAuthStatus={(path: string) => handleCheckAuth(path)} />
 
             {/* Login/Signup Modal */}
+            <UpdateProfileModal
+            on={updateProfileModal}
+            off={()=>setUpdateProfileModal(false)}
+            />
             <AuthenticationModal handleLogin={handleLogin} handleSignUp={handleSignUp} on={authModal} off={() => setAuthModal(false)} />
             <LoginModal on={loginModal} off={() => setLoginModal(false)} onSignUp={handleSignUp} />
             <SignUpModal on={signUpModal} off={() => setSignUpModal(false)} onLogin={handleLogin} />

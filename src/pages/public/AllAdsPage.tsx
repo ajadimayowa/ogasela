@@ -22,7 +22,7 @@ import SignUpModal from "../../components/modals/auth/SignUpModal";
 import VerifyEmailModal from "../../components/modals/auth/VerifyEmailModal";
 import IconButton from "../../components/custom-button/IconButton";
 
-const CategoryProductsPage: React.FC = () => {
+const AllAdsPage: React.FC = () => {
   const [products, setProducts] = useState<IAd[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
@@ -31,6 +31,7 @@ const CategoryProductsPage: React.FC = () => {
   const [city, setCity] = useState("");
   const [condition, setCondition] = useState("");
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(24);
   const [totalPages, setTotalPages] = useState(1);
 
   const dispatch = useDispatch();
@@ -41,7 +42,6 @@ const CategoryProductsPage: React.FC = () => {
   const navigate = useNavigate();
   const { categoryId } = useParams(); // categoryId from route params
   const location = useLocation();
-  const limit = 8;
 
   // optional if category data was passed via navigation state
   const [categoryName,setCategoryName] = useState('Products');
@@ -83,7 +83,7 @@ const CategoryProductsPage: React.FC = () => {
       if (city) params.city = city;
       if (condition) params.condition = condition;
 
-      const res = await api.get("/ads", { params });
+      const res = await api.get("/ads",{params});
       setProducts(res?.data?.data || []);
       setCategoryName(res?.data?.data[0]?.category?.name)
       setTotalPages(res?.data?.pagination?.totalPages || 1);
@@ -97,7 +97,7 @@ const CategoryProductsPage: React.FC = () => {
   // Fetch on mount and when filters change
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (categoryId) fetchProducts();
+  fetchProducts();
   }, [categoryId, page, sortBy, state, city, condition]);
 
   // Debounced search
@@ -137,9 +137,9 @@ const CategoryProductsPage: React.FC = () => {
       </div>
 
       <Container className="py-5">
-        <h2 className="text-center mb-4 fw-bold">
+        {/* <h2 className="text-center mb-4 fw-bold">
           {categoryName || 'Category'} — Browse Products
-        </h2>
+        </h2> */}
 
         {/* Search, Filters & Sort */}
         <Form onSubmit={handleSearch} className="mb-4">
@@ -269,4 +269,4 @@ const CategoryProductsPage: React.FC = () => {
   );
 };
 
-export default CategoryProductsPage;
+export default AllAdsPage;

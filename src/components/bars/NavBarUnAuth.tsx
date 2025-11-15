@@ -3,15 +3,19 @@ import { Button, Container, Image, Nav, Navbar, Collapse } from "react-bootstrap
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ogaselaLog from "../../assets/images/ogasela-logo.svg";
 import CustomButton from "../custom-button/custom-button";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 interface ITopBar {
     gotoProfile:()=>void;
     gotToPostAd:()=>void;
 }
 const NavbarUnAuth:React.FC<ITopBar> = ({gotoProfile,gotToPostAd}) => {
+    const token = localStorage.getItem('userToken') as string
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [open, setOpen] = useState(false);
+    const userProfile = useSelector((user:RootState)=>user.auth.userProfile)
     const donationUrl = process.env.REACT_APP_DONATION
 
     return (
@@ -23,10 +27,11 @@ const NavbarUnAuth:React.FC<ITopBar> = ({gotoProfile,gotToPostAd}) => {
                 </Navbar.Brand>
 
                 <div className="d-flex align-items-center gap-2">
+                   
                     <a onClick={gotToPostAd} href="#">
                         Post Ad
                     </a>
-                    <i onClick={gotoProfile} className="bi bi-person-circle fs-2 text-primary" role="button"></i>
+                    {userProfile?.profile.profilePicUrl && token?<Image role="button" onClick={gotoProfile} src={userProfile?.profile.profilePicUrl} height={30} style={{borderRadius:30}}/>:<i onClick={gotoProfile} className="bi bi-person-circle fs-2 text-primary" role="button"></i>}
 
                     {/* <CustomButton
                 title=""

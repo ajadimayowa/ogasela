@@ -7,12 +7,15 @@ interface IProfile {
   fullName: string;
   firstName: string;
   lastName: string;
-  isVerified: boolean;
+  bio: string;
+  profilePicUrl: string;
+  isVerified: boolean | null;
 }
 
 interface IContact {
   email: string;
   phoneNumber: string;
+  address: string
 }
 
 interface IKyc {
@@ -28,15 +31,25 @@ export interface IUser {
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
   emailVerificationExpires: string;
-  isDisable: boolean;
-  isBanned: boolean;
-  isActive: boolean;
-  rating: number;
-  totalSales: number;
+  isDisable: boolean | null;
+  isBanned: boolean | null;
+  isActive: boolean | null;
   createdAt: string;
   updatedAt: string;
+
   resetPasswordOtpExpires: string;
   id: string;
+  businessDetails?: {
+    name: string
+    address: string
+    phoneNumber: string
+    regNumber: string
+    certificate: string
+    isVerified: boolean
+    storeName?: string;
+    rating?: number;
+    totalSales?: number;
+  }
 }
 
 export interface IUserData {
@@ -45,15 +58,15 @@ export interface IUserData {
     contact: IContact;
     kyc: IKyc;
     ads: string[];
-    isSeller: boolean;
-    isEmailVerified: boolean;
-    isPhoneVerified: boolean;
+    isSeller: boolean | null;
+    isEmailVerified: boolean | null;
+    isPhoneVerified: boolean | null;
     emailVerificationExpires: string;
     isDisable: boolean;
     isBanned: boolean;
     isActive: boolean;
-    rating: number;
-    totalSales: number;
+    rating: number | null;
+    totalSales: number | null;
     createdAt: string;
     updatedAt: string;
     resetPasswordOtpExpires: string;
@@ -69,14 +82,18 @@ export interface IUserData {
 const initialState: IUserData = {
   userProfile: {
     profile: {
-      fullName: 'Mayowa Ajadi',
-      firstName: 'Mayowa',
-      lastName: 'Ajadi',
-      isVerified: false,
+      fullName: '',
+      firstName: '',
+      lastName: '',
+      bio: '',
+      profilePicUrl: '',
+
+      isVerified: null,
     },
     contact: {
-      email: 'ajadimayowa879@gmail.com',
-      phoneNumber: '8166064166',
+      email: '',
+      phoneNumber: '',
+      address: '',
     },
     kyc: {
       isKycCompleted: false,
@@ -89,8 +106,8 @@ const initialState: IUserData = {
     isDisable: false,
     isBanned: false,
     isActive: false,
-    rating: 0,
-    totalSales: 0,
+    rating: null,
+    totalSales: null,
     createdAt: '',
     updatedAt: '',
     resetPasswordOtpExpires: '',
@@ -108,7 +125,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUserData: (state, action: PayloadAction<any>) => {
-      console.log({dispatched:action.payload})
+      console.log({ dispatched: action.payload })
       state.userProfile = action.payload;
     },
     setUserLocation: (

@@ -7,6 +7,9 @@ import ProductAdCard from "../../components/cards/ProductAdCard";
 import { IAd } from "../../interfaces/ad";
 import { useNavigate } from "react-router-dom";
 import IconButton from "../../components/custom-button/IconButton";
+import ActiveAdTab from "../../components/tabs/ActiveAds";
+import PendingAdTab from "../../components/tabs/PendingAds";
+import PendingReviewAdTab from "../../components/tabs/PendingReviewAds";
 
 type Ad = {
     _id: string;
@@ -90,48 +93,12 @@ const MyAds: React.FC = () => {
                 onSelect={(k) => setKey(k || "active")}
                 className="mb-3 justify-content-center"
             >
-                <Tab eventKey="active" title="Active Ads"></Tab>
-                <Tab eventKey="pending" title="Pending Payment"></Tab>
-                <Tab eventKey="expired" title="Expired Ads"></Tab>
+                <Tab eventKey="active" title="Active Ads"><ActiveAdTab/></Tab>
+                <Tab eventKey="pending" title="Pending Payment"><PendingAdTab/></Tab>
+                <Tab eventKey="expired" title="Pending Review"><PendingReviewAdTab/></Tab>
             </Tabs>
 
-            {loading ? (
-                <div className="text-center py-5">
-                    <Spinner animation="border" />
-                </div>
-            ) : ads.length > 0 ? (
-                <Row className="g-3">
-                    {
-                         ads.map((ad:IAd) => (
-
-                    
-                <Col xs={6} sm={6} md={3} key={ad.id} className='mt-4'>
-                <ProductAdCard
-                                        id={ad.id}
-                                        condition={ad.condition}
-                  sellerVerfied={false}
-                                        image={ad.images[0]}
-                                        title={ad.title}
-                                        sellerName={ad.sellerName}
-                                        location={`${ad?.location.city},${ad?.location.state}`}
-                                        reviewCount={ad.reviewCount}
-                                        views={ad.views}
-                                        price={ad?.price}
-                                        description={ad.description}
-                                        onReviewClick={() => alert(`Go to reviews for ${ad.title}`)}
-                                        onCardClick={() => navigate(`/ad/${ad.id}`)}
-                                    />
-                                    </Col>
-                                
-                                ))
             
-                    }
-                </Row>)
-               : (
-                <div className="text-center text-muted py-5">
-                    No {key} ads found.
-                </div>
-            )}
         </Container>
         </>
         

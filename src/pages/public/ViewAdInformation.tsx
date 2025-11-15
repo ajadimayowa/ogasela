@@ -12,6 +12,10 @@ import { IAd } from "../../interfaces/ad";
 import { convertToThousand } from "../../utils/helpers";
 import moment from "moment";
 import IconButton from "../../components/custom-button/IconButton";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import PaystackPayment from "../../components/Stack";
+import { toast } from "react-toastify";
 
 const ViewAdPage = () => {
     const { id } = useParams();
@@ -25,6 +29,7 @@ const ViewAdPage = () => {
     const [authModal, setAuthModal] = useState(false);
     const [loginModal, setLoginModal] = useState(false);
     const [signUpModal, setSignUpModal] = useState(false);
+    const user = useSelector((user:RootState)=>user.auth.userProfile)
 
     const handleCheckAuth = (path: string) => {
         const token = localStorage.getItem("userToken") || "";
@@ -40,6 +45,24 @@ const ViewAdPage = () => {
         setSignUpModal(false);
         setAuthModal(false);
     };
+
+    const handlePaymentUodate = async (refNum:any)=>{
+        setLoading(true);
+        try {
+            const res = await api.post(`ad/update-payment`,{
+                adId:id,
+                reference:refNum?.reference
+            });
+            toast.success(res?.data?.message || 'Payment completed, awaiting review!') ;
+            setLoading(false);
+            navigate('/dashboard/ads')
+        } catch (error) {
+            console.log({ seeErr: error });
+        } finally {
+            setLoading(false);
+        }
+
+    }
 
     const handleSignUp = () => {
         setLoginModal(false);
@@ -169,16 +192,32 @@ const ViewAdPage = () => {
                                 </div>
                             ))}
                         </div>
-
+<div className="d-flex text-center w-100 justify-content-center mt-5">
+    
+     {
+                                    user.profile.fullName == adInfo?.sellerName && !adInfo.promotionType.paymentCompleted &&
+                                   <PaystackPayment
+    
+        email="customer@email.com"
+        amount={adInfo.promotionType.price}
+        onSuccess={(ref) => handlePaymentUodate(ref)}
+        onClose={() => console.log("Payment closed")}
+      />
+                                }
+</div>
                         {/* === Ad Info Section === */}
                         <div className="mt-3">
                             <div className="d-flex justify-content-between align-items-center">
+                               
                                 <p className="text-muted mb-0">
                                     {/* {ad.location} • {ad.views} */}
                                 </p>
-                                <Badge bg="warning" text="dark">
+                                {
+                                   adInfo&&adInfo.promotionType.paymentCompleted &&
+                                    <Badge bg="warning" text="dark">
                                     Promoted
                                 </Badge>
+                                }
                             </div>
                             <p className="text-secondary mt-1">
                                 {adInfo?.views.toLocaleString()} views
