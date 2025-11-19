@@ -86,7 +86,7 @@ const ProductAdCard: React.FC<ProductAdCardProps> = ({
       </Card.Body>
       <Card.Footer>
 
-        <div className="d-flex justify-content-between"> <Badge className="text-dark border bg-light">{condition}</Badge> <Badge className="text-light">{sellerVerfied ? 'verified' : 'Un Verified'}</Badge></div>
+        <div className="d-flex justify-content-between"> <Badge className="text-dark border bg-light">{condition}</Badge> <Badge className="text-light">{sellerVerfied ? 'verified' : 'unverified'}</Badge></div>
       </Card.Footer>
     </Card>
   );
